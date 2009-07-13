@@ -1,5 +1,7 @@
 # This file contains the Screen class.
 
+require 'sdl'
+
 require 'c_bitmap'
 
 #
@@ -22,6 +24,8 @@ module Sprout
   class ScreenInternal < Bitmap
     BITS_PER_PIXEL = 32
 
+    # Used internally by Sprout to set the video mode.  Use Sprout.screen_mode
+    # instead.
     def initialize(width, height)
       begin
         @buffer = SDL::Screen.open(width, height, BITS_PER_PIXEL, SDL::SWSURFACE)
