@@ -2,7 +2,8 @@
 
 require 'sdl'
 
-require 'c_error.rb'
+require 'c_bitmap'
+require 'c_error'
 
 # The Sprout module acts as a namespace for all Sprout-related objects and
 # methods.
