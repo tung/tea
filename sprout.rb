@@ -22,4 +22,10 @@ module Sprout
     end
   end
 
+  # Get the amount of time since Sprout was initialised in milliseconds.  Note
+  # that this wraps around if the game runs for longer than 49 days.
+  def Sprout.time
+    SDL.get_ticks
+  end
+
 end
