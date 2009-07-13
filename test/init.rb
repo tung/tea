@@ -3,4 +3,8 @@
 
 require 'sprout'
 
+puts <<TEST
+This line should be the only output of this test.
+TEST
+
 Sprout.init

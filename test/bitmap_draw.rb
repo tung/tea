@@ -4,6 +4,10 @@
 
 require 'sprout'
 
+puts <<TEST
+You should see a 320x240 window with a smile in the centre.
+TEST
+
 Sprout.init
 Sprout.screen_mode 320, 240
 

@@ -6,6 +6,10 @@
 
 require 'sprout'
 
+puts <<TEST
+You should see a 320x240 window for 2 seconds, and the text "screen size is 320x240"
+TEST
+
 Sprout.init
 Sprout.screen_mode 320, 240
 
