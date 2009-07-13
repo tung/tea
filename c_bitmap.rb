@@ -52,6 +52,20 @@ module Sprout
       @buffer
     end
 
+    # Convert a colour of the form 0xRRGGBBAA to a form compatible with the
+    # internal pixel buffer of the Bitmap.
+    #
+    # This is used internally by Sprout.  Anything that asks for a colour
+    # should use a number of the form 0xRRGGBBAA, and Sprout will handle colour
+    # formats automatically.
+    def format_color_internal(color_in)
+      red   = color_in & 0xff000000 >> 24
+      green = color_in & 0x00ff0000 >> 16
+      blue  = color_in & 0x0000ff00 >>  8
+      alpha = color_in & 0x000000ff
+      @buffer.map_rgba(red, green, blue, alpha)
+    end
+
   end
 
 end
