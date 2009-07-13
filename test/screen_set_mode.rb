@@ -4,6 +4,6 @@
 require 'sprout'
 
 Sprout.init
-Sprout::Screen.set_mode 320, 240
+Sprout.screen_mode 320, 240
 
 sleep 2
