@@ -3,10 +3,9 @@
 #
 module Sprout
 
-  Point = Class.new do
-    def self.draw_to(dest_bitmap, x, y, color)
-      dest_bitmap.buffer_internal[x, y] = dest_bitmap.format_color_internal(color)
-    end
+  Point = Object.new
+  def Point.draw_to(dest_bitmap, x, y, color)
+    dest_bitmap.buffer_internal[x, y] = dest_bitmap.format_color_internal(color)
   end
 
 end
