@@ -59,10 +59,10 @@ module Sprout
     # should use a number of the form 0xRRGGBBAA, and Sprout will handle colour
     # formats automatically.
     def format_color_internal(color_in)
-      red   = color_in & 0xff000000 >> 24
-      green = color_in & 0x00ff0000 >> 16
-      blue  = color_in & 0x0000ff00 >>  8
-      alpha = color_in & 0x000000ff
+      red   = (color_in & 0xff000000) >> 24
+      green = (color_in & 0x00ff0000) >> 16
+      blue  = (color_in & 0x0000ff00) >>  8
+      alpha = (color_in & 0x000000ff)
       @buffer.map_rgba(red, green, blue, alpha)
     end
 
