@@ -33,6 +33,13 @@ module Sprout
         raise Sprout::Error, e.message, e.backtrace
       end
     end
+
+    # Flip the back buffer and display buffer so things drawn to the screen can
+    # be seen.
+    def flip
+      @buffer.flip
+    end
+
   end
 
 end
