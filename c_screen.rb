@@ -5,14 +5,16 @@ require 'c_bitmap'
 #
 module Sprout
 
-  # Sprout.screen is the right way to get the screen bitmap.
-  attr_reader :screen
-
   # Set the video mode for the screen in pixels.
   #
   # May raise Sprout::Error if it fails.
   def Sprout.screen_mode(width, height)
     @screen = ScreenInternal.new(width, height)
+  end
+
+  # Sprout.screen is the right way to get the screen bitmap.
+  def Sprout.screen
+    @screen
   end
 
   # The internal screen class implementation.  Should only be made once,
