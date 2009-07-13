@@ -30,6 +30,28 @@ module Sprout
       @buffer.h
     end
 
+    # Draw the <var>drawable_object</var> on the Bitmap.  Equivalent to:
+    #
+    #   drawable_object.draw_to bitmap, *other_args
+    def draw(drawable_object, *other_args)
+      drawable_object.draw_to self, *other_args
+    end
+
+    # Draw the current Bitmap onto dest_bitmap at location (x, y).
+    def draw_to(dest_bitmap, x, y)
+      SDL::Surface.blit @buffer, 0, 0, @buffer.w, @buffer.h,
+                        dest_bitmap.buffer_internal, x, y
+    end
+
+    # Get the internal pixel buffer of the Bitmap.  Currently it's an SDL
+    # surface, but that could change at any time.
+    #
+    # This should only be called within a draw_to method to make an object
+    # drawable onto a Bitmap.
+    def buffer_internal
+      @buffer
+    end
+
   end
 
 end
