@@ -40,7 +40,7 @@ module Sprout
     # Draw the current Bitmap onto dest_bitmap at location (x, y).
     def draw_to(dest_bitmap, x, y)
       SDL::Surface.blit @buffer, 0, 0, @buffer.w, @buffer.h,
-                        dest_bitmap.buffer_internal, x, y
+                        dest_bitmap.buffer_, x, y
     end
 
     # Get the internal pixel buffer of the Bitmap.  Currently it's an SDL
@@ -48,7 +48,7 @@ module Sprout
     #
     # This should only be called within a draw_to method to make an object
     # drawable onto a Bitmap.
-    def buffer_internal
+    def buffer_
       @buffer
     end
 
@@ -58,7 +58,7 @@ module Sprout
     # This is used internally by Sprout.  Anything that asks for a colour
     # should use a number of the form 0xRRGGBBAA, and Sprout will handle colour
     # formats automatically.
-    def format_color_internal(color_in)
+    def format_color_(color_in)
       red   = (color_in & 0xff000000) >> 24
       green = (color_in & 0x00ff0000) >> 16
       blue  = (color_in & 0x0000ff00) >>  8

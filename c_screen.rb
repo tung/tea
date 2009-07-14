@@ -11,7 +11,7 @@ module Sprout
   #
   # May raise Sprout::Error if it fails.
   def Sprout.screen_mode(width, height)
-    @screen = ScreenInternal.new(width, height)
+    @screen = Screen_.new(width, height)
   end
 
   # Sprout.screen is the right way to get the screen bitmap.
@@ -21,7 +21,7 @@ module Sprout
 
   # The internal screen class implementation.  Should only be made once,
   # through Sprout.screen_mode.
-  class ScreenInternal < Bitmap
+  class Screen_ < Bitmap
     BITS_PER_PIXEL = 32
 
     # Used internally by Sprout to set the video mode.  Use Sprout.screen_mode
