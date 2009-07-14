@@ -15,4 +15,9 @@ module Sprout
     dest_bitmap.buffer_.fill_rect(x, y, w, h, dest_bitmap.format_color_(color))
   end
 
+  Line = Object.new
+  def Line.draw_to(dest_bitmap, x1, y1, x2, y2, color)
+    dest_bitmap.buffer_.draw_line x1, y1, x2, y2, dest_bitmap.format_color_(color)
+  end
+
 end
