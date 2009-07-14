@@ -12,7 +12,7 @@ module Sprout
 
   Rectangle = Object.new
   def Rectangle.draw_to(dest_bitmap, x, y, w, h, color)
-    dest_bitmap.buffer_.fill_rect(x, y, w, h, dest_bitmap.format_color_(color))
+    dest_bitmap.buffer_.fill_rect x, y, w, h, dest_bitmap.format_color_(color)
   end
 
   Line = Object.new
