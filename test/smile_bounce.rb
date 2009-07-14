@@ -1,9 +1,9 @@
-# This is a demo of a smiley face bouncing around a small screen.
+# This is a demo of 5 smiley faces bouncing around a small screen.
 
 require 'sprout'
 
 puts <<TEST
-You should see a smiley face bouncing around on a 320x240 screen for 5 seconds.
+You should see 5 smiley faces bouncing around on a 320x240 screen for 5 seconds.
 TEST
 
 class Smiley
@@ -11,8 +11,8 @@ class Smiley
     @bitmap = bitmap
     @x = start_x
     @y = start_y
-    @dx = rand() * 4 - 2
-    @dy = rand() * 4 - 2
+    @dx = rand() * 2 - 1
+    @dy = rand() * 2 - 1
   end
 
   def update
@@ -31,12 +31,14 @@ Sprout.init
 Sprout.screen_mode 320, 240
 
 smile_bitmap = Sprout::Bitmap.new('smile.png')
-s = Smiley.new(smile_bitmap, rand(288), rand(208))
+smiles = []
+5.times { smiles << Smiley.new(smile_bitmap, rand(288), rand(208)) }
 
 start = Sprout.time
 until Sprout.time >= start + 5000 do
-  s.update
-  s.draw
+  smiles.each { |s| s.update }
+  Sprout.screen.draw Sprout::Rectangle, 0, 0, Sprout.screen.w, Sprout.screen.h, 0x000000ff
+  smiles.each { |s| s.draw }
   Sprout.screen.flip
-  sleep 0.002
+  sleep 0.001
 end
