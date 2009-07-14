@@ -16,10 +16,10 @@ module Sprout
   end
 
   Line = Object.new
-  def Line.draw_to(dest_bitmap, x1, y1, x2, y2, color, options)
+  def Line.draw_to(dest_bitmap, x1, y1, x2, y2, color, options=nil)
     dest_bitmap.buffer_.draw_line x1, y1, x2, y2,
                                   dest_bitmap.format_color_(color),
-                                  options[:antialias]
+                                  (options[:antialias] if options)
   end
 
 end

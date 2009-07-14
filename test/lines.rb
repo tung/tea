@@ -25,22 +25,26 @@ Sprout.screen_mode 400, 300
 grid_x = Sprout.screen.w / 10
 grid_y = Sprout.screen.h / 10
 
-lines = [[1,   1,   1,   9, 0xff0000ff, false],
-         [2,   1,   2,   9, 0x00ff00ff, false],
-         [3,   1,   3,   9, 0x0000ffff, false],
-         [6,   1,   9,   1, 0xffff00ff, false],
-         [6,   2,   9,   2, 0xff00ffff, false],
-         [6,   3,   9,   3, 0x00ffffff, false],
-         [6,   6,   9,   9, 0xffffffff, true ],
-         [6,   9,   9,   6, 0x808080ff, false]]
+lines = [[1,   1,   1,   9, 0xff0000ff],
+         [2,   1,   2,   9, 0x00ff00ff],
+         [3,   1,   3,   9, 0x0000ffff],
+         [6,   1,   9,   1, 0xffff00ff],
+         [6,   2,   9,   2, 0xff00ffff],
+         [6,   3,   9,   3, 0x00ffffff],
+         [6,   9,   9,   6, 0x808080ff]]
 
 lines.each do |line|
   Sprout.screen.draw Sprout::Line,
                      grid_x * line[0], grid_y * line[1],
                      grid_x * line[2], grid_y * line[3],
-                     line[4],
-                     :antialias => line[5]
+                     line[4]
 end
+
+Sprout.screen.draw Sprout::Line,
+                   grid_x * 6, grid_y * 6,
+                   grid_x * 9, grid_y * 9,
+                   0xffffffff,
+                   :antialias => true
 
 Sprout.screen.flip
 
