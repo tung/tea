@@ -22,4 +22,15 @@ module Sprout
                                   (options[:antialias] if options)
   end
 
+  Circle = Object.new
+  def Circle.draw_to(dest_bitmap, x, y, radius, color, options=nil)
+    buf = dest_bitmap.buffer_
+    col = dest_bitmap.format_color_(color)
+    if options
+      buf.draw_circle x, y, radius, col, !options[:outline], options[:antialias]
+    else
+      buf.draw_circle x, y, radius, col, true
+    end
+  end
+
 end
