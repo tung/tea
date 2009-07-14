@@ -4,19 +4,19 @@
 require 'sdl'
 
 #
-module Sprout
+module Spot
 
   # A Bitmap is a grid of pixels that holds graphics.
   class Bitmap
 
     # Create a new Bitmap from an image file.
     #
-    # May raise Sprout::Error if it fails.
+    # May raise Spot::Error if it fails.
     def initialize(image_path)
       begin
         @buffer = SDL::Surface.load(image_path)
       rescue SDL::Error => e
-        raise Sprout::Error, e.message, e.backtrace
+        raise Spot::Error, e.message, e.backtrace
       end
     end
 
@@ -61,8 +61,8 @@ module Sprout
     # Convert a colour of the form 0xRRGGBBAA to a form compatible with the
     # internal pixel buffer of the Bitmap.
     #
-    # This is used internally by Sprout.  Anything that asks for a colour
-    # should use a number of the form 0xRRGGBBAA, and Sprout will handle colour
+    # This is used internally by Spot.  Anything that asks for a colour
+    # should use a number of the form 0xRRGGBBAA, and Spot will handle colour
     # formats automatically.
     def format_color_(color_in)
       red   = (color_in & 0xff000000) >> 24

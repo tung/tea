@@ -1,10 +1,10 @@
-# Test if Sprout can initialise.
+# Test if Spot can initialise.
 # Expected result is nothing.
 
-require 'sprout'
+require 'spot'
 
 puts <<TEST
 This line should be the only output of this test.
 TEST
 
-Sprout.init
+Spot.init

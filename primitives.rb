@@ -3,7 +3,7 @@
 require 'sdl'
 
 #
-module Sprout
+module Spot
 
   Point = Object.new
   def Point.draw_to(dest_bitmap, x, y, color)

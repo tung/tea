@@ -1,6 +1,6 @@
 # This is a demo of 5 smiley faces bouncing around a small screen.
 
-require 'sprout'
+require 'spot'
 
 puts <<TEST
 You should see 5 smiley faces bouncing around on a 320x240 screen for 5 seconds.
@@ -18,27 +18,27 @@ class Smiley
   def update
     @x += @dx
     @y += @dy
-    @dx = -@dx if @x < 0 || @x + @bitmap.w >= Sprout.screen.w
-    @dy = -@dy if @y < 0 || @y + @bitmap.h >= Sprout.screen.h
+    @dx = -@dx if @x < 0 || @x + @bitmap.w >= Spot.screen.w
+    @dy = -@dy if @y < 0 || @y + @bitmap.h >= Spot.screen.h
   end
 
   def draw
-    Sprout.screen.draw @bitmap, @x, @y
+    Spot.screen.draw @bitmap, @x, @y
   end
 end
 
-Sprout.init
-Sprout.screen_mode 320, 240
+Spot.init
+Spot.screen_mode 320, 240
 
-smile_bitmap = Sprout::Bitmap.new('smile.png')
+smile_bitmap = Spot::Bitmap.new('smile.png')
 smiles = []
 5.times { smiles << Smiley.new(smile_bitmap, rand(288), rand(208)) }
 
-start = Sprout.time
-until Sprout.time >= start + 5000 do
+start = Spot.time
+until Spot.time >= start + 5000 do
   smiles.each { |s| s.update }
-  Sprout.screen.clear
+  Spot.screen.clear
   smiles.each { |s| s.draw }
-  Sprout.screen.flip
+  Spot.screen.flip
   sleep 0.001
 end

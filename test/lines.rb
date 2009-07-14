@@ -7,7 +7,7 @@
 #
 # The white line should be antialiased.
 
-require 'sprout'
+require 'spot'
 
 puts <<TEST
 You should see a 400x300 window for 5 seconds with:
@@ -19,11 +19,11 @@ You should see a 400x300 window for 5 seconds with:
 The white line should be antialiased.
 TEST
 
-Sprout.init
-Sprout.screen_mode 400, 300
+Spot.init
+Spot.screen_mode 400, 300
 
-grid_x = Sprout.screen.w / 10
-grid_y = Sprout.screen.h / 10
+grid_x = Spot.screen.w / 10
+grid_y = Spot.screen.h / 10
 
 lines = [[1,   1,   1,   9, 0xff0000ff],
          [2,   1,   2,   9, 0x00ff00ff],
@@ -34,18 +34,18 @@ lines = [[1,   1,   1,   9, 0xff0000ff],
          [6,   9,   9,   6, 0x808080ff]]
 
 lines.each do |line|
-  Sprout.screen.draw Sprout::Line,
-                     grid_x * line[0], grid_y * line[1],
-                     grid_x * line[2], grid_y * line[3],
-                     line[4]
+  Spot.screen.draw Spot::Line,
+                   grid_x * line[0], grid_y * line[1],
+                   grid_x * line[2], grid_y * line[3],
+                   line[4]
 end
 
-Sprout.screen.draw Sprout::Line,
-                   grid_x * 6, grid_y * 6,
-                   grid_x * 9, grid_y * 9,
-                   0xffffffff,
-                   :antialias => true
+Spot.screen.draw Spot::Line,
+                 grid_x * 6, grid_y * 6,
+                 grid_x * 9, grid_y * 9,
+                 0xffffffff,
+                 :antialias => true
 
-Sprout.screen.flip
+Spot.screen.flip
 
 sleep 5

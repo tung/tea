@@ -5,32 +5,32 @@ require 'sdl'
 require 'c_bitmap'
 
 #
-module Sprout
+module Spot
 
   # Set the video mode for the screen in pixels.
   #
-  # May raise Sprout::Error if it fails.
-  def Sprout.screen_mode(width, height)
+  # May raise Spot::Error if it fails.
+  def Spot.screen_mode(width, height)
     @screen = Screen_.new(width, height)
   end
 
-  # Sprout.screen is the right way to get the screen bitmap.
-  def Sprout.screen
+  # Spot.screen is the right way to get the screen bitmap.
+  def Spot.screen
     @screen
   end
 
   # The internal screen class implementation.  Should only be made once,
-  # through Sprout.screen_mode.
+  # through Spot.screen_mode.
   class Screen_ < Bitmap
     BITS_PER_PIXEL = 32
 
-    # Used internally by Sprout to set the video mode.  Use Sprout.screen_mode
+    # Used internally by Spot to set the video mode.  Use Spot.screen_mode
     # instead.
     def initialize(width, height)
       begin
         @buffer = SDL::Screen.open(width, height, BITS_PER_PIXEL, SDL::SWSURFACE)
       rescue SDL::Error => e
-        raise Sprout::Error, e.message, e.backtrace
+        raise Spot::Error, e.message, e.backtrace
       end
     end
 

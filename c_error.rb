@@ -1,10 +1,10 @@
 # This file holds the Error class.
 
 #
-module Sprout
+module Spot
 
   # Error is the exception class raised when Bad Things happen in any of
-  # Sprout's objects or methods.
+  # Spot's objects or methods.
   class Error; end
 
 end
