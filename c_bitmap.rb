@@ -30,6 +30,12 @@ module Sprout
       @buffer.h
     end
 
+    # Erase the contents of the Bitmap.  Same as drawing a black rectangle over
+    # the whole Bitmap.
+    def clear
+      @buffer.fill_rect 0, 0, @buffer.w, @buffer.h, @buffer.map_rgba(0, 0, 0, 255)
+    end
+
     # Draw the <var>drawable_object</var> on the Bitmap.  Equivalent to:
     #
     #   drawable_object.draw_to bitmap, *other_args

@@ -37,7 +37,7 @@ smiles = []
 start = Sprout.time
 until Sprout.time >= start + 5000 do
   smiles.each { |s| s.update }
-  Sprout.screen.draw Sprout::Rectangle, 0, 0, Sprout.screen.w, Sprout.screen.h, 0x000000ff
+  Sprout.screen.clear
   smiles.each { |s| s.draw }
   Sprout.screen.flip
   sleep 0.001
