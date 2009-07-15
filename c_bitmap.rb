@@ -3,6 +3,7 @@
 
 require 'sdl'
 
+require 'm_blitting'
 require 'm_primitive_drawing'
 
 #
@@ -32,13 +33,9 @@ module Spot
       @buffer.h
     end
 
-    # Draw the source_bitmap onto the current Bitmap at (x, y).
-    #
-    # 'blit' is short for bit block transfer, which is how one Bitmap is drawn
-    # onto another.
-    def blit(source_bitmap, x, y)
-      src = source_bitmap.send(:buffer)
-      SDL::Surface.blit src, 0, 0, src.w, src.h, @buffer, x, y
+    include Spot::Blitting
+    def blittable_buffer
+      @buffer
     end
 
     include Spot::PrimitiveDrawing

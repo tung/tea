@@ -18,17 +18,17 @@ class Smiley
   def update
     @x += @dx
     @y += @dy
-    @dx = -@dx if @x < 0 || @x + @bitmap.w >= Spot.screen.w
-    @dy = -@dy if @y < 0 || @y + @bitmap.h >= Spot.screen.h
+    @dx = -@dx if @x < 0 || @x + @bitmap.w >= Spot::Screen.w
+    @dy = -@dy if @y < 0 || @y + @bitmap.h >= Spot::Screen.h
   end
 
   def draw
-    Spot.screen.blit @bitmap, @x, @y
+    Spot::Screen.blit @bitmap, @x, @y
   end
 end
 
 Spot.init
-Spot.screen_mode 320, 240
+Spot::Screen.set_mode 320, 240
 
 smile_bitmap = Spot::Bitmap.new('smile.png')
 smiles = []
@@ -37,8 +37,8 @@ smiles = []
 start = Spot.time
 until Spot.time >= start + 5000 do
   smiles.each { |s| s.update }
-  Spot.screen.clear
+  Spot::Screen.clear
   smiles.each { |s| s.draw }
-  Spot.screen.flip
+  Spot::Screen.flip
   sleep 0.001
 end

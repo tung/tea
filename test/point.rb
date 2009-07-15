@@ -14,13 +14,13 @@ for 2 seconds.  Point formation:
 TEST
 
 Spot.init
-Spot.screen_mode 400, 300
+Spot::Screen.set_mode 400, 300
 
-Spot.screen.point 100,  75, 0xff0000ff
-Spot.screen.point 300,  75, 0x00ff00ff
-Spot.screen.point 100, 225, 0x0000ffff
-Spot.screen.point 300, 225, 0xffffffff
+Spot::Screen.point 100,  75, 0xff0000ff
+Spot::Screen.point 300,  75, 0x00ff00ff
+Spot::Screen.point 100, 225, 0x0000ffff
+Spot::Screen.point 300, 225, 0xffffffff
 
-Spot.screen.flip
+Spot::Screen.flip
 
 sleep 2

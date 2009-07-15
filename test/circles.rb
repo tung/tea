@@ -13,12 +13,12 @@ You should see a 400x300 window for 3 seconds with:
 TEST
 
 Spot.init
-Spot.screen_mode 400, 300
+Spot::Screen.set_mode 400, 300
 
-Spot.screen.circle 200, 150, 100, 0xffffffff
-Spot.screen.circle 100, 150,  50, 0x00ff00ff, :antialias => true
-Spot.screen.circle 300, 150,  50, 0xff0000ff, :outline => true
+Spot::Screen.circle 200, 150, 100, 0xffffffff
+Spot::Screen.circle 100, 150,  50, 0x00ff00ff, :antialias => true
+Spot::Screen.circle 300, 150,  50, 0xff0000ff, :outline => true
 
-Spot.screen.flip
+Spot::Screen.flip
 
 sleep 3

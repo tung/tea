@@ -4,7 +4,7 @@ require 'sdl'
 
 require 'c_bitmap'
 require 'c_error'
-require 'c_screen'
+require 'screen'
 
 # The Spot module acts as a namespace for all Spot-related objects and
 # methods.

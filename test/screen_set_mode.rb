@@ -11,8 +11,8 @@ You should see a 320x240 window for 2 seconds, and the text "screen size is 320x
 TEST
 
 Spot.init
-Spot.screen_mode 320, 240
+Spot::Screen.set_mode 320, 240
 
-puts "screen size is #{Spot.screen.w}x#{Spot.screen.h}"
+puts "screen size is #{Spot::Screen.w}x#{Spot::Screen.h}"
 
 sleep 2

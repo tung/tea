@@ -8,7 +8,7 @@ You should see a 320x240 window appear for 2 seconds.
 TEST
 
 Spot.init
-Spot.screen_mode 320, 240
-Spot.screen.flip
+Spot::Screen.set_mode 320, 240
+Spot::Screen.flip
 
 sleep 2

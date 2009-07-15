@@ -9,13 +9,13 @@ You should see a 320x240 window with a smile in the centre.
 TEST
 
 Spot.init
-Spot.screen_mode 320, 240
+Spot::Screen.set_mode 320, 240
 
 image = Spot::Bitmap.new('smile.png')
-x = (Spot.screen.w - image.w) / 2
-y = (Spot.screen.h - image.h) / 2
+x = (Spot::Screen.w - image.w) / 2
+y = (Spot::Screen.h - image.h) / 2
 
-Spot.screen.blit image, x, y
-Spot.screen.flip
+Spot::Screen.blit image, x, y
+Spot::Screen.flip
 
 sleep 2

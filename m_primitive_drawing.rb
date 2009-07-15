@@ -30,7 +30,7 @@ module Spot
 
     # Plot a point at (x, y) with the given color (0xRRGGBBAA) on the Bitmap.
     def point(x, y, color)
-      primitve_buffer[x, y] = primitive_color(color)
+      primitive_buffer[x, y] = primitive_color(color)
     end
 
     # Draw a rectangle of size w * h with the top-left corner at (x, y) with
@@ -73,7 +73,7 @@ module Spot
       green = (hex_color & 0x00ff0000) >> 16
       blue  = (hex_color & 0x0000ff00) >>  8
       alpha = (hex_color & 0x000000ff)
-      @buffer.map_rgba(red, green, blue, alpha)
+      primitive_buffer.map_rgba(red, green, blue, alpha)
     end
 
   end
