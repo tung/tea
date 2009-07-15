@@ -3,6 +3,8 @@
 
 require 'sdl'
 
+require 'm_primitive_drawing'
+
 #
 module Spot
 
@@ -45,22 +47,15 @@ module Spot
       SDL::Surface.blit src, 0, 0, src.w, src.h, @buffer, x, y
     end
 
+    include Spot::PrimitiveDrawing
+    def primitive_buffer
+      @buffer
+    end
+
     private
 
     # The pixel buffer, currently an SDL::Surface.  Internal, don't touch this!
     attr_reader :buffer
-
-    # Convert a color of the form 0xRRGGBBAA into a color value the Bitmap's
-    # internal buffer understands.
-    #
-    # Internal, don't use this!
-    def format_color(hex_color)
-      red   = (hex_color & 0xff000000) >> 24
-      green = (hex_color & 0x00ff0000) >> 16
-      blue  = (hex_color & 0x0000ff00) >>  8
-      alpha = (hex_color & 0x000000ff)
-      @buffer.map_rgba(red, green, blue, alpha)
-    end
 
   end
 
