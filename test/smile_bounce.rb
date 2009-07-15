@@ -23,7 +23,7 @@ class Smiley
   end
 
   def draw
-    Spot.screen.draw @bitmap, @x, @y
+    Spot.screen.blit @bitmap, @x, @y
   end
 end
 
