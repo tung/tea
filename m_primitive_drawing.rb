@@ -21,6 +21,12 @@ module Spot
   #   end
   module PrimitiveDrawing
 
+    # Clear the drawing buffer.  This is the same as drawing a completely black
+    # rectangle over the whole buffer.
+    def clear
+      primitive_buffer.fill_rect 0, 0, primitive_buffer.w, primitive_buffer.h,
+                                 primitive_color(0x000000ff)
+    end
 
     # Plot a point at (x, y) with the given color (0xRRGGBBAA) on the Bitmap.
     def point(x, y, color)
