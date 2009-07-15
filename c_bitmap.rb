@@ -36,39 +36,29 @@ module Spot
       @buffer.fill_rect 0, 0, @buffer.w, @buffer.h, @buffer.map_rgba(0, 0, 0, 255)
     end
 
-    # Draw the <var>drawable_object</var> on the Bitmap.  Equivalent to:
+    # Draw the source_bitmap onto the current Bitmap at (x, y).
     #
-    #   drawable_object.draw_to bitmap, *other_args
-    def draw(drawable_object, *other_args)
-      drawable_object.draw_to self, *other_args
+    # 'blit' is short for bit block transfer, which is how one Bitmap is drawn
+    # onto another.
+    def blit(source_bitmap, x, y)
+      src = source_bitmap.send(:buffer)
+      SDL::Surface.blit src, 0, 0, src.w, src.h, @buffer, x, y
     end
 
-    # Draw the current Bitmap onto dest_bitmap at location (x, y).
-    def draw_to(dest_bitmap, x, y)
-      SDL::Surface.blit @buffer, 0, 0, @buffer.w, @buffer.h,
-                        dest_bitmap.buffer_, x, y
-    end
+    private
 
-    # Get the internal pixel buffer of the Bitmap.  Currently it's an SDL
-    # surface, but that could change at any time.
-    #
-    # This should only be called within a draw_to method to make an object
-    # drawable onto a Bitmap.
-    def buffer_
-      @buffer
-    end
+    # The pixel buffer, currently an SDL::Surface.  Internal, don't touch this!
+    attr_reader :buffer
 
-    # Convert a colour of the form 0xRRGGBBAA to a form compatible with the
-    # internal pixel buffer of the Bitmap.
+    # Convert a color of the form 0xRRGGBBAA into a color value the Bitmap's
+    # internal buffer understands.
     #
-    # This is used internally by Spot.  Anything that asks for a colour
-    # should use a number of the form 0xRRGGBBAA, and Spot will handle colour
-    # formats automatically.
-    def format_color_(color_in)
-      red   = (color_in & 0xff000000) >> 24
-      green = (color_in & 0x00ff0000) >> 16
-      blue  = (color_in & 0x0000ff00) >>  8
-      alpha = (color_in & 0x000000ff)
+    # Internal, don't use this!
+    def format_color(hex_color)
+      red   = (hex_color & 0xff000000) >> 24
+      green = (hex_color & 0x00ff0000) >> 16
+      blue  = (hex_color & 0x0000ff00) >>  8
+      alpha = (hex_color & 0x000000ff)
       @buffer.map_rgba(red, green, blue, alpha)
     end
 

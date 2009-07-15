@@ -9,7 +9,7 @@ TEST
 
 Spot.init
 Spot.screen_mode 400, 300
-Spot.screen.draw Spot::Rectangle, 50, 50, 300, 200, 0xffff00ff
+Spot.screen.rectangle 50, 50, 300, 200, 0xffff00ff
 Spot.screen.flip
 
 sleep 2

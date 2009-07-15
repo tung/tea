@@ -15,9 +15,9 @@ TEST
 Spot.init
 Spot.screen_mode 400, 300
 
-Spot.screen.draw Spot::Circle, 200, 150, 100, 0xffffffff
-Spot.screen.draw Spot::Circle, 100, 150,  50, 0x00ff00ff, :antialias => true
-Spot.screen.draw Spot::Circle, 300, 150,  50, 0xff0000ff, :outline => true
+Spot.screen.circle 200, 150, 100, 0xffffffff
+Spot.screen.circle 100, 150,  50, 0x00ff00ff, :antialias => true
+Spot.screen.circle 300, 150,  50, 0xff0000ff, :outline => true
 
 Spot.screen.flip
 

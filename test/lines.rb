@@ -34,14 +34,12 @@ lines = [[1,   1,   1,   9, 0xff0000ff],
          [6,   9,   9,   6, 0x808080ff]]
 
 lines.each do |line|
-  Spot.screen.draw Spot::Line,
-                   grid_x * line[0], grid_y * line[1],
+  Spot.screen.line grid_x * line[0], grid_y * line[1],
                    grid_x * line[2], grid_y * line[3],
                    line[4]
 end
 
-Spot.screen.draw Spot::Line,
-                 grid_x * 6, grid_y * 6,
+Spot.screen.line grid_x * 6, grid_y * 6,
                  grid_x * 9, grid_y * 9,
                  0xffffffff,
                  :antialias => true

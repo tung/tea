@@ -15,7 +15,7 @@ image = Spot::Bitmap.new('smile.png')
 x = (Spot.screen.w - image.w) / 2
 y = (Spot.screen.h - image.h) / 2
 
-Spot.screen.draw image, x, y
+Spot.screen.blit image, x, y
 Spot.screen.flip
 
 sleep 2
