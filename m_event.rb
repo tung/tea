@@ -4,6 +4,7 @@ require 'sdl'
 
 require 'c_error'
 require 'm_event_app'
+require 'm_event_mouse'
 
 #
 module Spot
@@ -27,8 +28,13 @@ module Spot
       begin
         sdl_event = if wait then SDL::Event.wait else SDL::Event.poll end
 
-        if [SDL::Event::Active, SDL::Event::Quit].include?(sdl_event.class)
+        if [SDL::Event::Active,
+            SDL::Event::Quit].include?(sdl_event.class)
           @@event_queue.push(*Event.translate_app_event(sdl_event))
+        elsif [SDL::Event::MouseMotion,
+               SDL::Event::MouseButtonDown,
+               SDL::Event::MouseButtonUp].include?(sdl_event.class)
+          @@event_queue.push(*Event.translate_mouse_event(sdl_event))
         end
 
         @@event_queue.shift
