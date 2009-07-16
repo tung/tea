@@ -16,7 +16,7 @@ module Spot
 
   module Event
 
-    # The event class for the exit event.
+    # Event generated when the player acts to close the screen window.
     class Exit; end
 
     # Event generated when the screen window is minimised.
