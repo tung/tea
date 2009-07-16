@@ -23,10 +23,4 @@ module Spot
     end
   end
 
-  # Get the amount of time since Spot was initialised in milliseconds.  Note
-  # that this wraps around if the game runs for longer than 49 days.
-  def Spot.time
-    SDL.get_ticks
-  end
-
 end

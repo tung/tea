@@ -34,8 +34,8 @@ smile_bitmap = Spot::Bitmap.new('smile.png')
 smiles = []
 5.times { smiles << Smiley.new(smile_bitmap, rand(288), rand(208)) }
 
-start = Spot.time
-until Spot.time >= start + 5000 do
+start = Time.now
+until Time.now >= start + 5 do
   smiles.each { |s| s.update }
   Spot::Screen.clear
   smiles.each { |s| s.draw }
