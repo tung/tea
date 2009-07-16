@@ -13,22 +13,25 @@ module Spot
   # so this module is quite important.
   module Event
 
+    # Spot's generated event queue.  Add to the back, get from the front.
+    @@event_queue = []
+
     # Get the next event in the event queue.  If wait is true and there are no
     # events to return, this method will wait until there is one and return it.
     # Otherwise, an empty event queue will return nil.
     #
     # May raise Spot::Error if getting an event fails.
     def Event.get(wait=false)
+      return @@event_queue.shift if @@event_queue.length > 0
+
       begin
-        event = if wait
-                  SDL::Event.wait
-                else
-                  SDL::Event.poll
-                end
-        case event
-        when SDL::Event::Active, SDL::Event::Quit
-          Event.translate_app_event event
+        sdl_event = if wait then SDL::Event.wait else SDL::Event.poll end
+
+        if [SDL::Event::Active, SDL::Event::Quit].include?(sdl_event.class)
+          @@event_queue.push(*Event.translate_app_event(sdl_event))
         end
+
+        @@event_queue.shift
       rescue SDL::Error => e
         raise Spot::Error, e.message, e.backtrace
       end

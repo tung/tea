@@ -38,13 +38,11 @@ loop do
     else
       puts 'KeyboardFocus gained'
     end
-  when Spot::Event::AppFocus
-    if e.focus_gained?
-      puts 'AppFocus gained'
-    else
-      puts 'AppFocus lost'
-    end
 =end
+  when Spot::Event::Restored
+    puts 'Restored event received'
+  when Spot::Event::Minimized
+    puts 'Minimized event received'
   when Spot::Event::Exit
     puts 'Exit event received'
     exit
