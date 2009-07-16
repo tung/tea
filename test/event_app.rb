@@ -3,7 +3,7 @@
 #
 #  * Gaining and losing mouse focus
 #  * Gaining and losing keyboard focus
-#  * Gaining and losing app focus
+#  * Minimising and restoring the screen window
 #  * App exit
 
 require 'spot'
@@ -13,7 +13,7 @@ This is an interactive event test.  It should display messages for:
 
   * Gaining and losing mouse focus
   * Gaining and losing keyboard focus
-  * Gaining and losing app focus
+  * Minimising and restoring the screen window
   * App exit
 
 Go ahead and start doing things like changing focus.
