@@ -32,13 +32,11 @@ loop do
     else
       puts 'MouseFocus lost'
     end
-  when Spot::Event::KeyboardFocus
-    if e.focus_gained?
-      puts 'KeyboardFocus lost'
-    else
-      puts 'KeyboardFocus gained'
-    end
 =end
+  when Spot::Event::KeyboardGained
+    puts 'KeyboardGained event received'
+  when Spot::Event::KeyboardLost
+    puts 'KeyboardLost event received'
   when Spot::Event::Restored
     puts 'Restored event received'
   when Spot::Event::Minimized
