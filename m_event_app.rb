@@ -48,27 +48,13 @@ module Spot
 
       when SDL::Event::Active
         if (sdl_event.state & SDL::Event::APPACTIVE) != 0
-          if sdl_event.gain
-            out_events.push Restored.new
-          else
-            out_events.push Minimized.new
-          end
+          out_events.push sdl_event.gain ? Restored.new : Minimized.new
         end
-
         if (sdl_event.state & SDL::Event::APPINPUTFOCUS) != 0
-          if sdl_event.gain
-            out_events.push KeyboardGained.new
-          else
-            out_events.push KeyboardLost.new
-          end
+          out_events.push sdl_event.gain ? KeyboardGained.new : KeyboardLost.new
         end
-
         if (sdl_event.state & SDL::Event::APPMOUSEFOCUS) != 0
-          if sdl_event.gain
-            out_events.push MouseGained.new
-          else
-            out_events.push MouseLost.new
-          end
+          out_events.push sdl_event.gain ? MouseGained.new : MouseLost.new
         end
       end
 
