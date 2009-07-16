@@ -25,14 +25,10 @@ Spot::Screen.set_mode 320, 240
 
 loop do
   case (e = Spot::Event.get)
-=begin
-  when Spot::Event::MouseFocus
-    if e.focus_gained?
-      puts 'MouseFocus gained'
-    else
-      puts 'MouseFocus lost'
-    end
-=end
+  when Spot::Event::MouseGained
+    puts 'MouseGained event received'
+  when Spot::Event::MouseLost
+    puts 'MouseLost event received'
   when Spot::Event::KeyboardGained
     puts 'KeyboardGained event received'
   when Spot::Event::KeyboardLost

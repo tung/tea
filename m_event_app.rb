@@ -31,6 +31,12 @@ module Spot
     # Event generated when keyboard input focus is lost.
     class KeyboardLost; end
 
+    # Event generated when mouse focus is gained.
+    class MouseGained; end
+
+    # Event generated when mouse focus is lost.
+    class MouseLost; end
+
     # Translates an app-related SDL::Event into a Spot::Event or an array of
     # Spot::Event objects.  For internal use only.
     def Event.translate_app_event(sdl_event)
@@ -54,6 +60,14 @@ module Spot
             out_events.push KeyboardGained.new
           else
             out_events.push KeyboardLost.new
+          end
+        end
+
+        if (sdl_event.state & SDL::Event::APPMOUSEFOCUS) != 0
+          if sdl_event.gain
+            out_events.push MouseGained.new
+          else
+            out_events.push MouseLost.new
           end
         end
       end
