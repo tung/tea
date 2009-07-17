@@ -1,17 +1,19 @@
 # Test that mouse events are being picked up.
-# Expected output is reporting of mouse move/down/up events, with position and
-# relevant buttons.
+# Expected output is reporting of mouse move/down/up/scroll events, with
+# position and relevant buttons.
 
 require 'spot'
 
 puts <<TEST
 Move the mouse in the window.  Mouse move/down/up events should be reported,
-with position and relevant buttons.
+with position and relevant buttons.  Mouse wheel scrolling should also be
+picked up, with at least the cursor position.
 TEST
 
 Spot.init
 Spot::Screen.set_mode 400, 300
 
+# We can avoid flooding the terminal with VT100 codes.  Sorry Windows.
 $windows = RUBY_PLATFORM =~ /w(?:in)?32/
 SAVE_POSITION = "\x1b[s"
 RESTORE_POSITION = "\x1b[u"
@@ -19,13 +21,28 @@ HIDE_CURSOR = "\x1b[?25l"
 UNHIDE_CURSOR = "\x1b[?25h"
 CLEAR_TO_LINE_END = "\x1b[K"
 
+# VT100-enhanced printing function that overwrites the current terminal line.
 def pr(*args)
   print HIDE_CURSOR, SAVE_POSITION if !$windows
   print *args
-  print CLEAR_TO_LINE_END, RESTORE_POSITION, UNHIDE_CURSOR if !$windows
+  if $windows
+    puts
+  else
+    print CLEAR_TO_LINE_END, RESTORE_POSITION, UNHIDE_CURSOR
+  end
 end
 
-last_event_class = nil
+# Event tracking to only put newlines when the event class changes.
+mouse_events = [Spot::Event::MouseMove,
+                Spot::Event::MouseDown,
+                Spot::Event::MouseUp,
+                Spot::Event::MouseScrollDown,
+                Spot::Event::MouseScrollUp]
+handled = false
+last_event_class = Spot::Event::MouseMove
+
+# Track repeated scrolling in the same direction.
+scroll_times = 0
 
 while e = Spot::Event.get(true) do
   if e.class == Spot::Event::Exit
@@ -33,17 +50,26 @@ while e = Spot::Event.get(true) do
     exit
   end
 
-  if [Spot::Event::MouseMove, Spot::Event::MouseDown, Spot::Event::MouseUp].include?(e.class) && e.class != last_event_class
+  # Put a newline when the event class changes.
+  if handled && mouse_events.include?(e.class) && e.class != last_event_class
     puts
     last_event_class = e.class
+    scroll_times = 0
   end
 
+  handled = true
   case e
   when Spot::Event::MouseMove
-    pr "mouse move: x = #{e.x}, y = #{e.y}, buttons = #{e.buttons.join(',')}"
+    pr "mouse move : x = #{e.x}, y = #{e.y}, buttons = #{e.buttons.join(',')}"
   when Spot::Event::MouseDown
-    pr "mouse down: x = #{e.x}, y = #{e.y}, button = #{e.button}"
+    pr "mouse down : x = #{e.x}, y = #{e.y}, button = #{e.button}"
   when Spot::Event::MouseUp
-    pr "mouse up  : x = #{e.x}, y = #{e.y}, button = #{e.button}"
+    pr "mouse up   : x = #{e.x}, y = #{e.y}, button = #{e.button}"
+  when Spot::Event::MouseScrollDown
+    pr "scroll down: x = #{e.x}, y = #{e.y}, times = #{scroll_times += 1}"
+  when Spot::Event::MouseScrollUp
+    pr "scroll up  : x = #{e.x}, y = #{e.y}, times = #{scroll_times += 1}"
+  else
+    handled = false
   end
 end
