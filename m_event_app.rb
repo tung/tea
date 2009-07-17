@@ -37,8 +37,8 @@ module Spot
     # Event generated when mouse focus is lost.
     class MouseLost; end
 
-    # Translates an app-related SDL::Event into a Spot::Event or an array of
-    # Spot::Event objects.  For internal use only.
+    # Translates an app-related SDL::Event into an array of Spot::Event
+    # objects.  For internal use only.
     def Event.translate_app_event(sdl_event)
       out_events = []
 
