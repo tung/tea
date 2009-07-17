@@ -26,20 +26,33 @@ module Spot
       return @@event_queue.shift if @@event_queue.length > 0
 
       begin
-        sdl_event = if wait then SDL::Event.wait else SDL::Event.poll end
-
-        if [SDL::Event::Active,
-            SDL::Event::Quit].include?(sdl_event.class)
-          @@event_queue.push(*Event.translate_app_event(sdl_event))
-        elsif [SDL::Event::MouseMotion,
-               SDL::Event::MouseButtonDown,
-               SDL::Event::MouseButtonUp].include?(sdl_event.class)
-          @@event_queue.push(*Event.translate_mouse_event(sdl_event))
+        if wait
+          begin
+            sdl_event = SDL::Event.wait
+            if (out_events = Event.translate_event(sdl_event))
+              @@event_queue.push *out_events
+            end
+          end until @@event_queue.length > 0
+        else
+          if (out_events = Event.translate_event(SDL::Event.poll))
+            @@event_queue.push *out_events
+          end
         end
 
         @@event_queue.shift
       rescue SDL::Error => e
         raise Spot::Error, e.message, e.backtrace
+      end
+    end
+
+    # Convert an SDL::Event into one or more Spot events.  May return nil, a
+    # single event object or multiple events in an array.
+    def Event.translate_event(sdl_event)
+      case sdl_event
+      when SDL::Event::Active, SDL::Event::Quit
+        Event.translate_app_event(sdl_event)
+      when SDL::Event::MouseMotion, SDL::Event::MouseButtonDown, SDL::Event::MouseButtonUp
+        Event.translate_mouse_event(sdl_event)
       end
     end
 
