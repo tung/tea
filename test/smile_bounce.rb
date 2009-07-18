@@ -35,7 +35,7 @@ smiles = []
 5.times { smiles << Smiley.new(smile_bitmap, rand(288), rand(208)) }
 
 start = Time.now
-until Time.now >= start + 5 do
+until Time.now >= start + 5
   smiles.each { |s| s.update }
   Spot::Screen.clear
   smiles.each { |s| s.draw }

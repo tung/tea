@@ -44,7 +44,7 @@ last_event_class = Spot::Event::MouseMove
 # Track repeated scrolling in the same direction.
 scroll_times = 0
 
-while e = Spot::Event.get(true) do
+while e = Spot::Event.get(true)
   if e.class == Spot::Event::Exit
     puts
     exit
