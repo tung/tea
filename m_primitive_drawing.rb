@@ -35,7 +35,7 @@ module Tea
 
     # Draw a rectangle of size w * h with the top-left corner at (x, y) with
     # the given color (0xRRGGBBAA).
-    def rectangle(x, y, w, h, color)
+    def rect(x, y, w, h, color)
       primitive_buffer.fill_rect x, y, w, h, primitive_color(color)
     end
 
