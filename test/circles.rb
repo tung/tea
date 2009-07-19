@@ -2,7 +2,7 @@
 # Expected results are a large white circle behind 2 smaller green and red
 # circles, in a 400x300 window for 3 seconds.
 
-require 'spot'
+require 'tea'
 
 puts <<TEST
 You should see a 400x300 window for 3 seconds with:
@@ -12,13 +12,13 @@ You should see a 400x300 window for 3 seconds with:
  * A small red circle on the right, outlined
 TEST
 
-Spot.init
-Spot::Screen.set_mode 400, 300
+Tea.init
+Tea::Screen.set_mode 400, 300
 
-Spot::Screen.circle 200, 150, 100, 0xffffffff
-Spot::Screen.circle 100, 150,  50, 0x00ff00ff, :antialias => true
-Spot::Screen.circle 300, 150,  50, 0xff0000ff, :outline => true
+Tea::Screen.circle 200, 150, 100, 0xffffffff
+Tea::Screen.circle 100, 150,  50, 0x00ff00ff, :antialias => true
+Tea::Screen.circle 300, 150,  50, 0xff0000ff, :outline => true
 
-Spot::Screen.flip
+Tea::Screen.flip
 
 sleep 3

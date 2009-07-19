@@ -2,20 +2,20 @@
 # Expected result is a 320x240 display with a smile in the middle for 2
 # seconds.
 
-require 'spot'
+require 'tea'
 
 puts <<TEST
 You should see a 320x240 window with a smile in the centre.
 TEST
 
-Spot.init
-Spot::Screen.set_mode 320, 240
+Tea.init
+Tea::Screen.set_mode 320, 240
 
-image = Spot::Bitmap.new('smile.png')
-x = (Spot::Screen.w - image.w) / 2
-y = (Spot::Screen.h - image.h) / 2
+image = Tea::Bitmap.new('smile.png')
+x = (Tea::Screen.w - image.w) / 2
+y = (Tea::Screen.h - image.h) / 2
 
-Spot::Screen.blit image, x, y
-Spot::Screen.flip
+Tea::Screen.blit image, x, y
+Tea::Screen.flip
 
 sleep 2

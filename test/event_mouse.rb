@@ -2,7 +2,7 @@
 # Expected output is reporting of mouse move/down/up/scroll events, with
 # position and relevant buttons.
 
-require 'spot'
+require 'tea'
 
 puts <<TEST
 Move the mouse in the window.  Mouse move/down/up events should be reported,
@@ -10,8 +10,8 @@ with position and relevant buttons.  Mouse wheel scrolling should also be
 picked up, with at least the cursor position.
 TEST
 
-Spot.init
-Spot::Screen.set_mode 400, 300
+Tea.init
+Tea::Screen.set_mode 400, 300
 
 # We can avoid flooding the terminal with VT100 codes.  Sorry Windows.
 $windows = RUBY_PLATFORM =~ /w(?:in)?32/
@@ -33,19 +33,19 @@ def pr(*args)
 end
 
 # Event tracking to only put newlines when the event class changes.
-mouse_events = [Spot::Event::MouseMove,
-                Spot::Event::MouseDown,
-                Spot::Event::MouseUp,
-                Spot::Event::MouseScrollDown,
-                Spot::Event::MouseScrollUp]
+mouse_events = [Tea::Event::MouseMove,
+                Tea::Event::MouseDown,
+                Tea::Event::MouseUp,
+                Tea::Event::MouseScrollDown,
+                Tea::Event::MouseScrollUp]
 handled = false
-last_event_class = Spot::Event::MouseMove
+last_event_class = Tea::Event::MouseMove
 
 # Track repeated scrolling in the same direction.
 scroll_times = 0
 
-while e = Spot::Event.get(true)
-  if e.class == Spot::Event::Exit
+while e = Tea::Event.get(true)
+  if e.class == Tea::Event::Exit
     puts
     exit
   end
@@ -59,15 +59,15 @@ while e = Spot::Event.get(true)
 
   handled = true
   case e
-  when Spot::Event::MouseMove
+  when Tea::Event::MouseMove
     pr "mouse move : x = #{e.x}, y = #{e.y}, buttons = #{e.buttons.join(',')}"
-  when Spot::Event::MouseDown
+  when Tea::Event::MouseDown
     pr "mouse down : x = #{e.x}, y = #{e.y}, button = #{e.button}"
-  when Spot::Event::MouseUp
+  when Tea::Event::MouseUp
     pr "mouse up   : x = #{e.x}, y = #{e.y}, button = #{e.button}"
-  when Spot::Event::MouseScrollDown
+  when Tea::Event::MouseScrollDown
     pr "scroll down: x = #{e.x}, y = #{e.y}, times = #{scroll_times += 1}"
-  when Spot::Event::MouseScrollUp
+  when Tea::Event::MouseScrollUp
     pr "scroll up  : x = #{e.x}, y = #{e.y}, times = #{scroll_times += 1}"
   else
     handled = false

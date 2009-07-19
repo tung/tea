@@ -3,7 +3,7 @@
 require 'sdl'
 
 #
-module Spot
+module Tea
 
   # The Blitting mixin allows objects with SDL::Surface to draw or 'blit' onto
   # each other.

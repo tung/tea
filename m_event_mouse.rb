@@ -11,7 +11,7 @@ module SDL
 end
 
 #
-module Spot
+module Tea
 
   module Event
 
@@ -72,7 +72,7 @@ module Spot
       end
     end
 
-    # Convert a mouse-related SDL::Event into a Spot event.  For internal use only.
+    # Convert a mouse-related SDL::Event into a Tea event.  For internal use only.
     def Event.translate_mouse_event(sdl_event)
       out_events = []
 

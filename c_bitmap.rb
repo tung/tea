@@ -7,19 +7,19 @@ require 'm_blitting'
 require 'm_primitive_drawing'
 
 #
-module Spot
+module Tea
 
   # A Bitmap is a grid of pixels that holds graphics.
   class Bitmap
 
     # Create a new Bitmap from an image file.
     #
-    # May raise Spot::Error if it fails.
+    # May raise Tea::Error if it fails.
     def initialize(image_path)
       begin
         @buffer = SDL::Surface.load(image_path)
       rescue SDL::Error => e
-        raise Spot::Error, e.message, e.backtrace
+        raise Tea::Error, e.message, e.backtrace
       end
     end
 
@@ -33,12 +33,12 @@ module Spot
       @buffer.h
     end
 
-    include Spot::Blitting
+    include Tea::Blitting
     def blittable_buffer
       @buffer
     end
 
-    include Spot::PrimitiveDrawing
+    include Tea::PrimitiveDrawing
     def primitive_buffer
       @buffer
     end

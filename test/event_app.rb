@@ -6,7 +6,7 @@
 #  * Minimising and restoring the screen window
 #  * App exit
 
-require 'spot'
+require 'tea'
 
 puts <<TEST
 This is an interactive event test.  It should display messages for:
@@ -20,24 +20,24 @@ Go ahead and start doing things like changing focus.
 
 TEST
 
-Spot.init
-Spot::Screen.set_mode 320, 240
+Tea.init
+Tea::Screen.set_mode 320, 240
 
 loop do
-  case (e = Spot::Event.get)
-  when Spot::Event::MouseGained
+  case (e = Tea::Event.get)
+  when Tea::Event::MouseGained
     puts 'MouseGained event received'
-  when Spot::Event::MouseLost
+  when Tea::Event::MouseLost
     puts 'MouseLost event received'
-  when Spot::Event::KeyboardGained
+  when Tea::Event::KeyboardGained
     puts 'KeyboardGained event received'
-  when Spot::Event::KeyboardLost
+  when Tea::Event::KeyboardLost
     puts 'KeyboardLost event received'
-  when Spot::Event::Restored
+  when Tea::Event::Restored
     puts 'Restored event received'
-  when Spot::Event::Minimized
+  when Tea::Event::Minimized
     puts 'Minimized event received'
-  when Spot::Event::Exit
+  when Tea::Event::Exit
     puts 'Exit event received'
     exit
   end

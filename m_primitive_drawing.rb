@@ -5,7 +5,7 @@ require 'sdl'
 require 'c_bitmap'
 
 #
-module Spot
+module Tea
 
   private
 

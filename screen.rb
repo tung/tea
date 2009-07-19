@@ -6,7 +6,7 @@ require 'm_blitting'
 require 'm_primitive_drawing'
 
 #
-module Spot
+module Tea
 
   Screen = Class.new do
 
@@ -19,7 +19,7 @@ module Spot
       begin
         @screen = SDL::Screen.open(width, height, BITS_PER_PIXEL, SDL::SWSURFACE)
       rescue SDL::Error => e
-        raise Spot::Error, e.message, e.backtrace
+        raise Tea::Error, e.message, e.backtrace
       end
     end
 
@@ -39,12 +39,12 @@ module Spot
       @screen.flip
     end
 
-    include Spot::Blitting
+    include Tea::Blitting
     def blittable_buffer
       @screen
     end
 
-    include Spot::PrimitiveDrawing
+    include Tea::PrimitiveDrawing
     def primitive_buffer
       @screen
     end

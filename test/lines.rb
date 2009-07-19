@@ -7,7 +7,7 @@
 #
 # The white line should be antialiased.
 
-require 'spot'
+require 'tea'
 
 puts <<TEST
 You should see a 400x300 window for 5 seconds with:
@@ -19,11 +19,11 @@ You should see a 400x300 window for 5 seconds with:
 The white line should be antialiased.
 TEST
 
-Spot.init
-Spot::Screen.set_mode 400, 300
+Tea.init
+Tea::Screen.set_mode 400, 300
 
-grid_x = Spot::Screen.w / 10
-grid_y = Spot::Screen.h / 10
+grid_x = Tea::Screen.w / 10
+grid_y = Tea::Screen.h / 10
 
 lines = [[1,   1,   1,   9, 0xff0000ff],
          [2,   1,   2,   9, 0x00ff00ff],
@@ -34,16 +34,16 @@ lines = [[1,   1,   1,   9, 0xff0000ff],
          [6,   9,   9,   6, 0x808080ff]]
 
 lines.each do |line|
-  Spot::Screen.line grid_x * line[0], grid_y * line[1],
+  Tea::Screen.line grid_x * line[0], grid_y * line[1],
                     grid_x * line[2], grid_y * line[3],
                     line[4]
 end
 
-Spot::Screen.line grid_x * 6, grid_y * 6,
+Tea::Screen.line grid_x * 6, grid_y * 6,
                   grid_x * 9, grid_y * 9,
                   0xffffffff,
                   :antialias => true
 
-Spot::Screen.flip
+Tea::Screen.flip
 
 sleep 5
