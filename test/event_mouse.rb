@@ -10,8 +10,7 @@ with position and relevant buttons.  Mouse wheel scrolling should also be
 picked up, with at least the cursor position.
 TEST
 
-Tea.init
-Tea::Screen.set_mode 400, 300
+##############################################################################
 
 # We can avoid flooding the terminal with VT100 codes.  Sorry Windows.
 $windows = RUBY_PLATFORM =~ /w(?:in)?32/
@@ -32,6 +31,11 @@ def pr(*args)
   end
 end
 
+##############################################################################
+
+Tea.init
+Tea::Screen.set_mode 400, 300
+
 # Event tracking to only put newlines when the event class changes.
 mouse_events = [Tea::Event::MouseMove,
                 Tea::Event::MouseDown,
@@ -44,10 +48,12 @@ last_event_class = Tea::Event::MouseMove
 # Track repeated scrolling in the same direction.
 scroll_times = 0
 
-while e = Tea::Event.get(true)
+loop do
+  e = Tea::Event.get(true)
+
   if e.class == Tea::Event::Exit
     puts
-    exit
+    break
   end
 
   # Put a newline when the event class changes.
