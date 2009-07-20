@@ -18,6 +18,9 @@ module Tea
   def Tea.init
     begin
       SDL.init(SDL::INIT_VIDEO)
+
+      # Get typed characters from keys when pressed.
+      SDL::Event.enable_unicode
     rescue SDL::Error => e
       raise Tea::Error, e.message, e.backtrace
     end

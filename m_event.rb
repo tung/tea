@@ -4,6 +4,7 @@ require 'sdl'
 
 require 'c_error'
 require 'm_event_app'
+require 'm_event_keyboard'
 require 'm_event_mouse'
 
 #
@@ -53,6 +54,8 @@ module Tea
         Event.translate_app_event(sdl_event)
       when SDL::Event::MouseMotion, SDL::Event::MouseButtonDown, SDL::Event::MouseButtonUp
         Event.translate_mouse_event(sdl_event)
+      when SDL::Event::KeyDown, SDL::Event::KeyUp
+        Event.translate_keyboard_event sdl_event
       end
     end
 
