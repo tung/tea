@@ -78,11 +78,10 @@ module Tea
 
       case sdl_event
       when SDL::Event::MouseMotion
-        buttons = []
-        buttons << :left   if (sdl_event.state & SDL::Mouse::BUTTON_LMASK) != 0
-        buttons << :middle if (sdl_event.state & SDL::Mouse::BUTTON_MMASK) != 0
-        buttons << :right  if (sdl_event.state & SDL::Mouse::BUTTON_RMASK) != 0
-        buttons.compact!
+        buttons = {}
+        buttons[:left]   = (sdl_event.state & SDL::Mouse::BUTTON_LMASK) != 0
+        buttons[:middle] = (sdl_event.state & SDL::Mouse::BUTTON_MMASK) != 0
+        buttons[:right]  = (sdl_event.state & SDL::Mouse::BUTTON_RMASK) != 0
         out_events.push MouseMove.new(sdl_event.x, sdl_event.y, buttons)
       when SDL::Event::MouseButtonDown
         case sdl_event.button

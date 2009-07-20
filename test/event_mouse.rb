@@ -66,7 +66,8 @@ loop do
   handled = true
   case e
   when Tea::Event::MouseMove
-    pr "mouse move : x = #{e.x}, y = #{e.y}, buttons = #{e.buttons.join(',')}"
+    buttons = (e.buttons.select { |button, down| down }).keys
+    pr "mouse move : x = #{e.x}, y = #{e.y}, buttons = #{buttons.join(',')}"
   when Tea::Event::MouseDown
     pr "mouse down : x = #{e.x}, y = #{e.y}, button = #{e.button}"
   when Tea::Event::MouseUp
