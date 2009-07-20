@@ -51,9 +51,9 @@ module Tea
     def Event.translate_event(sdl_event)
       case sdl_event
       when SDL::Event::Active, SDL::Event::Quit
-        Event.translate_app_event(sdl_event)
+        Event.translate_app_event sdl_event
       when SDL::Event::MouseMotion, SDL::Event::MouseButtonDown, SDL::Event::MouseButtonUp
-        Event.translate_mouse_event(sdl_event)
+        Event.translate_mouse_event sdl_event
       when SDL::Event::KeyDown, SDL::Event::KeyUp
         Event.translate_keyboard_event sdl_event
       end
