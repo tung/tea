@@ -44,6 +44,6 @@ Tea::Screen.line grid_x * 6, grid_y * 6,
                   0xffffffff,
                   :antialias => true
 
-Tea::Screen.flip
+Tea::Screen.update
 
 sleep 5

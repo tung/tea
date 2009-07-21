@@ -1,4 +1,4 @@
-# Test if the screen can be flipped without problems.
+# Test if the screen can be updated without problems.
 # Expected result is a 320x240 graphical window shown for 2 seconds.
 
 require 'tea'
@@ -9,6 +9,6 @@ TEST
 
 Tea.init
 Tea::Screen.set_mode 320, 240
-Tea::Screen.flip
+Tea::Screen.update
 
 sleep 2

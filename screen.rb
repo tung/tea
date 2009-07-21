@@ -33,9 +33,8 @@ module Tea
       @screen.h
     end
 
-    # Flip the back buffer and display buffer so that things drawn to the
-    # screen can be seen.
-    def flip
+    # Update the screen so that things drawn on it are displayed.
+    def update
       @screen.flip
     end
 

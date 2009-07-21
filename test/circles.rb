@@ -19,6 +19,6 @@ Tea::Screen.circle 200, 150, 100, 0xffffffff
 Tea::Screen.circle 100, 150,  50, 0x00ff00ff, :antialias => true
 Tea::Screen.circle 300, 150,  50, 0xff0000ff, :outline => true
 
-Tea::Screen.flip
+Tea::Screen.update
 
 sleep 3

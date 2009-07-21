@@ -16,6 +16,6 @@ x = (Tea::Screen.w - image.w) / 2
 y = (Tea::Screen.h - image.h) / 2
 
 Tea::Screen.blit image, x, y
-Tea::Screen.flip
+Tea::Screen.update
 
 sleep 2

@@ -21,6 +21,6 @@ Tea::Screen.point 300,  75, 0x00ff00ff
 Tea::Screen.point 100, 225, 0x0000ffff
 Tea::Screen.point 300, 225, 0xffffffff
 
-Tea::Screen.flip
+Tea::Screen.update
 
 sleep 2

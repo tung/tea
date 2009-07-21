@@ -39,6 +39,6 @@ until Time.now >= start + 5
   smiles.each { |s| s.update }
   Tea::Screen.clear
   smiles.each { |s| s.draw }
-  Tea::Screen.flip
+  Tea::Screen.update
   sleep 0.001
 end
