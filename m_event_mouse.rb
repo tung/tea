@@ -77,8 +77,8 @@ module Tea
         case sdl_event.button
         when SDL::Mouse::BUTTON_WHEELDOWN then @delta = 1
         when SDL::Mouse::BUTTON_WHEELUP   then @delta = -1
-        #else
-        #  raise Tea::Error, "Tea::Mouse::Scroll given an unexpected event: #{sdl_event.inspect}", caller
+        else
+          raise Tea::Error, "Tea::Mouse::Scroll given an unexpected event: #{sdl_event.inspect}", caller
         end
       end
     end
