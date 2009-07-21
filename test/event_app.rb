@@ -29,10 +29,10 @@ loop do
     puts 'Mouse::Gained event received'
   when Tea::Mouse::Lost
     puts 'Mouse::Lost event received'
-  when Tea::Event::KeyboardGained
-    puts 'KeyboardGained event received'
-  when Tea::Event::KeyboardLost
-    puts 'KeyboardLost event received'
+  when Tea::Kbd::Gained
+    puts 'Kbd::Gained event received'
+  when Tea::Kbd::Lost
+    puts 'Kbd::Lost event received'
   when Tea::Event::Restored
     puts 'Restored event received'
   when Tea::Event::Minimized

@@ -14,12 +14,12 @@ loop do
   e = Tea::Event.get(true)
 
   break if e.class == Tea::Event::Exit
-  next unless e.class == Tea::Event::KeyDown || e.class == Tea::Event::KeyUp
+  next unless e.class == Tea::Kbd::Down || e.class == Tea::Kbd::Up
   break if e.key == :escape
 
   out = []
 
-  if e.class == Tea::Event::KeyDown
+  if e.class == Tea::Kbd::Down
     out << 'down:'
   else
     out << '  up:'
