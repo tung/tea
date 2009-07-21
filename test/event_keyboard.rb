@@ -30,8 +30,10 @@ loop do
   mods = (e.mods.select { |mod, down| down }).keys
   out << "++ #{mods.join(' + ')}" if mods.length > 0
 
-  out << '='
-  out << "\"#{e.char}\"" if e.respond_to?(:char)
+  if e.respond_to?(:char)
+    out << '='
+    out << "\"#{e.char}\""
+  end
 
   puts out.join(' ')
 end
