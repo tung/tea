@@ -37,16 +37,15 @@ Tea.init
 Tea::Screen.set_mode 400, 300
 
 # Event tracking to only put newlines when the event class changes.
-mouse_events = [Tea::Event::MouseMove,
-                Tea::Event::MouseDown,
-                Tea::Event::MouseUp,
-                Tea::Event::MouseScrollDown,
-                Tea::Event::MouseScrollUp]
+mouse_events = [Tea::Mouse::Move,
+                Tea::Mouse::Down,
+                Tea::Mouse::Up,
+                Tea::Mouse::Scroll]
 handled = false
-last_event_class = Tea::Event::MouseMove
+last_event_class = Tea::Mouse::Move
 
 # Track repeated scrolling in the same direction.
-scroll_times = 0
+scroll_pos = 0
 
 loop do
   e = Tea::Event.get(true)
@@ -60,22 +59,22 @@ loop do
   if handled && mouse_events.include?(e.class) && e.class != last_event_class
     puts
     last_event_class = e.class
-    scroll_times = 0
+    scroll_pos = 0
   end
 
   handled = true
   case e
-  when Tea::Event::MouseMove
+  when Tea::Mouse::Move
     buttons = (e.buttons.select { |button, down| down }).keys
     pr "mouse move : x = #{e.x}, y = #{e.y}, buttons = #{buttons.join(',')}"
-  when Tea::Event::MouseDown
+  when Tea::Mouse::Down
     pr "mouse down : x = #{e.x}, y = #{e.y}, button = #{e.button}"
-  when Tea::Event::MouseUp
+  when Tea::Mouse::Up
     pr "mouse up   : x = #{e.x}, y = #{e.y}, button = #{e.button}"
-  when Tea::Event::MouseScrollDown
-    pr "scroll down: x = #{e.x}, y = #{e.y}, times = #{scroll_times += 1}"
-  when Tea::Event::MouseScrollUp
-    pr "scroll up  : x = #{e.x}, y = #{e.y}, times = #{scroll_times += 1}"
+  when Tea::Mouse::Scroll
+    dir = e.delta == 1 ? 'down' : 'up  '
+    scroll_pos += e.delta
+    pr "scroll #{dir}: x = #{e.x}, y = #{e.y}, position = #{scroll_pos} (#{e.delta})"
   else
     handled = false
   end

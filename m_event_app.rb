@@ -14,6 +14,14 @@ end
 #
 module Tea
 
+  module Mouse
+    # Event generated when mouse focus is gained.
+    class Gained; end
+
+    # Event generated when mouse focus is lost.
+    class Lost; end
+  end
+
   module Event
 
     # Event generated when the player acts to close the screen window.
@@ -30,12 +38,6 @@ module Tea
 
     # Event generated when keyboard input focus is lost.
     class KeyboardLost; end
-
-    # Event generated when mouse focus is gained.
-    class MouseGained; end
-
-    # Event generated when mouse focus is lost.
-    class MouseLost; end
 
     # Translates an app-related SDL::Event into an array of Tea::Event
     # objects.  For internal use only.
@@ -54,7 +56,7 @@ module Tea
           out_events.push sdl_event.gain ? KeyboardGained.new : KeyboardLost.new
         end
         if (sdl_event.state & SDL::Event::APPMOUSEFOCUS) != 0
-          out_events.push sdl_event.gain ? MouseGained.new : MouseLost.new
+          out_events.push sdl_event.gain ? Mouse::Gained.new : Mouse::Lost.new
         end
       end
 

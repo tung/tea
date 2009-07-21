@@ -25,10 +25,10 @@ Tea::Screen.set_mode 320, 240
 
 loop do
   case (e = Tea::Event.get)
-  when Tea::Event::MouseGained
-    puts 'MouseGained event received'
-  when Tea::Event::MouseLost
-    puts 'MouseLost event received'
+  when Tea::Mouse::Gained
+    puts 'Mouse::Gained event received'
+  when Tea::Mouse::Lost
+    puts 'Mouse::Lost event received'
   when Tea::Event::KeyboardGained
     puts 'KeyboardGained event received'
   when Tea::Event::KeyboardLost

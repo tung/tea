@@ -13,17 +13,20 @@ end
 #
 module Tea
 
-  module Event
-
+  module Mouse
     # Event generated when the mouse cursor is moved.
     #
     # +x+, +y+::    coordinates of the mouse cursor
     # +buttons+::   an array that may contain +:left+, +:middle+ and +:right+
-    class MouseMove
+    class Move
       attr_reader :x, :y, :buttons
-      def initialize(x, y, buttons)
-        @x, @y = x, y
-        @buttons = buttons
+      def initialize(sdl_event)
+        @x = sdl_event.x
+        @y = sdl_event.y
+        @buttons = {}
+        @buttons[:left]   = (sdl_event.state & SDL::Mouse::BUTTON_LMASK) != 0
+        @buttons[:middle] = (sdl_event.state & SDL::Mouse::BUTTON_MMASK) != 0
+        @buttons[:right]  = (sdl_event.state & SDL::Mouse::BUTTON_RMASK) != 0
       end
     end
 
@@ -31,11 +34,16 @@ module Tea
     #
     # +x+, +y+::    coordinates of the mouse cursor
     # +button+::    the mouse button that is down: +:left+, +:middle+ or +:right+
-    class MouseDown
+    class Down
       attr_reader :x, :y, :button
-      def initialize(x, y, button)
-        @x, @y = x, y
-        @button = button
+      def initialize(sdl_event)
+        @x = sdl_event.x
+        @y = sdl_event.y
+        case sdl_event.button
+        when SDL::Mouse::BUTTON_LEFT   then @button = :left
+        when SDL::Mouse::BUTTON_MIDDLE then @button = :middle
+        when SDL::Mouse::BUTTON_RIGHT  then @button = :right
+        end
       end
     end
 
@@ -44,33 +52,39 @@ module Tea
     # +x+, +y+::    coordinates of the mouse cursor
     # +button+::    the mouse button that was released: +:left+, +:middle+ or
     #               +:right+
-    class MouseUp
+    class Up
       attr_reader :x, :y, :button
-      def initialize(x, y, button)
-        @x, @y = x, y
-        @button = button
+      def initialize(sdl_event)
+        @x = sdl_event.x
+        @y = sdl_event.y
+        case sdl_event.button
+        when SDL::Mouse::BUTTON_LEFT   then @button = :left
+        when SDL::Mouse::BUTTON_MIDDLE then @button = :middle
+        when SDL::Mouse::BUTTON_RIGHT  then @button = :right
+        end
       end
     end
 
-    # Event generated when the mouse wheel is scrolled down.
+    # Event generated when the mouse wheel is scrolled.
     #
     # +x+, +y+::    coordinates of the mouse cursor.
-    class MouseScrollDown
-      attr_reader :x, :y
-      def initialize(x, y)
-        @x, @y = x, y
+    # +delta+::     1 when scrolling down, -1 when scrolling up.
+    class Scroll
+      attr_reader :x, :y, :delta
+      def initialize(sdl_event)
+        @x = sdl_event.x
+        @y = sdl_event.y
+        case sdl_event.button
+        when SDL::Mouse::BUTTON_WHEELDOWN then @delta = 1
+        when SDL::Mouse::BUTTON_WHEELUP   then @delta = -1
+        #else
+        #  raise Tea::Error, "Tea::Mouse::Scroll given an unexpected event: #{sdl_event.inspect}", caller
+        end
       end
     end
+  end
 
-    # Event generated when the mouse wheel is scrolled up.
-    #
-    # +x+, +y+::    coordinates of the mouse cursor.
-    class MouseScrollUp
-      attr_reader :x, :y
-      def initialize(x, y)
-        @x, @y = x, y
-      end
-    end
+  module Event
 
     # Convert a mouse-related SDL::Event into a Tea event.  For internal use only.
     def Event.translate_mouse_event(sdl_event)
@@ -78,34 +92,19 @@ module Tea
 
       case sdl_event
       when SDL::Event::MouseMotion
-        buttons = {}
-        buttons[:left]   = (sdl_event.state & SDL::Mouse::BUTTON_LMASK) != 0
-        buttons[:middle] = (sdl_event.state & SDL::Mouse::BUTTON_MMASK) != 0
-        buttons[:right]  = (sdl_event.state & SDL::Mouse::BUTTON_RMASK) != 0
-        out_events.push MouseMove.new(sdl_event.x, sdl_event.y, buttons)
+        out_events.push Mouse::Move.new(sdl_event)
       when SDL::Event::MouseButtonDown
         case sdl_event.button
         when SDL::Mouse::BUTTON_LEFT, SDL::Mouse::BUTTON_MIDDLE, SDL::Mouse::BUTTON_RIGHT
-          out_events.push MouseDown.new(sdl_event.x, sdl_event.y,
-                                        (case sdl_event.button
-                                         when SDL::Mouse::BUTTON_LEFT   then :left
-                                         when SDL::Mouse::BUTTON_MIDDLE then :middle
-                                         when SDL::Mouse::BUTTON_RIGHT  then :right
-                                         end))
-        when SDL::Mouse::BUTTON_WHEELDOWN
-          out_events.push MouseScrollDown.new(sdl_event.x, sdl_event.y)
-        when SDL::Mouse::BUTTON_WHEELUP
-          out_events.push MouseScrollUp.new(sdl_event.x, sdl_event.y)
+          out_events.push Mouse::Down.new(sdl_event)
+        when SDL::Mouse::BUTTON_WHEELDOWN, SDL::Mouse::BUTTON_WHEELUP
+          out_events.push Mouse::Scroll.new(sdl_event)
         end
       when SDL::Event::MouseButtonUp
+        # Ignore MouseButtonUp for the scroll wheel.
         case sdl_event.button
         when SDL::Mouse::BUTTON_LEFT, SDL::Mouse::BUTTON_MIDDLE, SDL::Mouse::BUTTON_RIGHT
-          out_events.push MouseUp.new(sdl_event.x, sdl_event.y,
-                                      (case sdl_event.button
-                                       when SDL::Mouse::BUTTON_LEFT   then :left
-                                       when SDL::Mouse::BUTTON_MIDDLE then :middle
-                                       when SDL::Mouse::BUTTON_RIGHT  then :right
-                                       end))
+          out_events.push Mouse::Up.new(sdl_event)
         end
       end
 
