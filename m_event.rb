@@ -46,6 +46,8 @@ module Tea
       end
     end
 
+    private
+
     # Convert an SDL::Event into one or more Tea events.  May return nil, a
     # single event object or multiple events in an array.
     def Event.translate_event(sdl_event)

@@ -42,6 +42,8 @@ module Tea
       end
     end
 
+    private
+
     # Convert a keyboard-related SDL::Event into a Tea event.  For internal use
     # only.
     def Event.translate_keyboard_event(sdl_event)

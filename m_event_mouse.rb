@@ -72,6 +72,8 @@ module Tea
       end
     end
 
+    private
+
     # Convert a mouse-related SDL::Event into a Tea event.  For internal use only.
     def Event.translate_mouse_event(sdl_event)
       out_events = []
