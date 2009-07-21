@@ -1,0 +1,52 @@
+require 'tea'
+
+class Smile
+  def initialize
+    @bitmap = Tea::Bitmap.new('smile.png')
+    @x = (Tea::Screen.w - @bitmap.w) / 2
+    @y = (Tea::Screen.h - @bitmap.h) / 2
+    @dx = @dy = 0
+  end
+
+  def n(move) @dy += move ? -1 : 1 end
+  def s(move) @dy += move ? 1 : -1 end
+  def e(move) @dx += move ? 1 : -1 end
+  def w(move) @dx += move ? -1 : 1 end
+
+  def update
+    @x += @dx
+    @y += @dy
+  end
+
+  def draw
+    Tea::Screen.blit @bitmap, @x, @y
+  end
+end
+
+Tea.init
+Tea::Screen.set_mode 640, 480
+player = Smile.new
+loop do
+  if e = Tea::Event.get
+    break if e.class == Tea::App::Exit
+
+    case e
+    when Tea::Kbd::Down then move = true
+    when Tea::Kbd::Up   then move = false
+    else next
+    end
+
+    case e.key
+    when :up     then player.n(move)
+    when :down   then player.s(move)
+    when :right  then player.e(move)
+    when :left   then player.w(move)
+    when :escape then break
+    end
+  end
+
+  player.update
+  Tea::Screen.clear
+  player.draw
+  Tea::Screen.update
+end
