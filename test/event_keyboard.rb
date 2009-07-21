@@ -15,7 +15,7 @@ loop do
 
   break if e.class == Tea::App::Exit
   next unless e.class == Tea::Kbd::Down || e.class == Tea::Kbd::Up
-  break if e.key == :escape
+  break if e.key == Tea::Kbd::ESCAPE
 
   out = []
 

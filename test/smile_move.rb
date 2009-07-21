@@ -44,11 +44,11 @@ loop do
     end
 
     case e.key
-    when :up     then player.n(move)
-    when :down   then player.s(move)
-    when :right  then player.e(move)
-    when :left   then player.w(move)
-    when :escape then break
+    when Tea::Kbd::UP     then player.n(move)
+    when Tea::Kbd::DOWN   then player.s(move)
+    when Tea::Kbd::RIGHT  then player.e(move)
+    when Tea::Kbd::LEFT   then player.w(move)
+    when Tea::Kbd::ESCAPE then break
     end
 
     wait_for_event = player.stopped?
