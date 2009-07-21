@@ -33,12 +33,12 @@ loop do
     puts 'Kbd::Gained event received'
   when Tea::Kbd::Lost
     puts 'Kbd::Lost event received'
-  when Tea::Event::Restored
-    puts 'Restored event received'
-  when Tea::Event::Minimized
-    puts 'Minimized event received'
-  when Tea::Event::Exit
-    puts 'Exit event received'
+  when Tea::App::Restored
+    puts 'App::Restored event received'
+  when Tea::App::Minimized
+    puts 'App::Minimized event received'
+  when Tea::App::Exit
+    puts 'App::Exit event received'
     exit
   end
   sleep 0.01

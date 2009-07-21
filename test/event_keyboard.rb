@@ -13,7 +13,7 @@ Tea::Screen.set_mode 320, 240
 loop do
   e = Tea::Event.get(true)
 
-  break if e.class == Tea::Event::Exit
+  break if e.class == Tea::App::Exit
   next unless e.class == Tea::Kbd::Down || e.class == Tea::Kbd::Up
   break if e.key == :escape
 

@@ -50,7 +50,7 @@ scroll_pos = 0
 loop do
   e = Tea::Event.get(true)
 
-  if e.class == Tea::Event::Exit
+  if e.class == Tea::App::Exit
     puts
     break
   end
