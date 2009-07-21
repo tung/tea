@@ -12,6 +12,7 @@ class Smile
   def s(move) @dy += move ? 1 : -1 end
   def e(move) @dx += move ? 1 : -1 end
   def w(move) @dx += move ? -1 : 1 end
+  def stopped?; @dx == 0 && @dy == 0; end
 
   def update
     @x += @dx
@@ -26,8 +27,14 @@ end
 Tea.init
 Tea::Screen.set_mode 640, 480
 player = Smile.new
+wait_for_event = true
 loop do
-  if e = Tea::Event.get
+  player.update
+  Tea::Screen.clear
+  player.draw
+  Tea::Screen.update
+
+  if e = Tea::Event.get(wait_for_event)
     break if e.class == Tea::App::Exit
 
     case e
@@ -43,10 +50,7 @@ loop do
     when :left   then player.w(move)
     when :escape then break
     end
-  end
 
-  player.update
-  Tea::Screen.clear
-  player.draw
-  Tea::Screen.update
+    wait_for_event = player.stopped?
+  end
 end
