@@ -42,8 +42,6 @@ module Tea
       end
     end
 
-    private
-
     # Convert a keyboard-related SDL::Event into a Tea event.  For internal use
     # only.
     def Event.translate_keyboard_event(sdl_event)
@@ -52,7 +50,7 @@ module Tea
       case sdl_event
       when SDL::Event::KeyDown
         key = SDL_KEY_TABLE[sdl_event.sym]
-        mods = Event.decode_modifiers(sdl_event.mod)
+        mods = decode_modifiers(sdl_event.mod)
 
         # Ruby 1.9 uses UTF-8 Unicode encoding.  Below this, who knows how
         # Unicode code points are interpreted?
@@ -70,12 +68,13 @@ module Tea
         out_events.push KeyDown.new(key, mods, char)
       when SDL::Event::KeyUp
         key = SDL_KEY_TABLE[sdl_event.sym]
-        mods = Event.decode_modifiers(sdl_event.mod)
+        mods = decode_modifiers(sdl_event.mod)
         out_events.push KeyUp.new(key, mods)
       end
 
       out_events
     end
+    private_class_method :translate_keyboard_event
 
     # Decode the SDL key event mod into a hash of easily consulted key modifier
     # symbols.  For internal use only.
@@ -100,6 +99,9 @@ module Tea
 
       mods
     end
+    private_class_method :decode_modifiers
+
+    private
 
     # Big fat table of SDL keys to Ruby strings.  For internal use only.
     SDL_KEY_TABLE = {SDL::Key::BACKSPACE => :backspace,

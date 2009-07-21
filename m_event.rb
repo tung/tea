@@ -30,12 +30,12 @@ module Tea
         if wait
           begin
             sdl_event = SDL::Event.wait
-            if (out_events = Event.translate_event(sdl_event))
+            if (out_events = translate_event(sdl_event))
               @@event_queue.push *out_events
             end
           end until @@event_queue.length > 0
         else
-          if (out_events = Event.translate_event(SDL::Event.poll))
+          if (out_events = translate_event(SDL::Event.poll))
             @@event_queue.push *out_events
           end
         end
@@ -46,20 +46,19 @@ module Tea
       end
     end
 
-    private
-
     # Convert an SDL::Event into one or more Tea events.  May return nil, a
     # single event object or multiple events in an array.
     def Event.translate_event(sdl_event)
       case sdl_event
       when SDL::Event::Active, SDL::Event::Quit
-        Event.translate_app_event sdl_event
+        translate_app_event sdl_event
       when SDL::Event::MouseMotion, SDL::Event::MouseButtonDown, SDL::Event::MouseButtonUp
-        Event.translate_mouse_event sdl_event
+        translate_mouse_event sdl_event
       when SDL::Event::KeyDown, SDL::Event::KeyUp
-        Event.translate_keyboard_event sdl_event
+        translate_keyboard_event sdl_event
       end
     end
+    private_class_method :translate_event
 
   end
 

@@ -37,8 +37,6 @@ module Tea
     # Event generated when mouse focus is lost.
     class MouseLost; end
 
-    private
-
     # Translates an app-related SDL::Event into an array of Tea::Event
     # objects.  For internal use only.
     def Event.translate_app_event(sdl_event)
@@ -62,6 +60,7 @@ module Tea
 
       out_events
     end
+    private_class_method :translate_app_event
 
   end
 
