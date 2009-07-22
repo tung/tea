@@ -43,11 +43,6 @@ module Tea
       @buffer
     end
 
-    private
-
-    # The pixel buffer, currently an SDL::Surface.  Internal, don't touch this!
-    attr_reader :buffer
-
   end
 
 end
