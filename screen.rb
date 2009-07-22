@@ -8,14 +8,15 @@ require 'm_primitive_drawing'
 #
 module Tea
 
-  Screen = Class.new do
+  # A Bitmap-like object that displays its contents on the screen when drawn to
+  # and updated.
+  class Screen
 
     # Video buffer depth.
     BITS_PER_PIXEL = 32
 
-    # Set or change the screen video mode, giving a width * height screen
-    # buffer.
-    def set_mode(width, height)
+    # Set or change the screen video mode, giving a width * height screen buffer.
+    def Screen.set_mode(width, height)
       begin
         @screen = SDL::Screen.open(width, height, BITS_PER_PIXEL, SDL::SWSURFACE)
       rescue SDL::Error => e
@@ -24,30 +25,20 @@ module Tea
     end
 
     # Get the screen width in pixels.
-    def w
-      @screen.w
-    end
+    def Screen.w; @screen.w; end
 
     # Get the screen height in pixels.
-    def h
-      @screen.h
-    end
+    def Screen.h; @screen.h; end
 
     # Update the screen so that things drawn on it are displayed.
-    def update
-      @screen.flip
-    end
+    def Screen.update; @screen.flip; end
 
-    include Tea::Blitting
-    def blittable_buffer
-      @screen
-    end
+    extend Blitting
+    def Screen.blittable_buffer; @screen; end
 
-    include Tea::PrimitiveDrawing
-    def primitive_buffer
-      @screen
-    end
+    extend PrimitiveDrawing
+    def Screen.primitive_buffer; @screen; end
 
-  end.new
+  end
 
 end
