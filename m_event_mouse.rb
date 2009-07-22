@@ -14,6 +14,12 @@ end
 module Tea
 
   module Mouse
+
+    # Mouse button constants for mouse events.
+    LEFT = :LEFT
+    MIDDLE = :MIDDLE
+    RIGHT = :RIGHT
+
     # Event generated when the mouse cursor is moved.
     #
     # +x+, +y+::    coordinates of the mouse cursor
@@ -24,9 +30,9 @@ module Tea
         @x = sdl_event.x
         @y = sdl_event.y
         @buttons = {}
-        @buttons[:left]   = (sdl_event.state & SDL::Mouse::BUTTON_LMASK) != 0
-        @buttons[:middle] = (sdl_event.state & SDL::Mouse::BUTTON_MMASK) != 0
-        @buttons[:right]  = (sdl_event.state & SDL::Mouse::BUTTON_RMASK) != 0
+        @buttons[Mouse::LEFT]   = (sdl_event.state & SDL::Mouse::BUTTON_LMASK) != 0
+        @buttons[Mouse::MIDDLE] = (sdl_event.state & SDL::Mouse::BUTTON_MMASK) != 0
+        @buttons[Mouse::RIGHT]  = (sdl_event.state & SDL::Mouse::BUTTON_RMASK) != 0
       end
     end
 
@@ -40,9 +46,9 @@ module Tea
         @x = sdl_event.x
         @y = sdl_event.y
         case sdl_event.button
-        when SDL::Mouse::BUTTON_LEFT   then @button = :left
-        when SDL::Mouse::BUTTON_MIDDLE then @button = :middle
-        when SDL::Mouse::BUTTON_RIGHT  then @button = :right
+        when SDL::Mouse::BUTTON_LEFT   then @button = Mouse::LEFT
+        when SDL::Mouse::BUTTON_MIDDLE then @button = Mouse::MIDDLE
+        when SDL::Mouse::BUTTON_RIGHT  then @button = Mouse::RIGHT
         end
       end
     end
@@ -58,9 +64,9 @@ module Tea
         @x = sdl_event.x
         @y = sdl_event.y
         case sdl_event.button
-        when SDL::Mouse::BUTTON_LEFT   then @button = :left
-        when SDL::Mouse::BUTTON_MIDDLE then @button = :middle
-        when SDL::Mouse::BUTTON_RIGHT  then @button = :right
+        when SDL::Mouse::BUTTON_LEFT   then @button = Mouse::LEFT
+        when SDL::Mouse::BUTTON_MIDDLE then @button = Mouse::MIDDLE
+        when SDL::Mouse::BUTTON_RIGHT  then @button = Mouse::RIGHT
         end
       end
     end
