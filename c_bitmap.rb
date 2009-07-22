@@ -18,6 +18,13 @@ module Tea
     def initialize(image_path)
       begin
         @buffer = SDL::Surface.load(image_path)
+
+        # Optimise for the screen mode, potentially making screen blits faster.
+        if Tea::Screen.mode_set?
+          @buffer = @buffer.display_format_alpha
+        else
+          Tea::Screen.on_set_mode lambda { @buffer = @buffer.display_format_alpha }
+        end
       rescue SDL::Error => e
         raise Tea::Error, e.message, e.backtrace
       end
