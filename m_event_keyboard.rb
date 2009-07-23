@@ -57,26 +57,53 @@ module Tea
       end
     end
 
+    # Returns +true+ if +key+ is being pressed down.
+    def Kbd.key_down?(key)
+      if (down = @@key_states[key]) == nil
+        raise Tea::Error, "Can't find key #{key} to check", caller
+      end
+      down
+    end
+
+    # Returns true if the modifier is 'active'.  For +:L_SHIFT+, +:R_SHIFT+,
+    # +:L_CTRL+, +:R_CTRL+, +:L_ALT+, and +:ALT_GR+ (and convenience modifier
+    # constants +:SHIFT+, +:CTRL+ and +:ALT+), this means they're being held
+    # down.  For +:NUM_LOCK+ and +:CAPS_LOCK+, this means their toggle is on.
+    def Kbd.mod_active?(mod)
+      if (active = @@mod_states[mod]) == nil
+        raise Tea::Error, "Can't find modifier #{mod} to check", caller
+      end
+      active
+    end
+
+    # Update the keyboard state, so that Kbd.key_down? and Kbd.mod_active?
+    # provide fresh data.  Called automatically by Event.get.
+    def Kbd.update_state(tea_event)
+      return unless tea_event.class == Down || tea_event.class == Up
+      @@key_states[tea_event.key] = (tea_event.class == Down)
+      @@mod_states.merge! tea_event.mods
+    end
+
     # Decode the SDL key event mod into a hash of easily consulted key modifier
     # symbols.  For internal use only.
     def Kbd.decode_modifiers(sdl_key_event_mod)
       mods = {}
 
-      mods[:l_shift] = (sdl_key_event_mod & SDL::Key::MOD_LSHIFT) != 0
-      mods[:r_shift] = (sdl_key_event_mod & SDL::Key::MOD_RSHIFT) != 0
-      mods[:shift]   = mods[:l_shift] || mods[:r_shift]
+      mods[:L_SHIFT] = (sdl_key_event_mod & SDL::Key::MOD_LSHIFT) != 0
+      mods[:R_SHIFT] = (sdl_key_event_mod & SDL::Key::MOD_RSHIFT) != 0
+      mods[:SHIFT]   = mods[:L_SHIFT] || mods[:R_SHIFT]
 
-      mods[:l_ctrl] = (sdl_key_event_mod & SDL::Key::MOD_LCTRL) != 0
-      mods[:r_ctrl] = (sdl_key_event_mod & SDL::Key::MOD_RCTRL) != 0
-      mods[:ctrl]   = mods[:l_ctrl] || mods[:r_ctrl]
+      mods[:L_CTRL] = (sdl_key_event_mod & SDL::Key::MOD_LCTRL) != 0
+      mods[:R_CTRL] = (sdl_key_event_mod & SDL::Key::MOD_RCTRL) != 0
+      mods[:CTRL]   = mods[:L_CTRL] || mods[:R_CTRL]
 
-      mods[:l_alt] = (sdl_key_event_mod & SDL::Key::MOD_LALT) != 0
-      mods[:r_alt] = (sdl_key_event_mod & SDL::Key::MOD_RALT) != 0
-      mods[:alt]   = mods[:l_alt] || mods[:r_alt]
+      mods[:L_ALT] = (sdl_key_event_mod & SDL::Key::MOD_LALT) != 0
+      mods[:R_ALT] = (sdl_key_event_mod & SDL::Key::MOD_RALT) != 0
+      mods[:ALT]   = mods[:L_ALT] || mods[:R_ALT]
 
-      mods[:num_lock]  = (sdl_key_event_mod & SDL::Key::MOD_NUM) != 0
-      mods[:caps_lock] = (sdl_key_event_mod & SDL::Key::MOD_CAPS) != 0
-      mods[:alt_gr]    = (sdl_key_event_mod & SDL::Key::MOD_MODE) != 0
+      mods[:NUM_LOCK]  = (sdl_key_event_mod & SDL::Key::MOD_NUM) != 0
+      mods[:CAPS_LOCK] = (sdl_key_event_mod & SDL::Key::MOD_CAPS) != 0
+      mods[:ALT_GR]    = (sdl_key_event_mod & SDL::Key::MOD_MODE) != 0
 
       mods
     end
@@ -225,6 +252,18 @@ module Tea
     SHIFT = :shift
     CTRL = :ctrl
     ALT = :alt
+
+    # Initialise key states to false, as opposed to nil.
+    @@key_states = {}
+    @@sdl_key_table.each_value { |sym| @@key_states[sym] = false }
+
+    # Modifier states, same deal.
+    @@mod_states = {:L_SHIFT => false, :R_SHIFT => false, :SHIFT => false,
+                    :L_CTRL  => false, :R_CTRL  => false, :CTRL  => false,
+                    :L_ALT   => false, :R_ALT   => false, :ALT   => false,
+                    :NUM_LOCK => false,
+                    :CAPS_LOCK => false,
+                    :ALT_GR => false}
   end
 
   module Event
