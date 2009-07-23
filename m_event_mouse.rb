@@ -88,6 +88,63 @@ module Tea
         end
       end
     end
+
+    # Report the x position of the mouse in the screen window.  Updated when
+    # Event.get is called.
+    def Mouse.x
+      @x = 0 if !instance_variable_defined?(:@x)
+      @x
+    end
+
+    # Report the y position of the mouse in the screen window.  Updated when
+    # Event.get is called.
+    def Mouse.y
+      @y = 0 if !instance_variable_defined?(:@y)
+      @y
+    end
+
+    # Returns true if the left mouse button is down.  Updated when Event.get is
+    # called.
+    def Mouse.left?
+      @left = false if !instance_variable_defined?(:@left)
+      @left
+    end
+
+    # Returns true if the middle mouse button is down.  Updated when Event.get
+    # is called.
+    def Mouse.middle?
+      @middle = false if !instance_variable_defined?(:@middle)
+      @middle
+    end
+
+    # Returns true if the right mouse button is down.  Updatedd when Event.get
+    # is called.
+    def Mouse.right?
+      @right = false if !instance_variable_defined?(:@right)
+      @right
+    end
+
+    # Update the mouse state, so that Mouse.x, Mouse.y, Mouse.left?,
+    # Mouse.middle? and Mouse.right? return recent data.
+    def Mouse.update_state(tea_event)
+      case tea_event
+      when Move
+        @x = tea_event.x
+        @y = tea_event.y
+      when Down
+        case tea_event.button
+        when LEFT   then @left = true
+        when MIDDLE then @middle = true
+        when RIGHT  then @right = true
+        end
+      when Up
+        case tea_event.button
+        when LEFT   then @left = false
+        when MIDDLE then @middle = false
+        when RIGHT  then @right = false
+        end
+      end
+    end
   end
 
   module Event

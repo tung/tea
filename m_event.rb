@@ -40,7 +40,7 @@ module Tea
       end
 
       tea_event = @@event_queue.shift
-      App.update_state tea_event
+      [App, Mouse].each { |state_holder| state_holder.update_state tea_event }
       tea_event
     rescue SDL::Error => e
       raise Tea::Error, e.message, e.backtrace
