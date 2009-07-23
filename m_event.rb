@@ -24,9 +24,7 @@ module Tea
     #
     # May raise Tea::Error if getting an event fails.
     def Event.get(wait=false)
-      return @@event_queue.shift if @@event_queue.length > 0
-
-      begin
+      if @@event_queue.length == 0
         if wait
           begin
             sdl_event = SDL::Event.wait
@@ -39,11 +37,13 @@ module Tea
             @@event_queue.push *out_events
           end
         end
-
-        @@event_queue.shift
-      rescue SDL::Error => e
-        raise Tea::Error, e.message, e.backtrace
       end
+
+      tea_event = @@event_queue.shift
+      App.update_state tea_event
+      tea_event
+    rescue SDL::Error => e
+      raise Tea::Error, e.message, e.backtrace
     end
 
     # Convert an SDL::Event into one or more Tea events.  May return nil, a

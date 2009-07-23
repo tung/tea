@@ -39,6 +39,24 @@ module Tea
 
     # Event generated when the screen window is restored from being minimised.
     class Restored; end
+
+    # Returns true if the screen window has not been minimised, otherwise
+    # false.
+    def App.visible?
+      @visible = true if !instance_variable_defined?(:@visible)
+      @visible
+    end
+
+    # Update the reported app state when a Tea event is retrieved, so
+    # App.visible? returns the right status.  Called automatically by
+    # Event.get.
+    def App.update_state(tea_event)
+      case tea_event
+      when Minimized then @visible = false
+      when Restored  then @visible = true
+      end
+      @visible
+    end
   end
 
   module Event
