@@ -19,8 +19,7 @@ module Tea
     def Screen.set_mode(width, height)
       begin
         @screen = SDL::Screen.open(width, height, BITS_PER_PIXEL, SDL::SWSURFACE)
-        @set_mode_callbacks.pop.call while @set_mode_callbacks.length > 0
-        @set_mode_callbacks_permanent.each { |c| c.call }
+        @set_mode_callbacks.each { |c| c.call }
       rescue SDL::Error => e
         raise Tea::Error, e.message, e.backtrace
       end
@@ -35,17 +34,10 @@ module Tea
     # called after the new screen mode is set.  The callback ordering is not
     # defined, so don't make callbacks that depend on other callbacks being
     # called first.
-    #
-    # If +keep+ is false (default), the callback is discarded after it is called.
-    def Screen.on_set_mode(callback, keep=false)
-      if keep
-        @set_mode_callbacks << callback
-      else
-        @set_mode_callbacks_permanent << callback
-      end
+    def Screen.on_set_mode(callback)
+      @set_mode_callbacks << callback
     end
     @set_mode_callbacks = []
-    @set_mode_callbacks_permanent = []
 
     # Get the screen width in pixels.
     def Screen.w; @screen.w; end
