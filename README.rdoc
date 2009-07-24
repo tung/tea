@@ -1,0 +1,99 @@
+= tea
+
+<i>For simpler games from a simpler age.</i>
+
+Tea is a simple 2D game development library for Ruby.  It's designed with these
+things in mind:
+
+* 0 is better than 1, and 1 is better than 2.
+* Simplicity beats speed.
+* Value and convenience can sometimes beat simplicity.
+* Procedural beats object-oriented in a dead-heat.
+
+The aim of Tea is to bring back some of the grass roots game development that
+things like QBASIC fostered.  By staying unobtrusive and out of the way, Tea
+lets you focus on your game or demo, and not the pointy bits that are part of
+many game engines and APIs.
+
+
+== Installing
+
+TODO
+
+
+== Using Tea
+
+First, require 'tea'.  This allows you to start using the rest of the Tea API.
+
+From there, you have access to all of Tea's modules, objects and methods.
+Below is a simple bouncing circle demo.
+
+  require 'tea'
+
+  Tea.init
+  Tea::Screen.set_mode 640, 480
+
+  x, y = 320, 240
+  dx, dy = rand() * 2 - 1, rand() * 2 - 1
+  r = 20
+
+  loop do
+    if e = Tea::Event.get
+      break if e.class == Tea::App::Exit
+    end
+
+    x += dx
+    y += dy
+    dx = -dx if x - r < 0 || x + r >= Tea::Screen.w
+    dy = -dy if y - r < 0 || y + r >= Tea::Screen.h
+
+    Tea::Screen.clear
+    Tea::Screen.circle x, y, r, 0xff00ffff
+    Tea::Screen.update
+
+    sleep 0.001
+  end
+
+
+== Status
+
+What's done:
+
+* Graphics
+  - Tea::Screen
+  - Tea::Bitmap (loaded from PNGs)
+  - Drawing of bitmaps on the screen/other bitmaps.
+  - Drawing of primitive shapes (rects, lines, circles).
+* Events
+  - Tea::Event.get.
+  - Tea::App::Minimized, Restored.
+  - Tea::Kbd::Down, Up.
+  - Tea::Mouse::Move, Down, Up, Scroll.
+  - State checking of App, Kbd, Mouse.
+
+What isn't done yet:
+
+* Sound
+* Screen resizing
+* Handling of alpha in colours for primitives
+
+What's still on the drawing board:
+
+* Timed game loop code
+* Resource management
+
+
+== License
+
+Tea is free software: you can redistribute it and/or modify it under the terms
+of the GNU Lesser General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.  Tea is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+details.
+
+You should have received a copy of the GNU Lesser General Public License along
+with Tea.  If not, see <http://www.gnu.org/licenses/>.
+
+Copyright (c) 2009 Tung Nguyen.
