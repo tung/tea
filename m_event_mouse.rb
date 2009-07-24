@@ -117,7 +117,7 @@ module Tea
       @middle
     end
 
-    # Returns true if the right mouse button is down.  Updatedd when Event.get
+    # Returns true if the right mouse button is down.  Updated when Event.get
     # is called.
     def Mouse.right?
       @right = false if !instance_variable_defined?(:@right)
