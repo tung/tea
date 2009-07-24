@@ -2,10 +2,10 @@
 
 require 'sdl'
 
-require 'c_bitmap'
-require 'c_error'
-require 'm_event'
-require 'screen'
+require 'tea/c_bitmap'
+require 'tea/c_error'
+require 'tea/m_event'
+require 'tea/screen'
 
 # The Tea module acts as a namespace for all Tea-related objects and
 # methods.

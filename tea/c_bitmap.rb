@@ -3,8 +3,8 @@
 
 require 'sdl'
 
-require 'm_blitting'
-require 'm_primitive_drawing'
+require 'tea/m_blitting'
+require 'tea/m_primitive_drawing'
 
 #
 module Tea

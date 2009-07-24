@@ -2,10 +2,10 @@
 
 require 'sdl'
 
-require 'c_error'
-require 'm_event_app'
-require 'm_event_keyboard'
-require 'm_event_mouse'
+require 'tea/c_error'
+require 'tea/m_event_app'
+require 'tea/m_event_keyboard'
+require 'tea/m_event_mouse'
 
 #
 module Tea

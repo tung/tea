@@ -2,8 +2,6 @@
 
 require 'sdl'
 
-require 'c_bitmap'
-
 #
 module Tea
 
