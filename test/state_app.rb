@@ -21,14 +21,13 @@ puts '%19s %20s%20s%20s' % ['EVENT', 'APP VISIBILITY', 'KEYBOARD', 'MOUSE']
 puts '-' * 80
 loop do
   visible = Tea::App.visible?  ? 'visible'     : 'not visible'
-  #kbd    = Tea::Kbd.in_app?   ? 'keyboard in' : 'keyboard not in'
-  kbd     = 'TODO'
+  kbd     = Tea::Kbd.in_app?   ? 'keyboard in' : 'keyboard not in'
   mouse   = Tea::Mouse.in_app? ? 'mouse in'    : 'mouse not in'
   puts '%19s:%20s%20s%20s' % [e.class, visible, kbd, mouse]
   begin
     e = Tea::Event.get(true)
     exit if e.class == Tea::App::Exit
   end until [Tea::App::Minimized, Tea::App::Restored,
-             #Tea::Kbd::Lost,     Tea::Kbd::Gained,
+             Tea::Kbd::Lost,      Tea::Kbd::Gained,
              Tea::Mouse::Lost,    Tea::Mouse::Gained].include?(e.class)
 end

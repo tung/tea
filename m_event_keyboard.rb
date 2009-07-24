@@ -76,12 +76,22 @@ module Tea
       active
     end
 
+    # Returns true if the keyboard is focused in the screen window.
+    def Kbd.in_app?
+      @@in_app = true if !class_variable_defined?(:@@in_app)
+      @@in_app
+    end
+
     # Update the keyboard state, so that Kbd.key_down? and Kbd.mod_active?
     # provide fresh data.  Called automatically by Event.get.
     def Kbd.update_state(tea_event)
-      return unless tea_event.class == Down || tea_event.class == Up
-      @@key_states[tea_event.key] = (tea_event.class == Down)
-      @@mod_states.merge! tea_event.mods
+      case tea_event
+      when Down, Up
+        @@key_states[tea_event.key] = (tea_event.class == Down)
+        @@mod_states.merge! tea_event.mods
+      when Lost then   @@in_app = false
+      when Gained then @@in_app = true
+      end
     end
 
     # Decode the SDL key event mod into a hash of easily consulted key modifier
