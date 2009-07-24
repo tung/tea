@@ -124,6 +124,12 @@ module Tea
       @right
     end
 
+    # Returns true if the mouse is in the screen window
+    def Mouse.in_app?
+      @in_app = true if !instance_variable_defined?(:@in_app)
+      @in_app
+    end
+
     # Update the mouse state, so that Mouse.x, Mouse.y, Mouse.left?,
     # Mouse.middle? and Mouse.right? return recent data.
     def Mouse.update_state(tea_event)
@@ -143,6 +149,10 @@ module Tea
         when MIDDLE then @middle = false
         when RIGHT  then @right = false
         end
+      when Lost
+        @in_app = false
+      when Gained
+        @in_app = true
       end
     end
   end
