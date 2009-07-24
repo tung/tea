@@ -22,6 +22,7 @@ It's designed with these things in mind:
   s.files = [
     "COPYING",
      "COPYING.LESSER",
+     "README.rdoc",
      "doc/example/bitmap_draw.rb",
      "doc/example/bitmap_load.rb",
      "doc/example/circles.rb",
