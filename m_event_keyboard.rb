@@ -21,7 +21,7 @@ module Tea
     class Down
       attr_reader :key, :mods, :char
       def initialize(sdl_event)
-        @key = Kbd.class_variable_get(:@@sdl_key_table)[sdl_event.sym]
+        @key = Kbd.instance_variable_get(:@sdl_key_table)[sdl_event.sym]
         @mods = Kbd.send(:decode_modifiers, sdl_event.mod)
 
         # Ruby 1.9 uses UTF-8 Unicode encoding.  Below this, who knows how
@@ -52,14 +52,14 @@ module Tea
     class Up
       attr_reader :key, :mods
       def initialize(sdl_event)
-        @key = Kbd.class_variable_get(:@@sdl_key_table)[sdl_event.sym]
+        @key = Kbd.instance_variable_get(:@sdl_key_table)[sdl_event.sym]
         @mods = Kbd.send(:decode_modifiers, sdl_event.mod)
       end
     end
 
     # Returns +true+ if +key+ is being pressed down.
     def Kbd.key_down?(key)
-      if (down = @@key_states[key]) == nil
+      if (down = @key_states[key]) == nil
         raise Tea::Error, "Can't find key #{key} to check", caller
       end
       down
@@ -70,7 +70,7 @@ module Tea
     # constants +:SHIFT+, +:CTRL+ and +:ALT+), this means they're being held
     # down.  For +:NUM_LOCK+ and +:CAPS_LOCK+, this means their toggle is on.
     def Kbd.mod_active?(mod)
-      if (active = @@mod_states[mod]) == nil
+      if (active = @mod_states[mod]) == nil
         raise Tea::Error, "Can't find modifier #{mod} to check", caller
       end
       active
@@ -78,8 +78,8 @@ module Tea
 
     # Returns true if the keyboard is focused in the screen window.
     def Kbd.in_app?
-      @@in_app = true if !class_variable_defined?(:@@in_app)
-      @@in_app
+      @in_app = true if !instance_variable_defined?(:@in_app)
+      @in_app
     end
 
     # Update the keyboard state, so that Kbd.key_down? and Kbd.mod_active?
@@ -87,10 +87,10 @@ module Tea
     def Kbd.update_state(tea_event)
       case tea_event
       when Down, Up
-        @@key_states[tea_event.key] = (tea_event.class == Down)
-        @@mod_states.merge! tea_event.mods
-      when Lost then   @@in_app = false
-      when Gained then @@in_app = true
+        @key_states[tea_event.key] = (tea_event.class == Down)
+        @mod_states.merge! tea_event.mods
+      when Lost then   @in_app = false
+      when Gained then @in_app = true
       end
     end
 
@@ -120,7 +120,7 @@ module Tea
     private_class_method :decode_modifiers
 
     # Big fat table of SDL keys to Ruby strings.  For internal use only.
-    @@sdl_key_table = {SDL::Key::BACKSPACE => :BACKSPACE,
+    @sdl_key_table = { SDL::Key::BACKSPACE => :BACKSPACE,
                        SDL::Key::TAB => :TAB,
                        #SDL::Key::CLEAR => clear, # ???
                        SDL::Key::RETURN => :ENTER,
@@ -256,7 +256,7 @@ module Tea
                        }
 
     # Define Tea key symbols as constants to avoid typo errors.
-    @@sdl_key_table.each_value { |sym| const_set(sym, sym) }
+    @sdl_key_table.each_value { |sym| const_set(sym, sym) }
 
     # Extra modifier constants for making modifier detection more consistent.
     SHIFT = :shift
@@ -264,16 +264,16 @@ module Tea
     ALT = :alt
 
     # Initialise key states to false, as opposed to nil.
-    @@key_states = {}
-    @@sdl_key_table.each_value { |sym| @@key_states[sym] = false }
+    @key_states = {}
+    @sdl_key_table.each_value { |sym| @key_states[sym] = false }
 
     # Modifier states, same deal.
-    @@mod_states = {:L_SHIFT => false, :R_SHIFT => false, :SHIFT => false,
+    @mod_states = { :L_SHIFT => false, :R_SHIFT => false, :SHIFT => false,
                     :L_CTRL  => false, :R_CTRL  => false, :CTRL  => false,
                     :L_ALT   => false, :R_ALT   => false, :ALT   => false,
                     :NUM_LOCK => false,
                     :CAPS_LOCK => false,
-                    :ALT_GR => false}
+                    :ALT_GR => false }
   end
 
   module Event
