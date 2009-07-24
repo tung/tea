@@ -27,7 +27,11 @@ loop do
 
   out << '(' << e.key.to_s << ')'
 
-  mods = (e.mods.select { |mod, down| down }).keys
+  if RUBY_VERSION =~ /1\.8/
+    mods = (e.mods.select { |mod, down| down }).map { |pair| pair[0] }
+  else
+    mods = (e.mods.select { |mod, down| down }).keys
+  end
   out << "++ #{mods.join(' + ')}" if mods.length > 0
 
   if e.respond_to?(:char)

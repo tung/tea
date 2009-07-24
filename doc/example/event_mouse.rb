@@ -65,7 +65,11 @@ loop do
   handled = true
   case e
   when Tea::Mouse::Move
-    buttons = (e.buttons.select { |button, down| down }).keys
+    if RUBY_VERSION =~ /1\.8/
+      buttons = (e.buttons.select { |button, down| down }).map { |pair| pair[0] }
+    else
+      buttons = (e.buttons.select { |button, down| down }).keys
+    end
     pr "mouse move : x = #{e.x}, y = #{e.y}, buttons = #{buttons.join(',')}"
   when Tea::Mouse::Down
     pr "mouse down : x = #{e.x}, y = #{e.y}, button = #{e.button}"
