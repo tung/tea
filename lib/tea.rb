@@ -1,4 +1,4 @@
-# Tea is a simple 2D game development framework for Ruby.
+# Tea is a simple 2D game development library for Ruby.
 
 require 'sdl'
 
