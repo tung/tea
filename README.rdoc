@@ -18,15 +18,15 @@ many game engines and APIs.
 
 == Installing
 
-First, get Ruby <http://www.ruby-lang.org/> if you don't have it already.  Ruby
+First, get Ruby (http://www.ruby-lang.org/) if you don't have it already.  Ruby
 1.9 or later is recommended.
 
 Tea is available as a gem on GitHub, so you can install it like so:
 
   gem install tung-tea -s http://gems.github.com
 
-The rubysdl gem <http://www.kmc.gr.jp/~ohai/> will be installed automatically
-as a dependency of Tea.
+The rubysdl gem (http://www.kmc.gr.jp/~ohai/rubysdl.en.html) will be installed
+automatically as a dependency of Tea.
 
 
 == Using Tea
@@ -89,7 +89,7 @@ What isn't done yet:
 == More information
 
 Project page:: http://github.com/tung/tea
-Wiki:: http://wiki.github.com/tung/tea
+Wiki::         http://wiki.github.com/tung/tea
 
 
 == License
@@ -103,6 +103,6 @@ FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 details.
 
 You should have received a copy of the GNU Lesser General Public License along
-with Tea.  If not, see <http://www.gnu.org/licenses/>.
+with Tea.  If not, see (http://www.gnu.org/licenses/).
 
 Copyright (c) 2009 Tung Nguyen.
