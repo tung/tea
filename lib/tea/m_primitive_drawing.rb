@@ -47,8 +47,8 @@ module Tea
                                  (options[:antialias] if options)
     end
 
-    # Draw a circle centred at (x, y) with the given radius and color.
-    # Optional hash arguments:
+    # Draw a circle centred at (x, y) with the given radius and color
+    # (0xRRGGBBAA).  Optional hash arguments:
     #
     # +:outline+::    If true, do not fill the circle, just draw an outline.
     # +:antialias+::  If true, smooth the edges of the circle with
@@ -67,10 +67,20 @@ module Tea
     # Convert hex_color of the form 0xRRGGBBAA to a color value the
     # primitive_buffer understands.
     def primitive_color(hex_color)
+      primitive_rgba_to_color(*primitive_hex_to_rgba(hex_color))
+    end
+
+    # Break hex_color from the form 0xRRGGBBAA to [red, green, blue, alpha].
+    def primitive_hex_to_rgba(hex_color)
       red   = (hex_color & 0xff000000) >> 24
       green = (hex_color & 0x00ff0000) >> 16
       blue  = (hex_color & 0x0000ff00) >>  8
       alpha = (hex_color & 0x000000ff)
+      [red, green, blue, alpha]
+    end
+
+    # Generate a colour compatible with the primitive buffer.
+    def primitive_rgba_to_color(red, green, blue, alpha=255)
       primitive_buffer.map_rgba(red, green, blue, alpha)
     end
 
