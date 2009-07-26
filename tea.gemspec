@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tea}
-  s.version = "0.0.4"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tung Nguyen"]
-  s.date = %q{2009-07-25}
+  s.date = %q{2009-07-26}
   s.description = %q{Tea is a library for making simpler games from a simpler age.
 It's designed with these things in mind:
 
@@ -41,6 +41,9 @@ It's designed with these things in mind:
      "doc/example/state_app.rb",
      "doc/example/state_keyboard.rb",
      "doc/example/state_mouse.rb",
+     "doc/key_constants.textile",
+     "doc/key_modifiers.textile",
+     "doc/reference.textile",
      "lib/tea.rb",
      "lib/tea/c_bitmap.rb",
      "lib/tea/c_error.rb",
@@ -52,6 +55,7 @@ It's designed with these things in mind:
      "lib/tea/m_primitive_drawing.rb",
      "lib/tea/screen.rb"
   ]
+  s.homepage = %q{http://github.com/tung/tea}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.3}
