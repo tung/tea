@@ -1,0 +1,204 @@
+This page is manually assembled, so parts of it may become out of date. If something's missing or doesn't exist, let me know.
+
+
+h1. Tea
+
+h2. Tea.init()
+
+Intialise Tea.  This needs to be called before using any of Tea's objects or methods.  May throw Tea::Error if initialisation fails.
+
+h2. Tea::Error
+
+This is the exception class raised when Bad Things happen in any of Tea's objects or methods.
+
+
+h1. Graphics
+
+h2. Tea::Bitmap
+
+A Bitmap is a grid of pixels that holds graphics.  It can be drawn onto and drawn with.
+
+h3. Tea::Bitmap included mixins
+
+Instances of Tea::Bitmap share methods from the following modules:
+
+Tea::Blitting:
+* blit(source_blittable, x, y)
+
+Tea::PrimitiveDrawing:
+* clear()
+* point(x, y, color)
+* rect(x, y, w, h, color)
+* line(x1, y1, x2, y2, color[, {:antialias => false}])
+* circle(x, y, radius, color[, {:outline => false, :antialias => false}])
+
+Note that colours are of the form 0xRRGGBBAA.
+
+h3. Tea::Bitmap.new(image_path)
+
+Create a new Bitmap from an image file.  May raise Tea::Error if it fails.
+
+h3. Tea::Bitmap#w()
+
+The width of the Bitmap in pixels.
+
+h3. Tea::Bitmap#h()
+
+The height of the Bitmap in pixels.
+
+h2. Tea::Screen
+
+Tea::Screen acts much like a Bitmap, except things drawn to it will be displayed on the screen once Tea::Screen.update() is called.
+
+h3. Tea::Screen mixins
+
+Since Tea::Screen is an object and not a class, its mixins add methods to Tea::Screen itself.
+
+Tea::Blitting:
+* blit(source_blittable, x, y)
+
+Tea::PrimitiveDrawing:
+* clear()
+* point(x, y, color)
+* rect(x, y, w, h, color)
+* line(x1, y1, x2, y2, color[, {:antialias => false}])
+* circle(x, y, radius, color[, {:outline => false, :antialias => false}])
+
+Note that colours are of the form 0xRRGGBBAA.
+
+h3. Tea::Screen.set_mode(width, height)
+
+Create a screen window with the given dimensions.  After this, you can start drawing on the screen.  May raise Tea::Error if it fails.
+
+h3. Tea::Screen.update()
+
+Make what has been drawn on the screen visible.
+
+h3. Tea::Screen.w()
+
+The width of the screen in pixels.
+
+h3. Tea::Screen.h()
+
+The height of the screen in pixels.
+
+
+h1. Input and other events
+
+Event handling is the heart and soul of most games, so this subsystem is quite important.
+
+h2. Tea::Event
+
+The Event module allows access to the event queue, and the classes of events that come out.
+
+Events rely on having a screen window, so call Tea::Screen.set_mode before using any of these.
+
+h3. Tea::Event.get(wait=false)
+
+Get the next event in the event queue.  If wait is true and there are no events to return, this method will wait until there is one and return it.  Otherwise, an empty event queue will return nil.  The events that can be returned include:
+
+* *Tea::App::Exit*
+* *Tea::App::Minimized*
+* *Tea::App::Restored*
+
+* *Tea::Kbd::Lost*
+  - i.e. keyboard input focus lost
+* *Tea::Kbd::Gained*
+  - i.e. keyboard input focus gained
+* *Tea::Kbd::Down*
+  - key - keyboard key that was pressed (see [[Key Constants]])
+  - mods - a hash of modifiers active when key was pressed (see [[Key Modifiers]])
+  - char - character generated when the key is typed
+* *Tea::Kbd::Up*
+  - key - keyboard key that was released (see [[Key Constants]])
+  - mods - modifiers active when the key was released (see [[Key Modifiers]])
+
+* *Tea::Mouse::Move*
+  - x, y - coordinates of the mouse
+  - buttons - a hash of mouse buttons to true/false: Tea::Mouse::LEFT, MIDDLE and RIGHT
+* *Tea::Mouse::Lost*
+  - i.e. mouse is no longer in the screen window
+* *Tea::Mouse::Gained*
+  - i.e. mouse is within the screen window
+* *Tea::Mouse::Down*
+  - x, y - coordinates of the mouse when the button was pressed
+  - button - one of Tea::Mouse::LEFT, MIDDLE or RIGHT
+* *Tea::Mouse::Up*
+  - x, y - coordinates of the mouse when the button was released
+  - button - mouse button constant, same as for Tea::Mouse::Down#button
+* *Tea::Mouse::Scroll*
+  - x, y - coordinates of the mouse when the scroll wheel was used
+  - delta - 1 for a downward scroll, -1 for an upward scroll
+
+These returned event objects may have methods that give extra information about the event itself.
+
+May raise Tea::Error if getting an event fails.
+
+h2. Tea::App
+
+As well as the app-related events that spawn from here, this module also provides some app-related status checking.
+
+The methods below will only return different values when Tea::Event.get() is called.
+
+h3. Tea::App.visible?
+
+Returns true if the screen window is visible, i.e. not minimised.
+
+h2. Tea::Kbd
+
+As well as the keyboard-related events that spawn from here, this module also lets you check the status of keys and modifiers.
+
+The methods below will only return different values when Tea::Event.get() is called.
+
+h3. Tea::Kbd.in_app?()
+
+Returns true if the keyboard focus is within the screen window. Most of the time, this means the screen window is in the foreground.
+
+h3. Tea::Kbd.key_down?(key)
+
+Returns true if the key given is being pressed.  See [[Key Constants]].
+
+h3. Tea::Kbd.mod_active?(mod)
+
+Returns true if the modifier is 'active'.
+
+For Shift, Ctrl, Alt and AltGr (not sure on the last one) this means they're being held down.
+
+For Num Lock and Caps Lock, this means their toggle is on.
+
+Tea::Kbd::SHIFT, CTRL and ALT can be passed in for convenience.  See [[Key Modifiers]].
+
+h2. Tea::Mouse
+
+As well as the mouse-related events that spawn from here, this module also lets you check the state of the mouse.
+
+The methods below will only return different values when Tea::Event.get() is called.
+
+h3. Tea::Mouse.in_app?()
+
+Returns true if the mouse cursor is over the screen window.  If there are other windows in front of the screen window, this can still return true, depending on your environment.
+
+h3. Tea::Mouse.x()
+
+Get the x part of the mouse coordinates.
+
+h3. Tea::Mouse.y()
+
+Get the y part of the mouse coordinates.
+
+h3. Tea::Mouse.left?()
+
+Returns true when the left mouse button is held down.
+
+h3. Tea::Mouse.middle?()
+
+Returns true when the middle mouse button is held down.
+
+h3. Tea::Mouse.right?()
+
+Returns true when the right mouse button is held down.
+
+
+h1. Sound
+
+Nothing yet.

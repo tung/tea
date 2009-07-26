@@ -1,0 +1,19 @@
+Key modifiers are things like Shift or Num Lock that change the meaning of some keys when they're held down or toggled on.  Tea::Kbd::Down and Tea::Kbd::Up events provide modifier information.
+
+The following constants are valid modifiers that also happen to match their keys.  Like the [[Key Constants]], they also live in Tea::Kbd, so the left Shift  key would be Tea::Kbd::L_SHIFT.
+
+L_SHIFT
+R_SHIFT
+L_CTRL
+R_CTRL
+L_ALT
+R_ALT
+NUM_LOCK
+CAPS_LOCK
+ALT_GR
+
+These extra constants can used for convenience. They also live in Tea::Kbd, but aren't physical keys.
+
+SHIFT
+CTRL
+ALT

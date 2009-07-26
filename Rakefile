@@ -5,7 +5,10 @@ begin
   Jeweler::Tasks.new do |spec|
     spec.name = 'tea'
     spec.summary = 'A simple game development library for Ruby.'
-    spec.files = FileList['README.rdoc', 'COPYING*', 'lib/tea.rb', 'lib/tea/*.rb', 'doc/example/*.rb', 'doc/example/smile.png'].to_a
+    spec.files = FileList['README.rdoc', 'COPYING*',
+                          'lib/tea.rb', 'lib/tea/*.rb',
+                          'doc/*.textile',
+                          'doc/example/*.rb', 'doc/example/smile.png'].to_a
     spec.add_dependency 'rubysdl'
 
     spec.author = 'Tung Nguyen'
