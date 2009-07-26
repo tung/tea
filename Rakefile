@@ -19,6 +19,7 @@ It's designed with these things in mind:
  - Value and convenience can sometimes beat simplicity.
  - Procedural beats object-oriented in a dead-heat.
     DESCRIPTION
+    spec.homepage = 'http://github.com/tung/tea'
     spec.has_rdoc = true
   end
 rescue LoadError

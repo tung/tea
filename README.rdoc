@@ -1,4 +1,4 @@
-= tea
+= Tea
 
 <i>For simpler games from a simpler age.</i>
 
@@ -18,7 +18,15 @@ many game engines and APIs.
 
 == Installing
 
-TODO
+First, get Ruby <http://www.ruby-lang.org/> if you don't have it already.  Ruby
+1.9 or later is recommended.
+
+Tea is available as a gem on GitHub, so you can install it like so:
+
+  gem install tung-tea -s http://gems.github.com
+
+The rubysdl gem <http://www.kmc.gr.jp/~ohai/> will be installed automatically
+as a dependency of Tea.
 
 
 == Using Tea
@@ -34,7 +42,7 @@ Below is a simple bouncing circle demo.
   Tea::Screen.set_mode 640, 480
 
   x, y = 320, 240
-  dx, dy = rand() * 2 - 1, rand() * 2 - 1
+  dx, dy = rand() * 4 - 2, rand() * 4 - 2
   r = 20
 
   loop do
@@ -77,10 +85,11 @@ What isn't done yet:
 * Screen resizing
 * Handling of alpha in colours for primitives
 
-What's still on the drawing board:
 
-* Timed game loop code
-* Resource management
+== More information
+
+Project page:: http://github.com/tung/tea
+Wiki:: http://wiki.github.com/tung/tea
 
 
 == License
