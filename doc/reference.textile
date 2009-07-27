@@ -134,6 +134,49 @@ These returned event objects may have methods that give extra information about 
 
 May raise Tea::Error if getting an event fails.
 
+h2. Tea::Event::Dispatch mixin
+
+This mixin gives the class a dispatch_event method that, when called, will call a specially-named method that matches the event's class name.
+
+<pre>
+require 'tea'
+
+class MyEventHandler
+  def initialize; @done = false; end
+  def done?; @done; end
+
+  include Tea::Event::Dispatch
+
+  def kbd_down(e)
+    puts "You typed: #{e.char}"
+    if e.key == Tea::Kbd::ESCAPE
+      puts 'Bye bye!'
+      @done = true
+    end
+  end
+end
+
+handler = MyEventHandler
+while !handler.done?
+  handler.dispatch_event Tea::Event.get(true)
+end
+</pre>
+
+This example shows:
+
+1. the Tea::Event::Dispatch mixin being included in a class,
+2. a sample event handling function kbd_down, matching Tea::Kbd::Down, and
+3. dispatch_event being called with an event passed into it.
+
+Event names are matched to method names as follows:
+
+1. Get the original class name, e.g. Tea::Kbd::Down.
+2. Get rid of the 'Tea::' part, e.g. Kbd::Down.
+3. Substitute the '::' for '_', e.g. Kbd_Down.
+4. Convert to all lower case, e.g. kbd_down.
+
+This mixin may not be needed for simpler games, but it can help when using classes to organise game code.
+
 h2. Tea::App
 
 As well as the app-related events that spawn from here, this module also provides some app-related status checking.

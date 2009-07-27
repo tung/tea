@@ -1,3 +1,5 @@
+# Move the Smiley face with the arrow keys.  Press Esc to exit.
+
 require 'tea'
 
 class Smile

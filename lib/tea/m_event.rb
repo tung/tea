@@ -4,6 +4,7 @@ require 'sdl'
 
 require 'tea/c_error'
 require 'tea/m_event_app'
+require 'tea/m_event_dispatch'
 require 'tea/m_event_keyboard'
 require 'tea/m_event_mouse'
 
