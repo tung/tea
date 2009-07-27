@@ -142,8 +142,8 @@ This mixin gives the class a dispatch_event method that, when called, will call 
 require 'tea'
 
 class MyEventHandler
+  attr_reader :done
   def initialize; @done = false; end
-  def done?; @done; end
 
   include Tea::Event::Dispatch
 
@@ -160,7 +160,7 @@ Tea.init
 Tea::Screen.set_mode 400, 300
 
 handler = MyEventHandler.new
-until handler.done?
+until handler.done
   handler.dispatch_event Tea::Event.get(true)
 end
 </pre>
