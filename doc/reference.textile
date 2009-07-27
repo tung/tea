@@ -156,7 +156,10 @@ class MyEventHandler
   end
 end
 
-handler = MyEventHandler
+Tea.init
+Tea::Screen.set_mode 400, 300
+
+handler = MyEventHandler.new
 while !handler.done?
   handler.dispatch_event Tea::Event.get(true)
 end
