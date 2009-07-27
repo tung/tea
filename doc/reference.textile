@@ -160,7 +160,7 @@ Tea.init
 Tea::Screen.set_mode 400, 300
 
 handler = MyEventHandler.new
-while !handler.done?
+until handler.done?
   handler.dispatch_event Tea::Event.get(true)
 end
 </pre>
