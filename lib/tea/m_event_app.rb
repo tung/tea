@@ -2,15 +2,6 @@
 
 require 'sdl'
 
-# A hot-patch to Ruby/SDL for missing SDL::Event::Active#state constants.
-module SDL
-  class Event
-    APPMOUSEFOCUS = 0x01
-    APPINPUTFOCUS = 0x02
-    APPACTIVE     = 0x04
-  end
-end
-
 #
 module Tea
 
@@ -61,6 +52,11 @@ module Tea
 
   module Event
 
+    # APP constants rubysdl is missing.  For internal use only.
+    APPMOUSEFOCUS_ = 0x01
+    APPINPUTFOCUS_ = 0x02
+    APPACTIVE_     = 0x04
+
     # Translates an app-related SDL::Event into an array of Tea::Event
     # objects.  For internal use only.
     def Event.translate_app_event(sdl_event)
@@ -71,13 +67,13 @@ module Tea
         out_events.push App::Exit.new
 
       when SDL::Event::Active
-        if (sdl_event.state & SDL::Event::APPACTIVE) != 0
+        if (sdl_event.state & APPACTIVE_) != 0
           out_events.push sdl_event.gain ? App::Restored.new : App::Minimized.new
         end
-        if (sdl_event.state & SDL::Event::APPINPUTFOCUS) != 0
+        if (sdl_event.state & APPINPUTFOCUS_) != 0
           out_events.push sdl_event.gain ? Kbd::Gained.new : Kbd::Lost.new
         end
-        if (sdl_event.state & SDL::Event::APPMOUSEFOCUS) != 0
+        if (sdl_event.state & APPMOUSEFOCUS_) != 0
           out_events.push sdl_event.gain ? Mouse::Gained.new : Mouse::Lost.new
         end
       end

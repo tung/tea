@@ -2,14 +2,6 @@
 
 require 'sdl'
 
-# Hot-patch for Ruby/SDL for missing mouse wheel constants.
-module SDL
-  module Mouse
-    BUTTON_WHEELUP = 4
-    BUTTON_WHEELDOWN = 5
-  end
-end
-
 #
 module Tea
 
@@ -81,8 +73,8 @@ module Tea
         @x = sdl_event.x
         @y = sdl_event.y
         case sdl_event.button
-        when SDL::Mouse::BUTTON_WHEELDOWN then @delta = 1
-        when SDL::Mouse::BUTTON_WHEELUP   then @delta = -1
+        when Event::BUTTON_WHEELDOWN_ then @delta = 1
+        when Event::BUTTON_WHEELUP_   then @delta = -1
         else
           raise Tea::Error, "Tea::Mouse::Scroll given an unexpected event: #{sdl_event.inspect}", caller
         end
@@ -159,6 +151,10 @@ module Tea
 
   module Event
 
+    # Missing mouse wheel button constants from rubysdl.  For internal use only.
+    BUTTON_WHEELUP_ = 4
+    BUTTON_WHEELDOWN_ = 5
+
     # Convert a mouse-related SDL::Event into a Tea event.  For internal use only.
     def Event.translate_mouse_event(sdl_event)
       out_events = []
@@ -170,7 +166,7 @@ module Tea
         case sdl_event.button
         when SDL::Mouse::BUTTON_LEFT, SDL::Mouse::BUTTON_MIDDLE, SDL::Mouse::BUTTON_RIGHT
           out_events.push Mouse::Down.new(sdl_event)
-        when SDL::Mouse::BUTTON_WHEELDOWN, SDL::Mouse::BUTTON_WHEELUP
+        when BUTTON_WHEELDOWN_, BUTTON_WHEELUP_
           out_events.push Mouse::Scroll.new(sdl_event)
         end
       when SDL::Event::MouseButtonUp
