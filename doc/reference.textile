@@ -34,9 +34,14 @@ Tea::PrimitiveDrawing:
 
 Note that colours are of the form 0xRRGGBBAA.
 
-h3. Tea::Bitmap.new(image_path)
+h3. Tea::Bitmap.new(*args)
 
-Create a new Bitmap from an image file.  May raise Tea::Error if it fails.
+Create a new Bitmap.  This can be done in 2 ways:
+
+1. Tea::Bitmap.new(image_path): load from an image file.
+2. Tea::Bitmap.new(width, height, color): create with the given size and colour.
+
+ArgumentError is raised if you don't call it in one of these ways.  Tea::Error may be raised if one of these initialisations fail.
 
 h3. Tea::Bitmap#w()
 
