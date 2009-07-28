@@ -23,7 +23,7 @@ It's designed with these things in mind:
  - Procedural beats object-oriented in a dead-heat.
     DESCRIPTION
     spec.homepage = 'http://github.com/tung/tea'
-    spec.has_rdoc = true
+    spec.has_rdoc = false
   end
 rescue LoadError
   puts 'Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com'
