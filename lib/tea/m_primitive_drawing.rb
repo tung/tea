@@ -77,10 +77,30 @@ module Tea
     # Optional hash arguments:
     #
     # +:antialias+::    If true, smooth the line with antialiasing.
+    # +:mix+::          +:blend+ averages the RGB parts of the line and
+    #                   destination colours by the line alpha (default).
+    #                   +:replace+ writes over the RGBA parts of the line
+    #                   destination pixels.
     def line(x1, y1, x2, y2, color, options=nil)
-      primitive_buffer.draw_line x1, y1, x2, y2,
-                                 primitive_color(color),
-                                 (options[:antialias] if options)
+      if options == nil
+        aa = false
+        mix = :blend
+      else
+        aa = options[:antialias] || false
+        mix = options[:mix] || :blend
+
+        unless [:blend, :replace].include?(mix)
+          raise Tea::Error, "invalid mix option \"#{mix}\"", caller
+        end
+      end
+
+      case mix
+      when :blend
+        r, g, b, a = primitive_hex_to_rgba(color)
+        primitive_buffer.draw_line x1, y1, x2, y2, primitive_rgba_to_color(r, g, b, 255), aa, a
+      when :replace
+        primitive_buffer.draw_line x1, y1, x2, y2, primitive_color(color), aa
+      end
     end
 
     # Draw a circle centred at (x, y) with the given radius and color
