@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tea}
-  s.version = "0.1.5"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tung Nguyen"]
-  s.date = %q{2009-07-29}
+  s.date = %q{2009-07-31}
   s.description = %q{Tea is a library for making simpler games from a simpler age.
 It's designed with these things in mind:
 
@@ -26,14 +26,17 @@ It's designed with these things in mind:
      "doc/example/bitmap_draw.rb",
      "doc/example/bitmap_load.rb",
      "doc/example/bitmap_new.rb",
-     "doc/example/circles.rb",
+     "doc/example/circle.rb",
+     "doc/example/circle_alpha.rb",
      "doc/example/event_app.rb",
      "doc/example/event_keyboard.rb",
      "doc/example/event_mouse.rb",
      "doc/example/init.rb",
      "doc/example/lines.rb",
+     "doc/example/lines_alpha.rb",
      "doc/example/point.rb",
      "doc/example/rect.rb",
+     "doc/example/rect_alpha.rb",
      "doc/example/screen_set_mode.rb",
      "doc/example/screen_update.rb",
      "doc/example/smile.png",
