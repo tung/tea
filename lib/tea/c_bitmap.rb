@@ -74,13 +74,12 @@ module Tea
         raise Tea::Error, "can't create bitmap smaller than 1x1 (#{width}x#{height})", caller
       end
 
-      # Default to little endian pixel format, because it's what Intel uses,
-      # and Intel arches are common.
-      rmask = 0x000000ff
-      gmask = 0x0000ff00
-      bmask = 0x00ff0000
-      amask = 0xff000000
-      @buffer = SDL::Surface.new(SDL::SWSURFACE | SDL::SRCALPHA,
+      # Default to big endian, as it works better with SGE's anti-aliasing.
+      rmask = 0xff000000
+      gmask = 0x00ff0000
+      bmask = 0x0000ff00
+      amask = 0x000000ff
+      @buffer = SDL::Surface.new(SDL::SWSURFACE,
                                  width, height, 32,
                                  rmask, gmask, bmask, amask)
       rect 0, 0, w, h, color, :mix => :replace
