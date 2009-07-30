@@ -109,18 +109,52 @@ module Tea
     # +:outline+::    If true, do not fill the circle, just draw an outline.
     # +:antialias+::  If true, smooth the edges of the circle with
     #                 antialiasing.
+    # +:mix+::        +:blend+ averages the RGB parts of the circle and
+    #                 destination colours by the colour's alpha (default).
+    #                 +:replace+ writes over the RGBA parts of the circle's
+    #                 destination pixels.
     #
-    # Raises Tea::Error if the radius is less than 0.
+    # Raises Tea::Error if the radius is less than 0, or :mix is given an
+    # unrecognised symbol.
     def circle(x, y, radius, color, options=nil)
       if radius < 0
         raise Tea::Error, "can't draw circle with radius #{radius}", caller
       end
 
-      if options
-        primitive_buffer.draw_circle x, y, radius, primitive_color(color),
-                                     !options[:outline], options[:antialias]
+      if options == nil
+        outline = false
+        antialias = false
+        mix = :blend
       else
-        primitive_buffer.draw_circle x, y, radius, primitive_color(color), true
+        outline = options[:outline] || false
+        antialias = options[:antialias] || false
+        mix = options[:mix] || :blend
+
+        unless [:blend, :replace].include?(mix)
+          raise Tea::Error, "invalid mix option \"#{mix}\"", caller
+        end
+      end
+
+      case mix
+      when :blend
+        r, g, b, a = primitive_hex_to_rgba(color)
+        if !outline && antialias && a < 255
+          # rubysdl can't draw filled antialiased alpha circles for some reason.
+          # Big endian because the SGE-powered circle antialiasing apparently
+          # doesn't like it any other way.
+          ts = SDL::Surface.new(SDL::SWSURFACE, (radius + 1) * 2, (radius + 1) * 2, 32,
+                                0xff000000,
+                                0x00ff0000,
+                                0x0000ff00,
+                                0x000000ff)
+          ts.draw_circle radius + 1, radius + 1, radius, ts.map_rgba(r, g, b, a), true, true
+          SDL::Surface.blit ts, 0, 0, ts.w, ts.h, primitive_buffer, x - radius - 1, y - radius - 1
+        else
+          primitive_buffer.draw_circle x, y, radius, primitive_rgba_to_color(r, g, b, 255),
+                                       !outline, antialias, (a == 255 ? nil : a)
+        end
+      when :replace
+        primitive_buffer.draw_circle x, y, radius, primitive_color(color), !outline, antialias
       end
     end
 

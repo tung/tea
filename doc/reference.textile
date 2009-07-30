@@ -30,7 +30,7 @@ Tea::PrimitiveDrawing:
 * point(x, y, color)
 * rect(x, y, w, h, color[, {:mix => :blend (alt. :replace)}])
 * line(x1, y1, x2, y2, color[, {:antialias => false, :mix => :blend (alt. :replace)}])
-* circle(x, y, radius, color[, {:outline => false, :antialias => false}])
+* circle(x, y, radius, color[, {:outline => false, :antialias => false, :mix => :blend (alt. :replace)}])
 
 Note that colours are of the form 0xRRGGBBAA.
 
@@ -67,7 +67,7 @@ Tea::PrimitiveDrawing:
 * point(x, y, color)
 * rect(x, y, w, h, color[, {:mix => :blend (alt. :replace)}])
 * line(x1, y1, x2, y2, color[, {:antialias => false, :mix => :blend (alt. :replace)}])
-* circle(x, y, radius, color[, {:outline => false, :antialias => false}])
+* circle(x, y, radius, color[, {:outline => false, :antialias => false, :mix => :blend (alt. :replace)}])
 
 Note that colours are of the form 0xRRGGBBAA.
 
