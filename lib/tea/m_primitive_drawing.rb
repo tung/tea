@@ -39,14 +39,38 @@ module Tea
     end
 
     # Draw a rectangle of size w * h with the top-left corner at (x, y) with
-    # the given color (0xRRGGBBAA).
+    # the given color (0xRRGGBBAA).  Hash arguments that can be used:
     #
-    # Raises Tea::Error if w or h are less than 0.
-    def rect(x, y, w, h, color)
-      if w < 0 || h < 0
+    # +:mix+::    +:blend+ averages the RGB parts the rectangle and destination
+    #             colours according to the colour's alpha (default).
+    #             +:replace+ writes over the full RGBA parts of the rectangle
+    #             area's pixels.
+    #
+    # Raises Tea::Error if w or h are less than 0, or if +:mix+ is given an
+    # unrecognised symbol.
+    def rect(x, y, w, h, color, options=nil)
+      if w < 0 || h < 0 || (options && options[:mix] == :blend && (w < 1 || h < 1))
         raise Tea::Error, "can't draw rectangle of size #{w}x#{h}", caller
       end
-      primitive_buffer.fill_rect x, y, w, h, primitive_color(color)
+
+      if options == nil || options[:mix] == nil
+        mix = :blend
+      else
+        unless [:blend, :replace].include?(options[:mix])
+          raise Tea::Error, "invalid mix option \"#{options[:mix]}\"", caller
+        end
+        mix = options[:mix]
+      end
+
+      case mix
+      when :blend
+        r, g, b, a = primitive_hex_to_rgba(color)
+        # draw_rect has an off-by-one error with the width and height, hence the "- 1"s.
+        return if w < 1 || h < 1
+        primitive_buffer.draw_rect x, y, w - 1, h - 1, primitive_rgba_to_color(r, g, b, 255), true, a
+      when :replace
+        primitive_buffer.fill_rect x, y, w, h, primitive_color(color)
+      end
     end
 
     # Draw a line from (x1, y1) to (x2, y2) with the given color (0xRRGGBBAA).
