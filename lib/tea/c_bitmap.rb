@@ -83,7 +83,7 @@ module Tea
       @buffer = SDL::Surface.new(SDL::SWSURFACE | SDL::SRCALPHA,
                                  width, height, 32,
                                  rmask, gmask, bmask, amask)
-      rect 0, 0, w, h, color
+      rect 0, 0, w, h, color, :mix => :replace
 
       # Optimise for the screen mode, now or later.
       if Tea::Screen.mode_set?
