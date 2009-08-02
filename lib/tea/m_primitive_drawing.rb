@@ -83,10 +83,10 @@ module Tea
     #                   destination pixels.
     def line(x1, y1, x2, y2, color, options=nil)
       if options == nil
-        aa = false
+        antialias = false
         mix = :blend
       else
-        aa = options[:antialias] || false
+        antialias = options[:antialias] || false
         mix = options[:mix] || :blend
 
         unless [:blend, :replace].include?(mix)
@@ -94,12 +94,34 @@ module Tea
         end
       end
 
+      mixer = nil
       case mix
-      when :blend
-        r, g, b, a = primitive_hex_to_rgba(color)
-        primitive_buffer.draw_line x1, y1, x2, y2, primitive_rgba_to_color(r, g, b, 255), aa, a
       when :replace
-        primitive_buffer.draw_line x1, y1, x2, y2, primitive_color(color), aa
+        mixer = lambda do |buffer, x, y, r, g, b, a, intensity|
+          return buffer.map_rgba(r, g, b, a * intensity)
+        end
+      when :blend
+        mixer = lambda do |buffer, x, y, r, g, b, a, intensity|
+          br, bg, bb, ba = buffer.get_rgba(buffer[x, y])
+          ai = a * intensity
+          ratio = ba > 0 ? ai / ba.to_f : 1
+          ratio = 1 if ratio > 1
+          fr = br + (r - br) * ratio
+          fg = bg + (g - bg) * ratio
+          fb = bb + (b - bb) * ratio
+          fa = (ba + ai < 255) ? (ba + ai) : 255
+          return buffer.map_rgba(fr, fg, fb, fa)
+        end
+      end
+
+      if antialias
+        r, g, b, a = primitive_hex_to_rgba(color)
+        primitive_aa_line x1, y1, x2, y2, r, g, b, a, mixer
+      elsif a == 0xff
+        primitive_buffer.draw_line x1, y1, x2, y2, primitive_color(color)
+      else
+        r, g, b, a = primitive_hex_to_rgba(color)
+        primitive_line x1, y1, x2, y2, r, g, b, a, mixer
       end
     end
 
@@ -178,6 +200,211 @@ module Tea
     # Generate a colour compatible with the primitive buffer.
     def primitive_rgba_to_color(red, green, blue, alpha=255)
       primitive_buffer.map_rgba(red, green, blue, alpha)
+    end
+
+    # Fractional part of x, for primitive_aa_line.
+    def primitive_fpart(x)
+      x - x.truncate
+    end
+
+    # Inverse fractional part of x, for primitive_aa_line.
+    def primitive_rfpart(x)
+      1 - primitive_fpart(x)
+    end
+
+    # Run a block with the primitive buffer locked.
+    def primitive_buffer_with_lock
+      buffer = primitive_buffer
+      if SDL::Surface.auto_lock?
+        auto_lock = true
+        SDL::Surface.auto_lock_off
+      end
+      buffer.lock if buffer.must_lock?
+      begin
+        yield
+      ensure
+        buffer.unlock if buffer.must_lock?
+        SDL::Surface.auto_lock_on if auto_lock
+      end
+    end
+
+    # Draw a line from (x1, y1) to (x2, y2) of color (red, green, blue).  The
+    # +alpha+ is passed to the +mixer+ proc to determine how the line and
+    # bitmap colours should be mixed.
+    #
+    # mixer = { |buffer, x, y, red, green, blue, alpha| ... }
+    def primitive_line(x1, y1, x2, y2, red, green, blue, alpha, mixer)
+
+      buffer = primitive_buffer
+      dx = x2 - x1
+      dy = y2 - y1
+
+      case
+      when dx == 0 && dy == 0       # point
+        buffer[x1, y1] = mixer.call buffer, x1, y1, red, green, blue, alpha, 1.0
+      when dx == 0 && dy != 0       # vertical line
+        primitive_buffer_with_lock do
+          for y in (y1.to_i)..(y2.to_i)
+            buffer[x1, y] = mixer.call buffer, x1, y, red, green, blue, alpha, 1.0
+          end
+        end
+      when dx != 0 && dy == 0       # horizontal line
+        primitive_buffer_with_lock do
+          for x in (x1.to_i)..(x2.to_i)
+            buffer[x, y1] = mixer.call buffer, x, y1, red, green, blue, alpha, 1.0
+          end
+        end
+      else  # Use Bresenham's line algorithm, from John Hall's Programming Linux Games.
+
+        # Figure out the x and y spans of the line.
+        xspan = dx + 1
+        yspan = dy + 1
+
+        # Figure out the correct increment for the major axis.
+        # Account for negative spans (x2 < x1, for instance).
+        if xspan < 0
+          xinc = -1
+          xspan = -xspan
+        else
+          xinc = 1
+        end
+        if yspan < 0
+          yinc = -1
+          yspan = -yspan
+        else
+          yinc = 1
+        end
+
+        x = x1
+        y = y1
+        error = 0
+
+        primitive_buffer_with_lock do
+          if xspan < yspan    # Draw a mostly vertical line.
+            for step in 0..yspan
+              buffer[x, y] = mixer.call buffer, x, y, red, green, blue, alpha, 1.0
+              error += xspan
+              if error >= yspan
+                x += xinc
+                error -= yspan
+              end
+              y += yinc
+            end
+          else    # Draw a mostly horizontal line.
+            for step in 0..xspan
+              buffer[x, y] = mixer.call buffer, x, y, red, green, blue, alpha, 1.0
+              error += yspan
+              if error >= xspan
+                y += yinc
+                error -= xspan
+              end
+              x += xinc
+            end
+          end
+        end
+
+      end
+    end
+
+    # Draw an antialiased line from (x1, y1) to (x2, y2) of colour (red, green,
+    # blue).  The +alpha+ is passed to the +mixer+ proc to determine how the
+    # line and bitmap colours should be mixed.
+    #
+    # mixer = { |buffer, x, y, red, green, blue, alpha, intensity| ... }
+    def primitive_aa_line(x1, y1, x2, y2, red, green, blue, alpha, mixer)
+
+      buffer = primitive_buffer
+      dx = x2 - x1
+      dy = y2 - y1
+
+      case
+      when dx == 0 && dy == 0       # point
+        buffer[x1, y1] = mixer.call buffer, x1, y1, red, green, blue, alpha, 1.0
+      when dx == 0 && dy != 0       # vertical line
+        primitive_buffer_with_lock do
+          for y in (y1.to_i)..(y2.to_i)
+            buffer[x1, y] = mixer.call buffer, x1, y, red, green, blue, alpha, 1.0
+          end
+        end
+      when dx != 0 && dy == 0       # horizontal line
+        primitive_buffer_with_lock do
+          for x in (x1.to_i)..(x2.to_i)
+            buffer[x, y1] = mixer.call buffer, x, y1, red, green, blue, alpha, 1.0
+          end
+        end
+      else  # Use Xiaolin Wu's line algorithm, described on Wikipedia.
+
+        if dx.abs > dy.abs  # Draw a mostly horizontal line.
+          if x2 < x1
+            x1, x2 = x2, x1
+            y1, y2 = y2, y1
+          end
+          gradient = dy.to_f / dx
+
+          # Handle first endpoint.
+          xend = x1.round
+          yend = y1 + gradient * (xend - x1)
+          xgap = primitive_rfpart(x1 + 0.5)
+          xpxl1 = xend                # This will be used in the main loop.
+          ypxl1 = yend.truncate
+          buffer[xpxl1, ypxl1]     = mixer.call buffer, xpxl1, ypxl1,     red, green, blue, alpha, primitive_rfpart(yend) * xgap
+          buffer[xpxl1, ypxl1 + 1] = mixer.call buffer, xpxl1, ypxl1 + 1, red, green, blue, alpha, primitive_fpart(yend)  * xgap
+          intery = yend + gradient    # First y-intersection for the main loop.
+
+          # Handle second endpoint.
+          xend = x2.round
+          yend = y2 + gradient * (xend - x2)
+          xgap = primitive_fpart(x2 + 0.5)
+          xpxl2 = xend                # This will be used in the main loop.
+          ypxl2 = yend.truncate
+          buffer[xpxl2, ypxl2]     = mixer.call buffer, xpxl2, ypxl2,     red, green, blue, alpha, primitive_rfpart(yend) * xgap
+          buffer[xpxl2, ypxl2 + 1] = mixer.call buffer, xpxl2, ypxl2 + 1, red, green, blue, alpha, primitive_fpart(yend)  * xgap
+
+          primitive_buffer_with_lock do
+            for x in (xpxl1 + 1)..(xpxl2 - 1)
+              intery_int = intery.truncate
+              buffer[x, intery_int]     = mixer.call buffer, x, intery_int,     red, green, blue, alpha, primitive_rfpart(intery)
+              buffer[x, intery_int + 1] = mixer.call buffer, x, intery_int + 1, red, green, blue, alpha, primitive_fpart(intery)
+              intery += gradient
+            end
+          end
+        else  # Draw a mostly vertical line.
+          if y2 < y1
+            y1, y2 = y2, y1
+            x1, x2 = x2, x1
+          end
+          gradient = dx.to_f / dy
+
+          # Handle first endpoint.
+          yend = y1.round
+          xend = x1 + gradient * (yend - y1)
+          ygap = primitive_rfpart(y1 + 0.5)
+          ypxl1 = yend                # This will be used in the main loop.
+          xpxl1 = xend.truncate
+          buffer[xpxl1,     ypxl1] = mixer.call buffer, xpxl1,     ypxl1, red, green, blue, alpha, primitive_rfpart(xend) * ygap
+          buffer[xpxl1 + 1, ypxl1] = mixer.call buffer, xpxl1 + 1, ypxl1, red, green, blue, alpha, primitive_fpart(xend)  * ygap
+          interx = xend + gradient    # First x-intersection for the main loop.
+
+          # Handle second endpoint.
+          yend = y2.round
+          xend = x2 + gradient * (yend - y2)
+          ygap = primitive_fpart(y2 + 0.5)
+          ypxl2 = yend                # This will be used in the main loop.
+          xpxl2 = xend.truncate
+          buffer[xpxl2,     ypxl2] = mixer.call buffer, xpxl2,     ypxl2, red, green, blue, alpha, primitive_rfpart(xend) * ygap
+          buffer[xpxl2 + 1, ypxl2] = mixer.call buffer, xpxl2 + 1, ypxl2, red, green, blue, alpha, primitive_fpart(xend)  * ygap
+
+          primitive_buffer_with_lock do
+            for y in (ypxl1 + 1)..(ypxl2 - 1)
+              interx_int = interx.truncate
+              buffer[interx_int,     y] = mixer.call buffer, interx_int,     y, red, green, blue, alpha, primitive_rfpart(interx)
+              buffer[interx_int + 1, y] = mixer.call buffer, interx_int + 1, y, red, green, blue, alpha, primitive_fpart(interx)
+              interx += gradient
+            end
+          end
+        end
+
+      end
     end
 
   end
