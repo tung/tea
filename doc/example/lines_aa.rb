@@ -8,7 +8,7 @@ require 'tea'
 
 puts <<TEST
 You should see 16 green lines in a wheel, with a green dot in the center,
-against a grey rectangle.
+against a grey square.
 
 Press any key to exit.
 TEST
@@ -28,7 +28,6 @@ Tea::Screen.rect 150, 100, 100, 100, 0x404040ff
 
 b.line CENTER_X, CENTER_Y, CENTER_X, CENTER_Y, LINE_COLOR, :antialias => true, :mix => :replace
 
-# TODO: Enable lines for all spokes.
 SPOKES.times do |n|
   angle = n * Math::PI * 2 / SPOKES
   x1 = CENTER_X +  LINE_CENTER_CLEARANCE                * Math.cos(angle)
