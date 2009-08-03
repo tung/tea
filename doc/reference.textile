@@ -253,3 +253,8 @@ Returns true when the right mouse button is held down.
 h1. Sound
 
 Nothing yet.
+
+
+h1. Fonts
+
+Nothing yet.
