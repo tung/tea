@@ -239,19 +239,23 @@ module Tea
       dx = x2 - x1
       dy = y2 - y1
 
+      plot = Proc.new do |x, y, i|
+        buffer[x, y] = mixer.call(buffer, x, y, red, green, blue, alpha, i)
+      end
+
       case
       when dx == 0 && dy == 0       # point
-        buffer[x1, y1] = mixer.call buffer, x1, y1, red, green, blue, alpha, 1.0
+        plot.call x1, y1, 1.0
       when dx == 0 && dy != 0       # vertical line
         primitive_buffer_with_lock do
           for y in (y1.to_i)..(y2.to_i)
-            buffer[x1, y] = mixer.call buffer, x1, y, red, green, blue, alpha, 1.0
+            plot.call x1, y, 1.0
           end
         end
       when dx != 0 && dy == 0       # horizontal line
         primitive_buffer_with_lock do
           for x in (x1.to_i)..(x2.to_i)
-            buffer[x, y1] = mixer.call buffer, x, y1, red, green, blue, alpha, 1.0
+            plot.call x, y1, 1.0
           end
         end
       else  # Use Bresenham's line algorithm, from John Hall's Programming Linux Games.
@@ -282,7 +286,7 @@ module Tea
         primitive_buffer_with_lock do
           if xspan < yspan    # Draw a mostly vertical line.
             for step in 0..yspan
-              buffer[x, y] = mixer.call buffer, x, y, red, green, blue, alpha, 1.0
+              plot.call x, y, 1.0
               error += xspan
               if error >= yspan
                 x += xinc
@@ -292,7 +296,7 @@ module Tea
             end
           else    # Draw a mostly horizontal line.
             for step in 0..xspan
-              buffer[x, y] = mixer.call buffer, x, y, red, green, blue, alpha, 1.0
+              plot.call x, y, 1.0
               error += yspan
               if error >= xspan
                 y += yinc
@@ -317,19 +321,23 @@ module Tea
       dx = x2 - x1
       dy = y2 - y1
 
+      plot = Proc.new do |x, y, i|
+        buffer[x, y] = mixer.call(buffer, x, y, red, green, blue, alpha, i)
+      end
+
       case
       when dx == 0 && dy == 0       # point
-        buffer[x1, y1] = mixer.call buffer, x1, y1, red, green, blue, alpha, 1.0
+        plot.call x1, y1, 1.0
       when dx == 0 && dy != 0       # vertical line
         primitive_buffer_with_lock do
           for y in (y1.to_i)..(y2.to_i)
-            buffer[x1, y] = mixer.call buffer, x1, y, red, green, blue, alpha, 1.0
+            plot.call x1, y, 1.0
           end
         end
       when dx != 0 && dy == 0       # horizontal line
         primitive_buffer_with_lock do
           for x in (x1.to_i)..(x2.to_i)
-            buffer[x, y1] = mixer.call buffer, x, y1, red, green, blue, alpha, 1.0
+            plot.call x, y1, 1.0
           end
         end
       else  # Use Xiaolin Wu's line algorithm, described on Wikipedia.
@@ -347,8 +355,8 @@ module Tea
           xgap = primitive_rfpart(x1 + 0.5)
           xpxl1 = xend                # This will be used in the main loop.
           ypxl1 = yend.truncate
-          buffer[xpxl1, ypxl1]     = mixer.call buffer, xpxl1, ypxl1,     red, green, blue, alpha, primitive_rfpart(yend) * xgap
-          buffer[xpxl1, ypxl1 + 1] = mixer.call buffer, xpxl1, ypxl1 + 1, red, green, blue, alpha, primitive_fpart(yend)  * xgap
+          plot.call xpxl1, ypxl1, primitive_rfpart(yend) * xgap
+          plot.call xpxl1, ypxl1 + 1, primitive_fpart(yend) * xgap
           intery = yend + gradient    # First y-intersection for the main loop.
 
           # Handle second endpoint.
@@ -357,14 +365,14 @@ module Tea
           xgap = primitive_fpart(x2 + 0.5)
           xpxl2 = xend                # This will be used in the main loop.
           ypxl2 = yend.truncate
-          buffer[xpxl2, ypxl2]     = mixer.call buffer, xpxl2, ypxl2,     red, green, blue, alpha, primitive_rfpart(yend) * xgap
-          buffer[xpxl2, ypxl2 + 1] = mixer.call buffer, xpxl2, ypxl2 + 1, red, green, blue, alpha, primitive_fpart(yend)  * xgap
+          plot.call xpxl2, ypxl2, primitive_rfpart(yend) * xgap
+          plot.call xpxl2, ypxl2 = 1, primitive_fpart(yend) * xgap
 
           primitive_buffer_with_lock do
             for x in (xpxl1 + 1)..(xpxl2 - 1)
               intery_int = intery.truncate
-              buffer[x, intery_int]     = mixer.call buffer, x, intery_int,     red, green, blue, alpha, primitive_rfpart(intery)
-              buffer[x, intery_int + 1] = mixer.call buffer, x, intery_int + 1, red, green, blue, alpha, primitive_fpart(intery)
+              plot.call x, intery_int, primitive_rfpart(intery)
+              plot.call x, intery_int + 1, primitive_fpart(intery)
               intery += gradient
             end
           end
@@ -381,8 +389,8 @@ module Tea
           ygap = primitive_rfpart(y1 + 0.5)
           ypxl1 = yend                # This will be used in the main loop.
           xpxl1 = xend.truncate
-          buffer[xpxl1,     ypxl1] = mixer.call buffer, xpxl1,     ypxl1, red, green, blue, alpha, primitive_rfpart(xend) * ygap
-          buffer[xpxl1 + 1, ypxl1] = mixer.call buffer, xpxl1 + 1, ypxl1, red, green, blue, alpha, primitive_fpart(xend)  * ygap
+          plot.call xpxl1, ypxl1, primitive_rfpart(xend) * ygap
+          plot.call xpxl1 + 1, ypxl1, primitive_fpart(xend) * ygap
           interx = xend + gradient    # First x-intersection for the main loop.
 
           # Handle second endpoint.
@@ -391,14 +399,14 @@ module Tea
           ygap = primitive_fpart(y2 + 0.5)
           ypxl2 = yend                # This will be used in the main loop.
           xpxl2 = xend.truncate
-          buffer[xpxl2,     ypxl2] = mixer.call buffer, xpxl2,     ypxl2, red, green, blue, alpha, primitive_rfpart(xend) * ygap
-          buffer[xpxl2 + 1, ypxl2] = mixer.call buffer, xpxl2 + 1, ypxl2, red, green, blue, alpha, primitive_fpart(xend)  * ygap
+          plot.call xpxl2, ypxl2, primitive_rfpart(xend) * ygap
+          plot.call xpxl2 + 1, ypxl2, primitive_fpart(xend) * ygap
 
           primitive_buffer_with_lock do
             for y in (ypxl1 + 1)..(ypxl2 - 1)
               interx_int = interx.truncate
-              buffer[interx_int,     y] = mixer.call buffer, interx_int,     y, red, green, blue, alpha, primitive_rfpart(interx)
-              buffer[interx_int + 1, y] = mixer.call buffer, interx_int + 1, y, red, green, blue, alpha, primitive_fpart(interx)
+              plot.call interx_int, y, primitive_rfpart(interx)
+              plot.call interx_int + 1, y, primitive_fpart(interx)
               interx += gradient
             end
           end
