@@ -65,25 +65,15 @@ Below is a simple bouncing circle demo.
 
 == Status
 
-What's done:
+What's working:
 
-* Graphics
-  - Tea::Screen
-  - Tea::Bitmap (loaded from PNGs)
-  - Drawing of bitmaps on the screen/other bitmaps.
-  - Drawing of primitive shapes (rects, lines, circles).
-* Events
-  - Tea::Event.get.
-  - Tea::App::Minimized, Restored.
-  - Tea::Kbd::Down, Up.
-  - Tea::Mouse::Move, Down, Up, Scroll.
-  - State checking of App, Kbd, Mouse.
+* Events/Input - done
+* Graphics - halfway done, fixing transparency, grabbing sub-bitmaps
 
 What isn't done yet:
 
-* Sound
-* Screen resizing
-* Handling of alpha in colours for primitives
+* Fonts - support bitmap and TrueType fonts in ASCII
+* Sound - support loading and playing sound files
 
 
 == More information
