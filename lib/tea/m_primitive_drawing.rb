@@ -97,20 +97,19 @@ module Tea
       mixer = nil
       case mix
       when :replace
-        mixer = lambda do |buffer, x, y, r, g, b, a, intensity|
-          return buffer.map_rgba(r, g, b, a * intensity)
+        mixer = lambda do |src_r, src_g, src_b, src_a, dest_r, dest_g, dest_b, dest_a, intensity|
+          [src_r, src_g, src_b, src_a * intensity]
         end
       when :blend
-        mixer = lambda do |buffer, x, y, r, g, b, a, intensity|
-          br, bg, bb, ba = buffer.get_rgba(buffer[x, y])
-          ai = a * intensity
-          ratio = ba > 0 ? ai / ba.to_f : 1
+        mixer = lambda do |src_r, src_g, src_b, src_a, dest_r, dest_g, dest_b, dest_a, intensity|
+          ai = src_a * intensity
+          ratio = dest_a > 0 ? ai / dest_a.to_f : 1
           ratio = 1 if ratio > 1
-          fr = br + (r - br) * ratio
-          fg = bg + (g - bg) * ratio
-          fb = bb + (b - bb) * ratio
-          fa = (ba + ai < 255) ? (ba + ai) : 255
-          return buffer.map_rgba(fr, fg, fb, fa)
+          final_r = dest_r + (src_r - dest_r) * ratio
+          final_g = dest_g + (src_g - dest_g) * ratio
+          final_b = dest_b + (src_b - dest_b) * ratio
+          final_a = (dest_a + ai < 255) ? (dest_a + ai) : 255
+          [final_r, final_g, final_b, final_a]
         end
       end
 
@@ -232,7 +231,7 @@ module Tea
     # +alpha+ is passed to the +mixer+ proc to determine how the line and
     # bitmap colours should be mixed.
     #
-    # mixer = { |buffer, x, y, red, green, blue, alpha| ... }
+    # mixer = { |src_red, src_green, src_blue, src_alpha, dest_red, dest_green, dest_blue, dest_alpha, intensity| ... }
     def primitive_line(x1, y1, x2, y2, red, green, blue, alpha, mixer)
 
       buffer = primitive_buffer
@@ -240,7 +239,8 @@ module Tea
       dy = y2 - y1
 
       plot = Proc.new do |x, y, i|
-        buffer[x, y] = mixer.call(buffer, x, y, red, green, blue, alpha, i)
+        buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[x, y])
+        buffer[x, y] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, i))
       end
 
       case
@@ -314,7 +314,7 @@ module Tea
     # blue).  The +alpha+ is passed to the +mixer+ proc to determine how the
     # line and bitmap colours should be mixed.
     #
-    # mixer = { |buffer, x, y, red, green, blue, alpha, intensity| ... }
+    # mixer = { |src_red, src_green, src_blue, src_alpha, dest_red, dest_green, dest_blue, dest_alpha, intensity| ... }
     def primitive_aa_line(x1, y1, x2, y2, red, green, blue, alpha, mixer)
 
       buffer = primitive_buffer
@@ -322,7 +322,8 @@ module Tea
       dy = y2 - y1
 
       plot = Proc.new do |x, y, i|
-        buffer[x, y] = mixer.call(buffer, x, y, red, green, blue, alpha, i)
+        buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[x, y])
+        buffer[x, y] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, i))
       end
 
       case
