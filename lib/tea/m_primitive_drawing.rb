@@ -168,7 +168,7 @@ module Tea
       case mix
       when :blend
         r, g, b, a = primitive_hex_to_rgba(color)
-        if !outline && antialias && a < 255
+        if !outline && antialias && a < 0xff
           # rubysdl can't draw filled antialiased alpha circles for some reason.
           # Big endian because the SGE-powered circle antialiasing apparently
           # doesn't like it any other way.
