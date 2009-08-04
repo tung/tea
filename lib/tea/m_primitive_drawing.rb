@@ -79,14 +79,24 @@ module Tea
         mix = options[:mix]
       end
 
+      r, g, b, a = primitive_hex_to_rgba(color)
       case mix
       when :blend
-        r, g, b, a = primitive_hex_to_rgba(color)
-        # draw_rect has an off-by-one error with the width and height, hence the "- 1"s.
-        return if w < 1 || h < 1
-        primitive_buffer.draw_rect x, y, w - 1, h - 1, primitive_rgba_to_color(r, g, b, 255), true, a
+        if a == 0xff
+          # Same as for mix == :replace
+          primitive_buffer.fill_rect x, y, w, h, primitive_rgba_to_color(r, g, b, a)
+        elsif primitive_buffer.class == SDL::Screen
+          # SGE's broken alpha blending doesn't matter on the screen, so
+          # optimise for it.  rubysdl's draw_rect is off-by-one for width and
+          # height, so compensate for that.
+          primitive_buffer.draw_rect x, y, w - 1, h - 1, primitive_rgba_to_color(r, g, b, 255), true, a
+        else
+          # CAUTION: This is _really_ slow, almost unusably so.  Perhaps I
+          # should consider not making :blend the default mix mode.
+          primitive_rect x, y, w, h, r, g, b, a, BLEND_MIXER
+        end
       when :replace
-        primitive_buffer.fill_rect x, y, w, h, primitive_color(color)
+        primitive_buffer.fill_rect x, y, w, h, primitive_rgba_to_color(r, g, b, a)
       end
     end
 
@@ -417,6 +427,41 @@ module Tea
           end
         end
 
+      end
+    end
+
+    # Draw a rectangle of size (w, h) with the top-left corner at (x, y), with
+    # the colour (red, green, blue) and mixed with +alpha+ and +mixer+.
+    #
+    # mixer = { |src_red, src_green, src_blue, src_alpha, dest_red, dest_green, dest_blue, dest_alpha, intensity| ... }
+    def primitive_rect(x, y, w, h, red, green, blue, alpha, mixer)
+      buffer = primitive_buffer
+
+      # Keep x, y, w, h within the clipping rectangle.
+      x2 = x + w
+      y2 = y + h
+      clip_x, clip_y, clip_w, clip_h = buffer.get_clip_rect
+      clip_x = 0 unless clip_x
+      clip_y = 0 unless clip_y
+      clip_w = buffer.w unless clip_w
+      clip_h = buffer.h unless clip_h
+      clip_x2 = clip_x + clip_w
+      clip_y2 = clip_y + clip_h
+      x = clip_x if x < clip_x
+      y = clip_y if y < clip_y
+      x2 = clip_x2 if x2 > clip_x2
+      y2 = clip_y2 if y2 > clip_y2
+      w = x2 - x
+      h = y2 - y
+      return unless w > 0 && h > 0
+
+      primitive_buffer_with_lock do
+        for py in y...(y + h)
+          for px in x...(x + w)
+            buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[px, py])
+            buffer[px, py] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, 1.0))
+          end
+        end
       end
     end
 
