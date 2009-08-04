@@ -121,20 +121,15 @@ module Tea
         end
       end
 
-      mixer = nil
-      case mix
-      when :replace then mixer = REPLACE_MIXER
-      when :blend   then mixer = BLEND_MIXER
-      end
-
-      if antialias
-        r, g, b, a = primitive_hex_to_rgba(color)
-        primitive_aa_line x1, y1, x2, y2, r, g, b, a, mixer
-      elsif a == 0xff
-        primitive_buffer.draw_line x1, y1, x2, y2, primitive_color(color)
+      r, g, b, a = primitive_hex_to_rgba(color)
+      if primitive_buffer.class == SDL::Screen
+        primitive_buffer.draw_line x1, y1, x2, y2, primitive_rgba_to_color(r, g, b, (mix == :replace ? a : 255)), antialias, (mix == :blend ? a : nil)
       else
-        r, g, b, a = primitive_hex_to_rgba(color)
-        primitive_line x1, y1, x2, y2, r, g, b, a, mixer
+        if antialias
+          primitive_aa_line x1, y1, x2, y2, r, g, b, a, (mix == :blend ? BLEND_MIXER : REPLACE_MIXER)
+        else
+          primitive_line x1, y1, x2, y2, r, g, b, a, (mix == :blend ? BLEND_MIXER : REPLACE_MIXER)
+        end
       end
     end
 
