@@ -38,6 +38,23 @@ module Tea
       primitive_buffer[x, y] = primitive_color(color)
     end
 
+    # Mixer for alpha blend mix strategy.
+    BLEND_MIXER = lambda do |src_r, src_g, src_b, src_a, dest_r, dest_g, dest_b, dest_a, intensity|
+      ai = src_a * intensity
+      ratio = dest_a > 0 ? ai / dest_a.to_f : 1
+      ratio = 1 if ratio > 1
+      final_r = dest_r + (src_r - dest_r) * ratio
+      final_g = dest_g + (src_g - dest_g) * ratio
+      final_b = dest_b + (src_b - dest_b) * ratio
+      final_a = (dest_a + ai < 255) ? (dest_a + ai) : 255
+      [final_r, final_g, final_b, final_a]
+    end
+
+    # Mixer for replace mix strategy.
+    REPLACE_MIXER = lambda do |src_r, src_g, src_b, src_a, dest_r, dest_g, dest_b, dest_a, intensity|
+      [src_r, src_g, src_b, src_a * intensity]
+    end
+
     # Draw a rectangle of size w * h with the top-left corner at (x, y) with
     # the given color (0xRRGGBBAA).  Hash arguments that can be used:
     #
@@ -96,21 +113,8 @@ module Tea
 
       mixer = nil
       case mix
-      when :replace
-        mixer = lambda do |src_r, src_g, src_b, src_a, dest_r, dest_g, dest_b, dest_a, intensity|
-          [src_r, src_g, src_b, src_a * intensity]
-        end
-      when :blend
-        mixer = lambda do |src_r, src_g, src_b, src_a, dest_r, dest_g, dest_b, dest_a, intensity|
-          ai = src_a * intensity
-          ratio = dest_a > 0 ? ai / dest_a.to_f : 1
-          ratio = 1 if ratio > 1
-          final_r = dest_r + (src_r - dest_r) * ratio
-          final_g = dest_g + (src_g - dest_g) * ratio
-          final_b = dest_b + (src_b - dest_b) * ratio
-          final_a = (dest_a + ai < 255) ? (dest_a + ai) : 255
-          [final_r, final_g, final_b, final_a]
-        end
+      when :replace then mixer = REPLACE_MIXER
+      when :blend   then mixer = BLEND_MIXER
       end
 
       if antialias
