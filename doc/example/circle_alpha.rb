@@ -1,5 +1,6 @@
 # Test that alpha blending works for circles.
-# Expected results
+# Expected results: 8 green circles drawn over the edges of a white rectangle,
+# varying in outline, anti-aliasing and blend/replace alpha mixing.
 
 require 'tea'
 
