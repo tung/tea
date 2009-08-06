@@ -486,14 +486,10 @@ module Tea
       # Xiaolin Wu's circle algorithm, with extra stuff.  Graphics Gems II, part IX, chapter 9.
       i = radius
       j = 0
-      plot.call x + i, y + j, 1.0
-      plot.call x + j, y + i, 1.0
-      plot.call x - j, y + i, 1.0
-      plot.call x - i, y + j, 1.0
-      plot.call x - i, y - j, 1.0
-      plot.call x - j, y - i, 1.0
-      plot.call x + j, y - i, 1.0
-      plot.call x + i, y - j, 1.0
+      plot.call x + i, y    , 1.0
+      plot.call x    , y + i, 1.0
+      plot.call x - i, y    , 1.0
+      plot.call x    , y - i, 1.0
       t = 0
 
       until i <= j
