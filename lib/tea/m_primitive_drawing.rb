@@ -165,26 +165,33 @@ module Tea
         end
       end
 
-      case mix
-      when :blend
-        r, g, b, a = primitive_hex_to_rgba(color)
-        if !outline && antialias && a < 0xff
-          # rubysdl can't draw filled antialiased alpha circles for some reason.
-          # Big endian because the SGE-powered circle antialiasing apparently
-          # doesn't like it any other way.
-          ts = SDL::Surface.new(SDL::SWSURFACE, (radius + 1) * 2, (radius + 1) * 2, 32,
-                                0xff000000,
-                                0x00ff0000,
-                                0x0000ff00,
-                                0x000000ff)
-          ts.draw_circle radius + 1, radius + 1, radius, ts.map_rgba(r, g, b, a), true, true
-          SDL::Surface.blit ts, 0, 0, ts.w, ts.h, primitive_buffer, x - radius - 1, y - radius - 1
-        else
-          primitive_buffer.draw_circle x, y, radius, primitive_rgba_to_color(r, g, b, 255),
-                                       !outline, antialias, (a == 255 ? nil : a)
+      if primitive_buffer.class == SDL::Screen
+        case mix
+        when :blend
+          r, g, b, a = primitive_hex_to_rgba(color)
+          if !outline && antialias && a < 0xff
+            # rubysdl can't draw filled antialiased alpha circles for some reason.
+            # Big endian because the SGE-powered circle antialiasing apparently
+            # doesn't like it any other way.
+            ts = SDL::Surface.new(SDL::SWSURFACE, (radius + 1) * 2, (radius + 1) * 2, 32,
+                                  0xff000000,
+                                  0x00ff0000,
+                                  0x0000ff00,
+                                  0x000000ff)
+            ts.draw_circle radius + 1, radius + 1, radius, ts.map_rgba(r, g, b, a), true, true
+            SDL::Surface.blit ts, 0, 0, ts.w, ts.h, primitive_buffer, x - radius - 1, y - radius - 1
+          else
+            primitive_buffer.draw_circle x, y, radius, primitive_rgba_to_color(r, g, b, 255),
+                                         !outline, antialias, (a == 255 ? nil : a)
+          end
+        when :replace
+          primitive_buffer.draw_circle x, y, radius, primitive_color(color), !outline, antialias
         end
-      when :replace
-        primitive_buffer.draw_circle x, y, radius, primitive_color(color), !outline, antialias
+      else
+        # SGE and alpha mixing don't... mix.  Gotta do it ourselves.
+        mixer = (mix == :blend) ? BLEND_MIXER : REPLACE_MIXER
+        r, g, b, a = primitive_hex_to_rgba(color)
+        primitive_circle x, y, radius, !outline, antialias, r, g, b, a, mixer
       end
     end
 
@@ -457,6 +464,79 @@ module Tea
             buffer[px, py] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, 1.0))
           end
         end
+      end
+    end
+
+    # Draw a circle centred at (x, y) with the given radius.
+    def primitive_circle(x, y, radius, filled, antialias, red, green, blue, alpha, mixer)
+      buffer = primitive_buffer
+
+      radius = radius.round
+      return if radius < 1 ||
+                x + radius < 0 || x - radius >= buffer.w ||
+                y + radius < 0 || y - radius >= buffer.h
+
+      # TODO: Special-case optimise for REPLACE_MIXER, which doesn't need
+      #       source pixel info.
+      plot = Proc.new do |px, py, i|
+        buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[px, py])
+        buffer[px, py] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, i))
+      end
+
+      # Xiaolin Wu's circle algorithm, with extra stuff.  Graphics Gems II, part IX, chapter 9.
+      i = radius
+      j = 0
+      plot.call x + i, y + j, 1.0
+      plot.call x + j, y + i, 1.0
+      plot.call x - j, y + i, 1.0
+      plot.call x - i, y + j, 1.0
+      plot.call x - i, y - j, 1.0
+      plot.call x - j, y - i, 1.0
+      plot.call x + j, y - i, 1.0
+      plot.call x + i, y - j, 1.0
+      t = 0
+
+      until i <= j
+        j += 1
+        d = Math.sqrt(radius * radius - j * j).ceil - Math.sqrt(radius * radius - j * j)
+        unless d > t
+          # Graphics Gems II gets this wrong by writing the reverse condition.
+          i -= 1
+        end
+
+        # first octant
+        plot.call x + i,     y + j,     1.0 - d
+        plot.call x + i - 1, y + j,     d
+
+        # second octant
+        plot.call x + j,     y + i,     1.0 - d
+        plot.call x + j,     y + i - 1, d
+
+        # third octant
+        plot.call x - j,     y + i,     1.0 - d
+        plot.call x - j,     y + i - 1, d
+
+        # fourth octant
+        plot.call x - i,     y + j,     1.0 - d
+        plot.call x - i + 1, y + j,     d
+
+        # fifth octant
+        plot.call x - i,     y - j,     1.0 - d
+        plot.call x - i + 1, y - j,     d
+
+        # sixth octant
+        plot.call x - j,     y - i,     1.0 - d
+        plot.call x - j,     y - i + 1, d
+
+        # seventh octant
+        plot.call x + j,     y - i,     1.0 - d
+        plot.call x + j,     y - i + 1, d
+
+        # eigth octant
+        plot.call x + i,     y - j,     1.0 - d
+        plot.call x + i - 1, y - j,     d
+
+        t = d
       end
     end
 
