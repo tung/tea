@@ -489,6 +489,15 @@ module Tea
       plot.call x,          y + radius, 1.0
       plot.call x,          y - radius, 1.0
 
+      if filled
+        # Fill the centre and cardinal directions before iterating.
+        plot.call x, y, 1.0
+        ((x + 1)..(x + radius - 1)).each { |fill_x| plot.call fill_x, y, 1.0 }
+        ((y + 1)..(y + radius - 1)).each { |fill_y| plot.call x, fill_y, 1.0 }
+        ((x - radius + 1)..(x - 1)).each { |fill_x| plot.call fill_x, y, 1.0 }
+        ((y - radius + 1)..(y - 1)).each { |fill_y| plot.call x, fill_y, 1.0 }
+      end
+
       i = radius
       j = 0
       t = 0
@@ -504,28 +513,13 @@ module Tea
 
         if antialias
           plot.call x + i,     y + j,     inv_d
-          plot.call x + i - 1, y + j,     d
-
           plot.call x + j,     y + i,     inv_d
-          plot.call x + j,     y + i - 1, d
-
           plot.call x - j,     y + i,     inv_d
-          plot.call x - j,     y + i - 1, d
-
           plot.call x - i,     y + j,     inv_d
-          plot.call x - i + 1, y + j,     d
-
           plot.call x - i,     y - j,     inv_d
-          plot.call x - i + 1, y - j,     d
-
           plot.call x - j,     y - i,     inv_d
-          plot.call x - j,     y - i + 1, d
-
           plot.call x + j,     y - i,     inv_d
-          plot.call x + j,     y - i + 1, d
-
           plot.call x + i,     y - j,     inv_d
-          plot.call x + i - 1, y - j,     d
         else
           plot.call x + i,     y + j,     1.0
           plot.call x + j,     y + i,     1.0
@@ -535,6 +529,27 @@ module Tea
           plot.call x - j,     y - i,     1.0
           plot.call x + j,     y - i,     1.0
           plot.call x + i,     y - j,     1.0
+        end
+
+        if filled
+          ((x + j    )..(x + i - 1)).each { |fill_x| plot.call fill_x, y + j,  1.0 }
+          ((y + j + 1)..(y + i - 1)).each { |fill_y| plot.call x + j,  fill_y, 1.0 }
+          ((y + j + 1)..(y + i - 1)).each { |fill_y| plot.call x - j,  fill_y, 1.0 }
+          ((x - i + 1)..(x - j    )).each { |fill_x| plot.call fill_x, y + j,  1.0 }
+          ((x - i + 1)..(x - j    )).each { |fill_x| plot.call fill_x, y - j,  1.0 }
+          ((y - i + 1)..(y - j - 1)).each { |fill_y| plot.call x - j,  fill_y, 1.0 }
+          ((y - i + 1)..(y - j - 1)).each { |fill_y| plot.call x + j,  fill_y, 1.0 }
+          ((x + j    )..(x + i - 1)).each { |fill_x| plot.call fill_x, y - j,  1.0 }
+        elsif antialias
+          # Anti-aliased drawing needs its inner pixel if no filling is happening.
+          plot.call x + i - 1, y + j,     d
+          plot.call x + j,     y + i - 1, d
+          plot.call x - j,     y + i - 1, d
+          plot.call x - i + 1, y + j,     d
+          plot.call x - i + 1, y - j,     d
+          plot.call x - j,     y - i + 1, d
+          plot.call x + j,     y - i + 1, d
+          plot.call x + i - 1, y - j,     d
         end
 
         t = d
