@@ -4,6 +4,7 @@
 require 'sdl'
 
 require 'tea/m_blitting'
+require 'tea/m_clipping'
 require 'tea/m_primitive_drawing'
 
 #
@@ -40,6 +41,11 @@ module Tea
 
     include Tea::Blitting
     def blittable_buffer
+      @buffer
+    end
+
+    include Tea::Clipping
+    def clipping_buffer
       @buffer
     end
 

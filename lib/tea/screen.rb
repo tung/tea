@@ -3,6 +3,7 @@
 require 'sdl'
 
 require 'tea/m_blitting'
+require 'tea/m_clipping'
 require 'tea/m_primitive_drawing'
 
 #
@@ -50,6 +51,9 @@ module Tea
 
     extend Blitting
     def Screen.blittable_buffer; @screen; end
+
+    extend Clipping
+    def Screen.clipping_buffer; @screen; end
 
     extend PrimitiveDrawing
     def Screen.primitive_buffer; @screen; end

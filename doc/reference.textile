@@ -25,6 +25,13 @@ Instances of Tea::Bitmap share methods from the following modules:
 Tea::Blitting:
 * blit(source_blittable, x, y)
 
+Tea::Clipping:
+* clip
+* clip(x, y, w, h)
+* clip(x, y, w, h) { ... }
+
+These clip methods get, set and run a block with a clipping rectangle respectively.  While a clipping rectangle is set, drawing will be clipped inside it.
+
 Tea::PrimitiveDrawing:
 * clear()
 * point(x, y, color)
@@ -61,6 +68,13 @@ Since Tea::Screen is an object and not a class, its mixins add methods to Tea::S
 
 Tea::Blitting:
 * blit(source_blittable, x, y)
+
+Tea::Clipping:
+* clip
+* clip(x, y, w, h)
+* clip(x, y, w, h) { ... }
+
+These clip methods get, set and run a block with a clipping rectangle respectively.  While a clipping rectangle is set, drawing will be clipped inside it.
 
 Tea::PrimitiveDrawing:
 * clear()
