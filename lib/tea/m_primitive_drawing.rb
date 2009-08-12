@@ -254,9 +254,16 @@ module Tea
       dx = x2 - x1
       dy = y2 - y1
 
-      plot = Proc.new do |x, y, i|
-        buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[x, y])
-        buffer[x, y] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, i))
+      # Optimise for REPLACE_MIXER, which doesn't need source pixel info.
+      if mixer == REPLACE_MIXER
+        plot = Proc.new do |x, y, i|
+          buffer[x, y] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, 0, 0, 0, 0, i))
+        end
+      else
+        plot = Proc.new do |x, y, i|
+          buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[x, y])
+          buffer[x, y] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, i))
+        end
       end
 
       case
@@ -337,9 +344,16 @@ module Tea
       dx = x2 - x1
       dy = y2 - y1
 
-      plot = Proc.new do |x, y, i|
-        buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[x, y])
-        buffer[x, y] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, i))
+      # Optimise for REPLACE_MIXER, which doesn't need source pixel info.
+      if mixer == REPLACE_MIXER
+        plot = Proc.new do |x, y, i|
+          buffer[x, y] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, 0, 0, 0, 0, i))
+        end
+      else
+        plot = Proc.new do |x, y, i|
+          buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[x, y])
+          buffer[x, y] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, i))
+        end
       end
 
       case
@@ -457,11 +471,22 @@ module Tea
       h = y2 - y
       return unless w > 0 && h > 0
 
-      primitive_buffer_with_lock do
-        for py in y...(y + h)
-          for px in x...(x + w)
-            buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[px, py])
-            buffer[px, py] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, 1.0))
+      # Optimise for REPLACE_MIXER, which doesn't need source pixel info.
+      if mixer == REPLACE_MIXER
+        primitive_buffer_with_lock do
+          for py in y...(y + h)
+            for px in x...(x + w)
+              buffer[px, py] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, 0, 0, 0, 0, 1.0))
+            end
+          end
+        end
+      else
+        primitive_buffer_with_lock do
+          for py in y...(y + h)
+            for px in x...(x + w)
+              buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[px, py])
+              buffer[px, py] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, 1.0))
+            end
           end
         end
       end
@@ -476,11 +501,16 @@ module Tea
                 x + radius < 0 || x - radius >= buffer.w ||
                 y + radius < 0 || y - radius >= buffer.h
 
-      # TODO: Special-case optimise for REPLACE_MIXER, which doesn't need
-      #       source pixel info.
-      plot = Proc.new do |px, py, i|
-        buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[px, py])
-        buffer[px, py] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, i))
+      # Optimise for REPLACE_MIXER, which doesn't need source pixel info.
+      if mixer == REPLACE_MIXER
+        plot = Proc.new do |px, py, i|
+          buffer[px, py] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, 0, 0, 0, 0, i))
+        end
+      else
+        plot = Proc.new do |px, py, i|
+          buf_r, buf_g, buf_b, buf_a = buffer.get_rgba(buffer[px, py])
+          buffer[px, py] = buffer.map_rgba(*mixer.call(red, green, blue, alpha, buf_r, buf_g, buf_b, buf_a, i))
+        end
       end
 
       # Xiaolin Wu's circle algorithm, with extra stuff.  Graphics Gems II, part IX, chapter 9.
