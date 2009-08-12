@@ -542,23 +542,23 @@ module Tea
         i -= 1 unless d > t
 
         if antialias
-          plot.call x + i,     y + j,     inv_d
-          plot.call x + j,     y + i,     inv_d
-          plot.call x - j,     y + i,     inv_d
-          plot.call x - i,     y + j,     inv_d
-          plot.call x - i,     y - j,     inv_d
-          plot.call x - j,     y - i,     inv_d
-          plot.call x + j,     y - i,     inv_d
-          plot.call x + i,     y - j,     inv_d
+          plot.call x + i, y + j, inv_d
+          plot.call x + j, y + i, inv_d
+          plot.call x - j, y + i, inv_d
+          plot.call x - i, y + j, inv_d
+          plot.call x - i, y - j, inv_d
+          plot.call x - j, y - i, inv_d
+          plot.call x + j, y - i, inv_d
+          plot.call x + i, y - j, inv_d
         else
-          plot.call x + i,     y + j,     1.0
-          plot.call x + j,     y + i,     1.0
-          plot.call x - j,     y + i,     1.0
-          plot.call x - i,     y + j,     1.0
-          plot.call x - i,     y - j,     1.0
-          plot.call x - j,     y - i,     1.0
-          plot.call x + j,     y - i,     1.0
-          plot.call x + i,     y - j,     1.0
+          plot.call x + i, y + j, 1.0
+          plot.call x + j, y + i, 1.0
+          plot.call x - j, y + i, 1.0
+          plot.call x - i, y + j, 1.0
+          plot.call x - i, y - j, 1.0
+          plot.call x - j, y - i, 1.0
+          plot.call x + j, y - i, 1.0
+          plot.call x + i, y - j, 1.0
         end
 
         if filled
