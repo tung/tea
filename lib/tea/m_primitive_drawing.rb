@@ -493,7 +493,8 @@ module Tea
       j = 0
       t = 0
 
-      until i <= j
+      # Stop two steps short so we can join the octants ourselves.
+      until i - 2 <= j
         j += 1
         d = Math.sqrt(radius * radius - j * j).ceil - Math.sqrt(radius * radius - j * j)
         unless d > t
@@ -535,6 +536,16 @@ module Tea
 
         t = d
       end
+
+      # plot final octant meeting points relative to octants 1, 3, 5 & 7
+      j += 1
+      d = Math.sqrt(radius * radius - j * j).ceil - Math.sqrt(radius * radius - j * j)
+      i -= 1 unless d > t
+      plot.call x + i, y + j, 1.0 - d
+      plot.call x - j, y + i, 1.0 - d
+      plot.call x - i, y - j, 1.0 - d
+      plot.call x + j, y - i, 1.0 - d
+
     end
 
   end
