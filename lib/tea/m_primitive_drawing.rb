@@ -496,42 +496,42 @@ module Tea
       # Stop two steps short so we can join the octants ourselves.
       until i - 2 <= j
         j += 1
-        d = Math.sqrt(radius * radius - j * j).ceil - Math.sqrt(radius * radius - j * j)
-        unless d > t
-          # Graphics Gems II gets this wrong by writing the reverse condition.
-          i -= 1
-        end
+        radius2_j2_diff = Math.sqrt(radius * radius - j * j)
+        d = radius2_j2_diff.ceil - radius2_j2_diff
+        inv_d = 1.0 - d
+        # Graphics Gems II seems to get this wrong by writing the reverse condition.
+        i -= 1 unless d > t
 
         # first octant
-        plot.call x + i,     y + j,     1.0 - d
+        plot.call x + i,     y + j,     inv_d
         plot.call x + i - 1, y + j,     d
 
         # second octant
-        plot.call x + j,     y + i,     1.0 - d
+        plot.call x + j,     y + i,     inv_d
         plot.call x + j,     y + i - 1, d
 
         # third octant
-        plot.call x - j,     y + i,     1.0 - d
+        plot.call x - j,     y + i,     inv_d
         plot.call x - j,     y + i - 1, d
 
         # fourth octant
-        plot.call x - i,     y + j,     1.0 - d
+        plot.call x - i,     y + j,     inv_d
         plot.call x - i + 1, y + j,     d
 
         # fifth octant
-        plot.call x - i,     y - j,     1.0 - d
+        plot.call x - i,     y - j,     inv_d
         plot.call x - i + 1, y - j,     d
 
         # sixth octant
-        plot.call x - j,     y - i,     1.0 - d
+        plot.call x - j,     y - i,     inv_d
         plot.call x - j,     y - i + 1, d
 
         # seventh octant
-        plot.call x + j,     y - i,     1.0 - d
+        plot.call x + j,     y - i,     inv_d
         plot.call x + j,     y - i + 1, d
 
         # eigth octant
-        plot.call x + i,     y - j,     1.0 - d
+        plot.call x + i,     y - j,     inv_d
         plot.call x + i - 1, y - j,     d
 
         t = d
@@ -539,12 +539,14 @@ module Tea
 
       # plot final octant meeting points relative to octants 1, 3, 5 & 7
       j += 1
-      d = Math.sqrt(radius * radius - j * j).ceil - Math.sqrt(radius * radius - j * j)
+      radius2_j2_diff = Math.sqrt(radius * radius - j * j)
+      d = radius2_j2_diff.ceil - radius2_j2_diff
+      inv_d = 1.0 - d
       i -= 1 unless d > t
-      plot.call x + i, y + j, 1.0 - d
-      plot.call x - j, y + i, 1.0 - d
-      plot.call x - i, y - j, 1.0 - d
-      plot.call x + j, y - i, 1.0 - d
+      plot.call x + i, y + j, inv_d
+      plot.call x - j, y + i, inv_d
+      plot.call x - i, y - j, inv_d
+      plot.call x + j, y - i, inv_d
 
     end
 
