@@ -5,8 +5,6 @@ require 'sdl'
 #
 module Tea
 
-  private
-
   # The PrimitiveDrawing mixin enables primitive shapes to be drawn to classes
   # with an internal SDL::Surface.
   #

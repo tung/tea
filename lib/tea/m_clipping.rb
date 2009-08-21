@@ -12,7 +12,9 @@ module Tea
   # that returns the buffer to be clipped.
   #
   #   include Tea::Clipping
-  #   def clipping_buffer; @sdl_buffer; end
+  #   def clipping_buffer
+  #     @sdl_buffer
+  #   end
   module Clipping
 
     # Get, set or run a block with a clipping rectangle that restricts where
