@@ -2,9 +2,9 @@
 
 require 'sdl'
 
-require 'tea/m_blitting'
-require 'tea/m_clipping'
-require 'tea/m_primitive_drawing'
+require 'tea/mix_blitting'
+require 'tea/mix_clipping'
+require 'tea/mix_primitive'
 
 #
 module Tea
