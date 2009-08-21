@@ -21,7 +21,7 @@ module Tea
     #
     # source_blittable needs to include the Blitting mixin too.
     def blit(source_blittable, x, y)
-      src = source_blittable.send(:blittable_buffer)
+      src = source_blittable.blittable_buffer
       dest = blittable_buffer
       SDL::Surface.blit src, 0, 0, src.w, src.h, dest, x, y
     end
