@@ -5,7 +5,7 @@ require 'sdl'
 require 'tea/c_bitmap'
 require 'tea/c_error'
 require 'tea/m_event'
-require 'tea/screen'
+require 'tea/o_screen'
 
 # The Tea module acts as a namespace for all Tea-related objects and
 # methods.
