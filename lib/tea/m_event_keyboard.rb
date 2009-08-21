@@ -232,6 +232,19 @@ module Tea
       end
     end
 
+    # Defaults for Kbd.key_down?, Kbd.mod_active? and Kbd.in_app?.
+    @key_states = {}
+    Event.each_key { |key| @key_states[key] = false }
+
+    @mod_states = { :L_SHIFT => false, :R_SHIFT => false, :SHIFT => false,
+                    :L_CTRL  => false, :R_CTRL  => false, :CTRL  => false,
+                    :L_ALT   => false, :R_ALT   => false, :ALT   => false,
+                    :NUM_LOCK => false,
+                    :CAPS_LOCK => false,
+                    :ALT_GR => false }
+
+    @in_app = true
+
     # Returns +true+ if +key+ is being pressed down.
     def Kbd.key_down?(key)
       if (down = @key_states[key]) == nil
@@ -253,7 +266,6 @@ module Tea
 
     # Returns true if the keyboard is focused in the screen window.
     def Kbd.in_app?
-      @in_app = true if !instance_variable_defined?(:@in_app)
       @in_app
     end
 
@@ -277,17 +289,6 @@ module Tea
     CTRL = :ctrl
     ALT = :alt
 
-    # Initialise key states to false, as opposed to nil.
-    @key_states = {}
-    Event.each_key { |key| @key_states[key] = false }
-
-    # Modifier states, same deal.
-    @mod_states = { :L_SHIFT => false, :R_SHIFT => false, :SHIFT => false,
-                    :L_CTRL  => false, :R_CTRL  => false, :CTRL  => false,
-                    :L_ALT   => false, :R_ALT   => false, :ALT   => false,
-                    :NUM_LOCK => false,
-                    :CAPS_LOCK => false,
-                    :ALT_GR => false }
   end
 
   module Event

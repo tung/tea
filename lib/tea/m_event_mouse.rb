@@ -81,44 +81,47 @@ module Tea
       end
     end
 
+    # Defaults for Mouse.x, Mouse.y, Mouse.left?, Mouse.middle?, Mouse.right?
+    # and Mouse.in_app?
+    @x = 0
+    @y = 0
+    @left = false
+    @middle = false
+    @right = false
+    @in_app = false
+
     # Report the x position of the mouse in the screen window.  Updated when
     # Event.get is called.
     def Mouse.x
-      @x = 0 if !instance_variable_defined?(:@x)
       @x
     end
 
     # Report the y position of the mouse in the screen window.  Updated when
     # Event.get is called.
     def Mouse.y
-      @y = 0 if !instance_variable_defined?(:@y)
       @y
     end
 
     # Returns true if the left mouse button is down.  Updated when Event.get is
     # called.
     def Mouse.left?
-      @left = false if !instance_variable_defined?(:@left)
       @left
     end
 
     # Returns true if the middle mouse button is down.  Updated when Event.get
     # is called.
     def Mouse.middle?
-      @middle = false if !instance_variable_defined?(:@middle)
       @middle
     end
 
     # Returns true if the right mouse button is down.  Updated when Event.get
     # is called.
     def Mouse.right?
-      @right = false if !instance_variable_defined?(:@right)
       @right
     end
 
     # Returns true if the mouse is in the screen window
     def Mouse.in_app?
-      @in_app = true if !instance_variable_defined?(:@in_app)
       @in_app
     end
 
