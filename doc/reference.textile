@@ -32,7 +32,7 @@ Tea::Clipping:
 
 These clip methods get, set and run a block with a clipping rectangle respectively.  While a clipping rectangle is set, drawing will be clipped inside it.
 
-Tea::PrimitiveDrawing:
+Tea::Primitive:
 * clear()
 * point(x, y, color)
 * rect(x, y, w, h, color[, {:mix => :blend (alt. :replace)}])
@@ -76,7 +76,7 @@ Tea::Clipping:
 
 These clip methods get, set and run a block with a clipping rectangle respectively.  While a clipping rectangle is set, drawing will be clipped inside it.
 
-Tea::PrimitiveDrawing:
+Tea::Primitive:
 * clear()
 * point(x, y, color)
 * rect(x, y, w, h, color[, {:mix => :blend (alt. :replace)}])

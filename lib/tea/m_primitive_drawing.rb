@@ -13,11 +13,11 @@ module Tea
   # To use this mixin, include it and implement/alias a +primitive_buffer+
   # method that gets the object's SDL::Surface.
   #
-  #   include 'PrimitiveDrawing'
+  #   include 'Primitive'
   #   def primitive_buffer
   #     @internal_sdl_buffer
   #   end
-  module PrimitiveDrawing
+  module Primitive
 
     # Clear the drawing buffer.  This is the same as drawing a completely black
     # rectangle over the whole buffer.

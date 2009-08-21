@@ -8,11 +8,11 @@ module Tea
   # The Blitting mixin allows objects with SDL::Surface to draw or 'blit' onto
   # each other.
   #
-  # To use this mixin, include it and write/alias a blittable_buffer method
+  # To use this mixin, include it and write/alias a blitting_buffer method
   # that gets the SDL::Surface.
   #
   #   include Blitting
-  #   def blittable_buffer
+  #   def blitting_buffer
   #     @my_sdl_surface
   #   end
   module Blitting
@@ -21,8 +21,8 @@ module Tea
     #
     # source_blittable needs to include the Blitting mixin too.
     def blit(source_blittable, x, y)
-      src = source_blittable.blittable_buffer
-      dest = blittable_buffer
+      src = source_blittable.blitting_buffer
+      dest = blitting_buffer
       SDL::Surface.blit src, 0, 0, src.w, src.h, dest, x, y
     end
 

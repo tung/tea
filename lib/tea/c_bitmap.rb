@@ -40,7 +40,7 @@ module Tea
     end
 
     include Tea::Blitting
-    def blittable_buffer
+    def blitting_buffer
       @buffer
     end
 
@@ -49,7 +49,7 @@ module Tea
       @buffer
     end
 
-    include Tea::PrimitiveDrawing
+    include Tea::Primitive
     def primitive_buffer
       @buffer
     end

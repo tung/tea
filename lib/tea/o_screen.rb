@@ -56,7 +56,7 @@ module Tea
     end
 
     extend Blitting
-    def Screen.blittable_buffer
+    def Screen.blitting_buffer
       @screen
     end
 
@@ -65,7 +65,7 @@ module Tea
       @screen
     end
 
-    extend PrimitiveDrawing
+    extend Primitive
     def Screen.primitive_buffer
       @screen
     end
