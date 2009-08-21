@@ -7,29 +7,36 @@ module Tea
 
   module Mouse
     # Event generated when mouse focus is gained.
-    class Gained; end
+    class Gained
+    end
 
     # Event generated when mouse focus is lost.
-    class Lost; end
+    class Lost
+    end
   end
 
   module Kbd
     # Event generated when keyboard input focus is gained.
-    class Gained; end
+    class Gained
+    end
 
     # Event generated when keyboard input focus is lost.
-    class Lost; end
+    class Lost
+    end
   end
 
   module App
     # Event generated when the player acts to close the screen window.
-    class Exit; end
+    class Exit
+    end
 
     # Event generated when the screen window is minimised.
-    class Minimized; end
+    class Minimized
+    end
 
     # Event generated when the screen window is restored from being minimised.
-    class Restored; end
+    class Restored
+    end
 
     # Default for App.visible?.
     @visible = true

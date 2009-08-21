@@ -41,22 +41,34 @@ module Tea
     @set_mode_callbacks = []
 
     # Get the screen width in pixels.
-    def Screen.w; @screen.w; end
+    def Screen.w
+      @screen.w
+    end
 
     # Get the screen height in pixels.
-    def Screen.h; @screen.h; end
+    def Screen.h
+      @screen.h
+    end
 
     # Update the screen so that things drawn on it are displayed.
-    def Screen.update; @screen.flip; end
+    def Screen.update
+      @screen.flip
+    end
 
     extend Blitting
-    def Screen.blittable_buffer; @screen; end
+    def Screen.blittable_buffer
+      @screen
+    end
 
     extend Clipping
-    def Screen.clipping_buffer; @screen; end
+    def Screen.clipping_buffer
+      @screen
+    end
 
     extend PrimitiveDrawing
-    def Screen.primitive_buffer; @screen; end
+    def Screen.primitive_buffer
+      @screen
+    end
 
   end
 
