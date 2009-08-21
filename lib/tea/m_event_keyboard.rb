@@ -285,9 +285,9 @@ module Tea
     Event.each_key { |key| const_set(key, key) }
 
     # Extra modifier constants for making modifier detection more consistent.
-    SHIFT = :shift
-    CTRL = :ctrl
-    ALT = :alt
+    SHIFT = :SHIFT
+    CTRL = :CTRL
+    ALT = :ALT
 
   end
 
