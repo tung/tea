@@ -32,6 +32,11 @@ Tea::Clipping:
 
 These clip methods get, set and run a block with a clipping rectangle respectively.  While a clipping rectangle is set, drawing will be clipped inside it.
 
+Tea::Grabbing:
+* grab([x, y, w, h])
+
+This grab method copies a sub-section of the Bitmap (or all of it if no arguments are given) and returns it as a new Bitmap object.
+
 Tea::Primitive:
 * clear()
 * point(x, y, color)
@@ -75,6 +80,11 @@ Tea::Clipping:
 * clip(x, y, w, h) { ... }
 
 These clip methods get, set and run a block with a clipping rectangle respectively.  While a clipping rectangle is set, drawing will be clipped inside it.
+
+Tea::Grabbing:
+* grab([x, y, w, h])
+
+This grab method copies a sub-section of the screen (or all of it if no arguments are given) and returns it as a new Bitmap object.
 
 Tea::Primitive:
 * clear()

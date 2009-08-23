@@ -4,6 +4,7 @@ require 'sdl'
 
 require 'tea/mix_blitting'
 require 'tea/mix_clipping'
+require 'tea/mix_grabbing'
 require 'tea/mix_primitive'
 
 #
@@ -62,6 +63,11 @@ module Tea
 
     extend Clipping
     def Screen.clipping_buffer
+      @screen
+    end
+
+    extend Grabbing
+    def Screen.grabbing_buffer
       @screen
     end
 
