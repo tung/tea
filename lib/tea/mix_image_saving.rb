@@ -32,7 +32,7 @@ module Tea
         ext = extension_match[0]
         case ext
         when '.bmp'
-          image_saving_buffer.save_bmp(path)
+          image_saving_buffer.save_bmp path
         when '.png'
           image_saving_cheat_save path
         else
