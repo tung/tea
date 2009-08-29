@@ -68,16 +68,21 @@ module Tea
         raise Tea::Error, "can't draw rectangle of size #{w}x#{h}", caller
       end
 
-      if options == nil || options[:mix] == nil
-        mix = :blend
-      else
-        unless [:blend, :replace].include?(options[:mix])
-          raise Tea::Error, "invalid mix option \"#{options[:mix]}\"", caller
+      r, g, b, a = primitive_hex_to_rgba(color)
+
+      if a < 0xff
+        if options == nil || options[:mix] == nil
+          mix = :blend
+        else
+          unless [:blend, :replace].include?(options[:mix])
+            raise Tea::Error, "invalid mix option \"#{options[:mix]}\"", caller
+          end
+          mix = options[:mix]
         end
-        mix = options[:mix]
+      else
+        mix = :replace
       end
 
-      r, g, b, a = primitive_hex_to_rgba(color)
       case mix
       when :blend
         if a == 0xff
@@ -107,19 +112,20 @@ module Tea
     #                   +:replace+ writes over the RGBA parts of the line
     #                   destination pixels.
     def line(x1, y1, x2, y2, color, options=nil)
+      r, g, b, a = primitive_hex_to_rgba(color)
+
       if options == nil
         antialias = false
-        mix = :blend
+        mix = (a < 0xff) ? :blend : :replace
       else
         antialias = options[:antialias] || false
-        mix = options[:mix] || :blend
+        mix = options[:mix] || ((a < 0xff) ? :blend : :replace)
 
         unless [:blend, :replace].include?(mix)
           raise Tea::Error, "invalid mix option \"#{mix}\"", caller
         end
       end
 
-      r, g, b, a = primitive_hex_to_rgba(color)
       if primitive_buffer.class == SDL::Screen
         primitive_buffer.draw_line x1, y1, x2, y2, primitive_rgba_to_color(r, g, b, (mix == :replace ? a : 255)), antialias, (mix == :blend ? a : nil)
       else
@@ -149,14 +155,16 @@ module Tea
         raise Tea::Error, "can't draw circle with radius #{radius}", caller
       end
 
+      r, g, b, a = primitive_hex_to_rgba(color)
+
       if options == nil
         outline = false
         antialias = false
-        mix = :blend
+        mix = (a < 0xff) ? :blend : :replace
       else
         outline = options[:outline] || false
         antialias = options[:antialias] || false
-        mix = options[:mix] || :blend
+        mix = options[:mix] || ((a < 0xff) ? :blend : :replace)
 
         unless [:blend, :replace].include?(mix)
           raise Tea::Error, "invalid mix option \"#{mix}\"", caller
@@ -166,8 +174,7 @@ module Tea
       if primitive_buffer.class == SDL::Screen
         case mix
         when :blend
-          r, g, b, a = primitive_hex_to_rgba(color)
-          if !outline && antialias && a < 0xff
+          if !outline && antialias
             # rubysdl can't draw filled antialiased alpha circles for some reason.
             # Big endian because the SGE-powered circle antialiasing apparently
             # doesn't like it any other way.
@@ -188,7 +195,6 @@ module Tea
       else
         # SGE and alpha mixing don't... mix.  Gotta do it ourselves.
         mixer = (mix == :blend) ? BLEND_MIXER : REPLACE_MIXER
-        r, g, b, a = primitive_hex_to_rgba(color)
         primitive_circle x, y, radius, !outline, antialias, r, g, b, a, mixer
       end
     end
