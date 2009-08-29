@@ -68,7 +68,7 @@ Below is a simple bouncing circle demo.
 What's working:
 
 * Events/Input - done
-* Graphics - almost done, still need saving Bitmaps to file
+* Graphics - done
 
 What isn't done yet:
 

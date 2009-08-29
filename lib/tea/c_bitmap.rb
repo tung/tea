@@ -6,6 +6,7 @@ require 'sdl'
 require 'tea/mix_blitting'
 require 'tea/mix_clipping'
 require 'tea/mix_grabbing'
+require 'tea/mix_image_saving'
 require 'tea/mix_primitive'
 
 #
@@ -52,6 +53,11 @@ module Tea
 
     include Tea::Grabbing
     def grabbing_buffer
+      @buffer
+    end
+
+    include Tea::ImageSaving
+    def image_saving_buffer
       @buffer
     end
 

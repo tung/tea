@@ -37,6 +37,11 @@ Tea::Grabbing:
 
 This grab method copies a sub-section of the Bitmap (or all of it if no arguments are given) and returns it as a new Bitmap object.
 
+Tea::ImageSaving:
+* save(path)
+
+The save method saves the Bitmap as an image file.
+
 Tea::Primitive:
 * clear()
 * point(x, y, color)
@@ -85,6 +90,11 @@ Tea::Grabbing:
 * grab([x, y, w, h])
 
 This grab method copies a sub-section of the screen (or all of it if no arguments are given) and returns it as a new Bitmap object.
+
+Tea::ImageSaving:
+* save(path)
+
+The save method saves the Screen as an image file.
 
 Tea::Primitive:
 * clear()
