@@ -1,5 +1,6 @@
 # This file holds the ImageSaving mixin.
 
+require 'RMagick'
 require 'sdl'
 
 require 'tea/c_error'
@@ -33,7 +34,7 @@ module Tea
         when '.bmp'
           image_saving_buffer.save_bmp(path)
         when '.png'
-          raise Tea::Error, "PNG format not supported for saving yet", caller
+          image_saving_cheat_save path
         else
           raise Tea::Error, "can't determine image format '#{ext}' for saving", caller
         end
@@ -43,6 +44,25 @@ module Tea
 
     rescue SDL::Error => e
       raise Tea::Error, e.message, e.backtrace
+    end
+
+    private
+
+    # Cheat by using RMagick to save in formats other than BMP.
+    def image_saving_cheat_save(path)
+      buffer = image_saving_buffer
+
+      buffer_string = String.new
+      for y in 0...buffer.h
+        for x in 0...buffer.w
+          r, g, b, a = buffer.get_rgba(buffer[x, y])
+          buffer_string << r << g << b << a
+        end
+      end
+
+      image = Magick::Image.new(buffer.w, buffer.h)
+      image.import_pixels 0, 0, buffer.h, buffer.w, 'RGBA', buffer_string, Magick::CharPixel
+      image.write path
     end
 
   end

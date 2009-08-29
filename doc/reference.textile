@@ -40,7 +40,7 @@ This grab method copies a sub-section of the Bitmap (or all of it if no argument
 Tea::ImageSaving:
 * save(path)
 
-The save method saves the Bitmap as an image file.
+The save method saves the Bitmap as an image file.  Supported formats: BMP, PNG.
 
 Tea::Primitive:
 * clear()
@@ -94,7 +94,7 @@ This grab method copies a sub-section of the screen (or all of it if no argument
 Tea::ImageSaving:
 * save(path)
 
-The save method saves the Screen as an image file.
+The save method saves the Screen as an image file.  Supported formats: BMP, PNG.
 
 Tea::Primitive:
 * clear()

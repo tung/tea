@@ -10,6 +10,7 @@ begin
                           'doc/*.textile',
                           'doc/example/*.rb', 'doc/example/smile.png'].to_a
     spec.add_dependency 'rubysdl'
+    spec.add_dependency 'rmagick'
 
     spec.author = 'Tung Nguyen'
     spec.email = 'tunginobi@gmail.com'
