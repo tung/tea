@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tea}
-  s.version = "0.3.0"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tung Nguyen"]
@@ -72,6 +72,7 @@ It's designed with these things in mind:
   s.homepage = %q{http://github.com/tung/tea}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
+  s.requirements = ["SDL, SGE", "imagemagick"]
   s.rubygems_version = %q{1.3.3}
   s.summary = %q{A simple game development library for Ruby.}
 
@@ -81,10 +82,13 @@ It's designed with these things in mind:
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rubysdl>, [">= 0"])
+      s.add_runtime_dependency(%q<rmagick>, [">= 0"])
     else
       s.add_dependency(%q<rubysdl>, [">= 0"])
+      s.add_dependency(%q<rmagick>, [">= 0"])
     end
   else
     s.add_dependency(%q<rubysdl>, [">= 0"])
+    s.add_dependency(%q<rmagick>, [">= 0"])
   end
 end
