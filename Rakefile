@@ -9,8 +9,12 @@ begin
                           'lib/tea.rb', 'lib/tea/*.rb',
                           'doc/*.textile',
                           'doc/example/*.rb', 'doc/example/smile.png'].to_a
+
     spec.add_dependency 'rubysdl'
+    spec.requirements << 'SDL, SGE'
+
     spec.add_dependency 'rmagick'
+    spec.requirements << 'imagemagick'
 
     spec.author = 'Tung Nguyen'
     spec.email = 'tunginobi@gmail.com'
