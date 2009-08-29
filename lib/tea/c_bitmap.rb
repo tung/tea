@@ -41,27 +41,27 @@ module Tea
       @buffer.h
     end
 
-    include Tea::Blitting
+    include Blitting
     def blitting_buffer
       @buffer
     end
 
-    include Tea::Clipping
+    include Clipping
     def clipping_buffer
       @buffer
     end
 
-    include Tea::Grabbing
+    include Grabbing
     def grabbing_buffer
       @buffer
     end
 
-    include Tea::ImageSaving
+    include ImageSaving
     def image_saving_buffer
       @buffer
     end
 
-    include Tea::Primitive
+    include Primitive
     def primitive_buffer
       @buffer
     end
