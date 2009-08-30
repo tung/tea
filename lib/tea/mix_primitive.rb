@@ -70,25 +70,18 @@ module Tea
 
       r, g, b, a = primitive_hex_to_rgba(color)
 
-      if a < 0xff
-        if options == nil || options[:mix] == nil
-          mix = :blend
-        else
-          unless [:blend, :replace].include?(options[:mix])
-            raise Tea::Error, "invalid mix option \"#{options[:mix]}\"", caller
-          end
-          mix = options[:mix]
-        end
+      if options == nil || options[:mix] == nil
+        mix = (a < 0xff) ? :blend : :replace
       else
-        mix = :replace
+        unless [:blend, :replace].include?(options[:mix])
+          raise Tea::Error, "invalid mix option \"#{options[:mix]}\"", caller
+        end
+        mix = (a < 0xff) ? options[:mix] : :replace
       end
 
       case mix
       when :blend
-        if a == 0xff
-          # Same as for mix == :replace
-          primitive_buffer.fill_rect x, y, w, h, primitive_rgba_to_color(r, g, b, a)
-        elsif primitive_buffer.class == SDL::Screen
+        if primitive_buffer.class == SDL::Screen
           # SGE's broken alpha blending doesn't matter on the screen, so
           # optimise for it.  rubysdl's draw_rect is off-by-one for width and
           # height, so compensate for that.
@@ -118,12 +111,13 @@ module Tea
         antialias = false
         mix = (a < 0xff) ? :blend : :replace
       else
-        antialias = options[:antialias] || false
-        mix = options[:mix] || ((a < 0xff) ? :blend : :replace)
-
-        unless [:blend, :replace].include?(mix)
+        if options[:mix] && [:blend, :replace].include?(options[:mix]) == false
           raise Tea::Error, "invalid mix option \"#{mix}\"", caller
         end
+
+        antialias = options[:antialias] || false
+        mix = (options[:mix] && a < 0xff) ? options[:mix] : :replace
+        mix = (a < 0xff) ? (options[:mix] ? options[:mix] : :blend) : :replace
       end
 
       if primitive_buffer.class == SDL::Screen
@@ -162,13 +156,13 @@ module Tea
         antialias = false
         mix = (a < 0xff) ? :blend : :replace
       else
-        outline = options[:outline] || false
-        antialias = options[:antialias] || false
-        mix = options[:mix] || ((a < 0xff) ? :blend : :replace)
-
-        unless [:blend, :replace].include?(mix)
+        if options[:mix] && [:blend, :replace].include?(options[:mix]) == false
           raise Tea::Error, "invalid mix option \"#{mix}\"", caller
         end
+
+        outline = options[:outline] || false
+        antialias = options[:antialias] || false
+        mix = (a < 0xff) ? (options[:mix] ? options[:mix] : :blend) : :replace
       end
 
       if primitive_buffer.class == SDL::Screen
