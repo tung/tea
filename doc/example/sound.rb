@@ -15,7 +15,11 @@ Keys:
   Down  - Pause
   Up    - Resume (unpause)
 
-  s     - Print tone's status (stopped/playing/paused)
+  Enter - Print tone's status (stopped/playing/paused)
+
+  p     - Pause all
+  r     - Resume (unpause) all
+  s     - Stop all
 
   =     - Tone volume +1/8
   -     - Tone volume -1/8
@@ -23,7 +27,6 @@ Keys:
   _     - Master volume -1/8
 
   Esc   - Exit demo
-
 --
 TEST
 
@@ -62,8 +65,18 @@ until done
       tones[which_tone].resume
       puts "Resuming tone ##{which_tone + 1}"
 
-    when Tea::Kbd::S
+    when Tea::Kbd::ENTER
       puts "Tone ##{which_tone + 1} is #{tones[which_tone].state.to_s}"
+
+    when Tea::Kbd::P
+      Tea::Sound.pause_all
+      puts "Pausing all sounds"
+    when Tea::Kbd::R
+      Tea::Sound.resume_all
+      puts "Resuming all sounds"
+    when Tea::Kbd::S
+      Tea::Sound.stop_all
+      puts "Stopping all sounds"
 
     when Tea::Kbd::EQUALS
       tones[which_tone].volume += 16

@@ -39,6 +39,21 @@ module Tea
       @@volume = v
     end
 
+    # Pause all sound.
+    def Sound.pause_all
+      SDL::Mixer.pause -1
+    end
+
+    # Resume playing all paused sound.
+    def Sound.resume_all
+      SDL::Mixer.resume -1
+    end
+
+    # Stop all sounds, playing or paused.
+    def Sound.stop_all
+      SDL::Mixer.halt -1
+    end
+
 
     # Load a sound file.
     #

@@ -300,6 +300,18 @@ h3. Tea::Sound.volume=(new_volume)
 
 Set the master volume.  new_volume should be between 0 (min) and 128 (max) inclusive.
 
+h3. Tea::Sound.pause_all()
+
+Pause all playing sounds.
+
+h3. Tea::Sound.resume_all()
+
+Resume all paused sounds.
+
+h3. Tea::Sound.stop_all()
+
+Stop all playing and paused sounds.
+
 h3. Tea::Sound.new(path)
 
 Load a new sound from an audio file.
