@@ -26,16 +26,30 @@ module Tea
                                  primitive_color(0x000000ff)
     end
 
+    # Get the color (0xRRGGBBAA) at the point (x, y) on the Bitmap.
+    #
+    # Raises Tea::Error if (x, y) is outside of the Bitmap's area.
+    def [](x, y)
+      buffer = primitive_buffer
+      w = buffer.w
+      h = buffer.h
+      if x < 0 || x > w || y < 0 || y > h
+        raise Tea::Error, "can't get color at (#{x}, #{y}), not within #{w}x#{h}", caller
+      end
+      Color.mix(*buffer.get_rgba(buffer[x, y]))
+    end
+
     # Plot a point at (x, y) with the given color (0xRRGGBBAA) on the Bitmap.
     #
-    # Raises Tea::Error if (x, y) is outside of the drawing buffer.
-    def point(x, y, color)
-      w = primitive_buffer.w
-      h = primitive_buffer.h
+    # Raises Tea::Error if (x, y) is outside of the Bitmap's area.
+    def []=(x, y, color)
+      buffer = primitive_buffer
+      w = buffer.w
+      h = buffer.h
       if x < 0 || x > w || y < 0 || y > h
         raise Tea::Error, "can't plot point (#{x}, #{y}), not within #{w}x#{h}", caller
       end
-      primitive_buffer[x, y] = primitive_color(color)
+      buffer[x, y] = primitive_color(color)
     end
 
     # Mixer for alpha blend mix strategy.

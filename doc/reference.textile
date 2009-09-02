@@ -77,7 +77,8 @@ The save method saves the Bitmap as an image file.  Supported formats: BMP, PNG.
 
 Tea::Primitive:
 * clear()
-* point(x, y, color)
+* [x, y]
+* [x, y] = color
 * rect(x, y, w, h, color[, {:mix => :blend (alt. :replace)}])
 * line(x1, y1, x2, y2, color[, {:antialias => false, :mix => :blend (alt. :replace)}])
 * circle(x, y, radius, color[, {:outline => false, :antialias => false, :mix => :blend (alt. :replace)}])
@@ -131,7 +132,8 @@ The save method saves the Screen as an image file.  Supported formats: BMP, PNG.
 
 Tea::Primitive:
 * clear()
-* point(x, y, color)
+* [x, y]
+* [x, y] = color
 * rect(x, y, w, h, color[, {:mix => :blend (alt. :replace)}])
 * line(x1, y1, x2, y2, color[, {:antialias => false, :mix => :blend (alt. :replace)}])
 * circle(x, y, radius, color[, {:outline => false, :antialias => false, :mix => :blend (alt. :replace)}])

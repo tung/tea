@@ -53,7 +53,7 @@ module Tea
       for buf_y in y..(y + h)
         for buf_x in x..(x + w)
           red, green, blue, alpha = buffer.get_rgba(buffer[buf_x, buf_y])
-          bitmap.point buf_x - x, buf_y - y, ((red << 24) | (green << 16) | (blue << 8) | alpha)
+          bitmap[buf_x - x, buf_y - y] = ((red << 24) | (green << 16) | (blue << 8) | alpha)
         end
       end
 
