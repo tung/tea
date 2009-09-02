@@ -69,7 +69,7 @@ What's working:
 
 * Events/Input - done
 * Graphics - done
-* Sound - almost done
+* Sound - done
 
 What isn't done yet:
 
