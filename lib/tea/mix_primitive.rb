@@ -33,7 +33,7 @@ module Tea
       buffer = primitive_buffer
       w = buffer.w
       h = buffer.h
-      if x < 0 || x > w || y < 0 || y > h
+      if x < 0 || x >= w || y < 0 || y >= h
         raise Tea::Error, "can't get color at (#{x}, #{y}), not within #{w}x#{h}", caller
       end
       Color.mix(*buffer.get_rgba(buffer[x, y]))
@@ -46,7 +46,7 @@ module Tea
       buffer = primitive_buffer
       w = buffer.w
       h = buffer.h
-      if x < 0 || x > w || y < 0 || y > h
+      if x < 0 || x >= w || y < 0 || y >= h
         raise Tea::Error, "can't plot point (#{x}, #{y}), not within #{w}x#{h}", caller
       end
       buffer[x, y] = primitive_color(color)

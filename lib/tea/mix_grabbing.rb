@@ -4,6 +4,7 @@
 require 'sdl'
 
 require 'tea/c_bitmap'
+require 'tea/m_color'
 
 #
 module Tea
@@ -48,12 +49,11 @@ module Tea
         raise ArgumentError, "wrong number of arguments (#{box.length} for 0 or 4)", caller
       end
 
-      bitmap = Bitmap.new(w, h, 0x00000000)
+      bitmap = Bitmap.new(w, h, Tea::Color::CLEAR)
 
-      for buf_y in y..(y + h)
-        for buf_x in x..(x + w)
-          red, green, blue, alpha = buffer.get_rgba(buffer[buf_x, buf_y])
-          bitmap[buf_x - x, buf_y - y] = ((red << 24) | (green << 16) | (blue << 8) | alpha)
+      for buf_y in y...(y + h)
+        for buf_x in x...(x + w)
+          bitmap[buf_x - x, buf_y - y] = Color.mix(*buffer.get_rgba(buffer[buf_x, buf_y]))
         end
       end
 
