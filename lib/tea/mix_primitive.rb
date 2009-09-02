@@ -2,6 +2,8 @@
 
 require 'sdl'
 
+require 'tea/m_color'
+
 #
 module Tea
 
@@ -68,7 +70,7 @@ module Tea
         raise Tea::Error, "can't draw rectangle of size #{w}x#{h}", caller
       end
 
-      r, g, b, a = primitive_hex_to_rgba(color)
+      r, g, b, a = Color.split(color)
 
       if options == nil || options[:mix] == nil
         mix = (a < 0xff) ? :blend : :replace
@@ -105,7 +107,7 @@ module Tea
     #                   +:replace+ writes over the RGBA parts of the line
     #                   destination pixels.
     def line(x1, y1, x2, y2, color, options=nil)
-      r, g, b, a = primitive_hex_to_rgba(color)
+      r, g, b, a = Color.split(color)
 
       if options == nil
         antialias = false
@@ -149,7 +151,7 @@ module Tea
         raise Tea::Error, "can't draw circle with radius #{radius}", caller
       end
 
-      r, g, b, a = primitive_hex_to_rgba(color)
+      r, g, b, a = Color.split(color)
 
       if options == nil
         outline = false
@@ -198,16 +200,7 @@ module Tea
     # Convert hex_color of the form 0xRRGGBBAA to a color value the
     # primitive_buffer understands.
     def primitive_color(hex_color)
-      primitive_rgba_to_color(*primitive_hex_to_rgba(hex_color))
-    end
-
-    # Break hex_color from the form 0xRRGGBBAA to [red, green, blue, alpha].
-    def primitive_hex_to_rgba(hex_color)
-      red   = (hex_color & 0xff000000) >> 24
-      green = (hex_color & 0x00ff0000) >> 16
-      blue  = (hex_color & 0x0000ff00) >>  8
-      alpha = (hex_color & 0x000000ff)
-      [red, green, blue, alpha]
+      primitive_rgba_to_color(*Color.split(hex_color))
     end
 
     # Generate a colour compatible with the primitive buffer.

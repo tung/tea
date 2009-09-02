@@ -16,10 +16,10 @@ TEST
 Tea.init
 Tea::Screen.set_mode 400, 300
 
-Tea::Screen.point 100,  75, 0xff0000ff
-Tea::Screen.point 300,  75, 0x00ff00ff
-Tea::Screen.point 100, 225, 0x0000ffff
-Tea::Screen.point 300, 225, 0xffffffff
+Tea::Screen.point 100,  75, Tea::Color::RED
+Tea::Screen.point 300,  75, Tea::Color::GREEN
+Tea::Screen.point 100, 225, Tea::Color::BLUE
+Tea::Screen.point 300, 225, Tea::Color::WHITE
 
 Tea::Screen.update
 

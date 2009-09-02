@@ -25,13 +25,13 @@ Tea::Screen.set_mode 400, 300
 grid_x = Tea::Screen.w / 10
 grid_y = Tea::Screen.h / 10
 
-lines = [[1,   1,   1,   9, 0xff0000ff],
-         [2,   1,   2,   9, 0x00ff00ff],
-         [3,   1,   3,   9, 0x0000ffff],
-         [6,   1,   9,   1, 0xffff00ff],
-         [6,   2,   9,   2, 0xff00ffff],
-         [6,   3,   9,   3, 0x00ffffff],
-         [6,   9,   9,   6, 0x808080ff]]
+lines = [[1,   1,   1,   9, Tea::Color::RED],
+         [2,   1,   2,   9, Tea::Color::GREEN],
+         [3,   1,   3,   9, Tea::Color::BLUE],
+         [6,   1,   9,   1, Tea::Color::YELLOW],
+         [6,   2,   9,   2, Tea::Color::MAGENTA],
+         [6,   3,   9,   3, Tea::Color::CYAN],
+         [6,   9,   9,   6, Tea::Color::DARK_GRAY]]
 
 lines.each do |line|
   Tea::Screen.line grid_x * line[0], grid_y * line[1],
@@ -41,7 +41,7 @@ end
 
 Tea::Screen.line grid_x * 6, grid_y * 6,
                   grid_x * 9, grid_y * 9,
-                  0xffffffff,
+                  Tea::Color::WHITE,
                   :antialias => true
 
 Tea::Screen.update

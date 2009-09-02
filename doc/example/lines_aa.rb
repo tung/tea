@@ -16,15 +16,15 @@ TEST
 Tea.init
 Tea::Screen.set_mode 400, 300
 
-b = Tea::Bitmap.new(250, 250, 0x00000000)
+b = Tea::Bitmap.new(250, 250, Tea::Color.mix(0, 0, 0, 0))
 CENTER_X = b.w / 2
 CENTER_Y = b.h / 2
 LINE_CENTER_CLEARANCE = 10
 LINE_LENGTH = 100
-LINE_COLOR = 0x00ff0080
+LINE_COLOR = Tea::Color.mix(0, 255, 0, 128)
 SPOKES = 16
 
-Tea::Screen.rect 150, 100, 100, 100, 0x404040ff
+Tea::Screen.rect 150, 100, 100, 100, Tea::Color.mix(64, 64, 64)
 
 b.line CENTER_X, CENTER_Y, CENTER_X, CENTER_Y, LINE_COLOR, :antialias => true, :mix => :replace
 

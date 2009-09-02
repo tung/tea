@@ -56,7 +56,7 @@ Below is a simple bouncing circle demo.
     dy = -dy if y - r < 0 || y + r >= Tea::Screen.h
 
     Tea::Screen.clear
-    Tea::Screen.circle x, y, r, 0xff00ffff
+    Tea::Screen.circle x, y, r, Tea::Color::MAGENTA
     Tea::Screen.update
 
     sleep 0.001

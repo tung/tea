@@ -25,23 +25,27 @@ TEST
 Tea.init
 Tea::Screen.set_mode 400, 300
 
+TL_GREEN = Tea::Color.mix(  0, 255,   0, 128)
+TL_BLUE  = Tea::Color.mix(  0,   0, 255, 128)
+TL_WHITE = Tea::Color.mix(255, 255, 255, 128)
+
 x, y = 205, 15
 up, down, left, right = false, false, false, false
 wait_for_event = true
 
-b = Tea::Bitmap.new(180, 130, 0x00000000)
-b.rect 45, 32, 90, 65, 0xff0000ff
-b.rect  0,  0, 90, 65, 0x00ff0080, :mix => :blend
-b.rect 90, 65, 90, 65, 0x0000ff80, :mix => :replace
-b.rect  0, 65, 90, 65, 0xffffff80
+b = Tea::Bitmap.new(180, 130, Tea::Color::CLEAR)
+b.rect 45, 32, 90, 65, Tea::Color::RED
+b.rect  0,  0, 90, 65, TL_GREEN, :mix => :blend
+b.rect 90, 65, 90, 65, TL_BLUE, :mix => :replace
+b.rect  0, 65, 90, 65, TL_WHITE
 
 begin
   Tea::Screen.clear
 
-  Tea::Screen.rect 100,  75, 200, 150, 0xff0000ff
-  Tea::Screen.rect   0,   0, 200, 150, 0x00ff0080, :mix => :blend
-  Tea::Screen.rect 200, 150, 200, 150, 0x0000ff80, :mix => :replace
-  Tea::Screen.rect   0, 150, 200, 150, 0xffffff80
+  Tea::Screen.rect 100,  75, 200, 150, Tea::Color::RED
+  Tea::Screen.rect   0,   0, 200, 150, TL_GREEN, :mix => :blend
+  Tea::Screen.rect 200, 150, 200, 150, TL_BLUE, :mix => :replace
+  Tea::Screen.rect   0, 150, 200, 150, TL_WHITE
 
   Tea::Screen.blit b, x, y
 

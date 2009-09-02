@@ -15,9 +15,9 @@ TEST
 Tea.init
 Tea::Screen.set_mode 400, 300
 
-Tea::Screen.circle 200, 150, 100, 0xffffffff
-Tea::Screen.circle 100, 150,  50, 0x00ff00ff, :antialias => true
-Tea::Screen.circle 300, 150,  50, 0xff0000ff, :outline => true
+Tea::Screen.circle 200, 150, 100, Tea::Color::WHITE
+Tea::Screen.circle 100, 150,  50, Tea::Color::GREEN, :antialias => true
+Tea::Screen.circle 300, 150,  50, Tea::Color::RED, :outline => true
 
 Tea::Screen.update
 

@@ -8,9 +8,9 @@ You should see a red square in a cyan square for 2 seconds.
 TEST
 
 Tea.init
-a = Tea::Bitmap.new(200, 200, 0x00ffffff)
+a = Tea::Bitmap.new(200, 200, Tea::Color::CYAN)
 Tea::Screen.set_mode 400, 300
-b = Tea::Bitmap.new(150, 150, 0xff0000ff)
+b = Tea::Bitmap.new(150, 150, Tea::Color::RED)
 
 Tea::Screen.blit a, 100, 50
 Tea::Screen.blit b, 125, 75

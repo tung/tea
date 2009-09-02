@@ -14,6 +14,39 @@ This is the exception class raised when Bad Things happen in any of Tea's object
 
 h1. Graphics
 
+h2. Tea::Color
+
+This module holds utility methods for working with colours.  It exists for convenience; colours can still be passed around in the form 0xRRGGBBAA.
+
+There are some pre-mixed colour constants available in it:
+
+|_. Color        |_. Red |_. Green |_. Blue |_. Alpha |
+|   CLEAR        |>.   0 |>.     0 |>.    0 |>.     0 |
+|   BLACK        |>.   0 |>.     0 |>.    0 |>.   255 |
+|   DARK_RED     |>. 128 |>.     0 |>.    0 |>.   255 |
+|   DARK_GREEN   |>.   0 |>.   128 |>.    0 |>.   255 |
+|   DARK_YELLOW  |>. 128 |>.   128 |>.    0 |>.   255 |
+|   DARK_BLUE    |>.   0 |>.     0 |>.  128 |>.   255 |
+|   DARK_MAGENTA |>. 128 |>.     0 |>.  128 |>.   255 |
+|   DARK_CYAN    |>.   0 |>.   128 |>.  128 |>.   255 |
+|   DARK_GRAY    |>. 128 |>.   128 |>.  128 |>.   255 |
+|   GRAY         |>. 192 |>.   192 |>.  192 |>.   255 |
+|   RED          |>. 255 |>.     0 |>.    0 |>.   255 |
+|   GREEN        |>.   0 |>.   255 |>.    0 |>.   255 |
+|   YELLOW       |>. 255 |>.   255 |>.    0 |>.   255 |
+|   BLUE         |>.   0 |>.     0 |>.  255 |>.   255 |
+|   MAGENTA      |>. 255 |>.     0 |>.  255 |>.   255 |
+|   CYAN         |>.   0 |>.   255 |>.  255 |>.   255 |
+|   WHITE        |>. 255 |>.   255 |>.  255 |>.   255 |
+
+h3. Tea::Color.mix(red, green, blue, alpha=255)
+
+Create a colour of the form 0xRRGGBBAA.  Each argument should be an integer between 0..255 inclusive.  The colours returned by this method can be used throughout the graphics API.
+
+h3. Tea::Color.split(color)
+
+Split a colour of the form 0xRRGGBBAA into its red, green, blue and alpha parts.  A 4-element array is returned, of the form [red, green, blue, alpha], where each element is between 0..255 inclusive.
+
 h2. Tea::Bitmap
 
 A Bitmap is a grid of pixels that holds graphics.  It can be drawn onto and drawn with.
@@ -49,7 +82,7 @@ Tea::Primitive:
 * line(x1, y1, x2, y2, color[, {:antialias => false, :mix => :blend (alt. :replace)}])
 * circle(x, y, radius, color[, {:outline => false, :antialias => false, :mix => :blend (alt. :replace)}])
 
-Note that colours are of the form 0xRRGGBBAA.
+Note that colours are of the form 0xRRGGBBAA, and can be conveniently made using Tea::Color.mix().
 
 h3. Tea::Bitmap.new(*args)
 
@@ -103,7 +136,7 @@ Tea::Primitive:
 * line(x1, y1, x2, y2, color[, {:antialias => false, :mix => :blend (alt. :replace)}])
 * circle(x, y, radius, color[, {:outline => false, :antialias => false, :mix => :blend (alt. :replace)}])
 
-Note that colours are of the form 0xRRGGBBAA.
+Note that colours are of the form 0xRRGGBBAA, and can be conveniently made with Tea::Color.mix().
 
 h3. Tea::Screen.set_mode(width, height)
 

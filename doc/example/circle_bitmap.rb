@@ -10,8 +10,8 @@ TEST
 Tea.init
 Tea::Screen.set_mode 320, 240
 
-b = Tea::Bitmap.new(320, 240, 0x00000000)
-b.circle 160, 120, 100, 0xffffffff, :mix => :replace
+b = Tea::Bitmap.new(320, 240, Tea::Color.mix(0, 0, 0, 0))
+b.circle 160, 120, 100, Tea::Color::WHITE, :mix => :replace
 Tea::Screen.blit b, 0, 0
 
 Tea::Screen.update

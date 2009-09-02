@@ -24,21 +24,22 @@ TEST
 Tea.init
 Tea::Screen.set_mode 400, 300
 
-Tea::Screen.rect 100, 75, 200, 150, 0xffffffff
+Tea::Screen.rect 100, 75, 200, 150, Tea::Color::WHITE
 
-b = Tea::Bitmap.new(Tea::Screen.w, Tea::Screen.h, 0x00000000)
-b.rect 105, 80, 190, 140, 0x0000ffff
+b = Tea::Bitmap.new(Tea::Screen.w, Tea::Screen.h, Tea::Color.mix(0, 0, 0, 0))
+b.rect 105, 80, 190, 140, Tea::Color.mix(0, 0, 255)
 
-b.circle 100,  75, 25, 0x00ff0080, :outline => false, :antialias => false, :mix => :blend
-b.circle 200,  75, 25, 0x00ff0080, :outline => false, :antialias => false, :mix => :replace
-b.circle 300,  75, 25, 0x00ff0080, :outline => false, :antialias => true,  :mix => :blend
+translucent_green = Tea::Color.mix(0, 255, 0, 128)
+b.circle 100,  75, 25, translucent_green, :outline => false, :antialias => false, :mix => :blend
+b.circle 200,  75, 25, translucent_green, :outline => false, :antialias => false, :mix => :replace
+b.circle 300,  75, 25, translucent_green, :outline => false, :antialias => true,  :mix => :blend
 
-b.circle 100, 150, 25, 0x00ff0080, :outline => false, :antialias => true,  :mix => :replace
-b.circle 300, 150, 25, 0x00ff0080, :outline => true,  :antialias => false, :mix => :blend
+b.circle 100, 150, 25, translucent_green, :outline => false, :antialias => true,  :mix => :replace
+b.circle 300, 150, 25, translucent_green, :outline => true,  :antialias => false, :mix => :blend
 
-b.circle 100, 225, 25, 0x00ff0080, :outline => true,  :antialias => false, :mix => :replace
-b.circle 200, 225, 25, 0x00ff0080, :outline => true,  :antialias => true,  :mix => :blend
-b.circle 300, 225, 25, 0x00ff0080, :outline => true,  :antialias => true,  :mix => :replace
+b.circle 100, 225, 25, translucent_green, :outline => true,  :antialias => false, :mix => :replace
+b.circle 200, 225, 25, translucent_green, :outline => true,  :antialias => true,  :mix => :blend
+b.circle 300, 225, 25, translucent_green, :outline => true,  :antialias => true,  :mix => :replace
 
 Tea::Screen.blit b, 0, 0
 

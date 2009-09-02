@@ -9,7 +9,7 @@ TEST
 
 Tea.init
 Tea::Screen.set_mode 400, 300
-Tea::Screen.rect 50, 50, 300, 200, 0xffff00ff
+Tea::Screen.rect 50, 50, 300, 200, Tea::Color::YELLOW
 Tea::Screen.update
 
 sleep 2
