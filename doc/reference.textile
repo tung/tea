@@ -182,7 +182,9 @@ require 'tea'
 
 class MyEventHandler
   attr_reader :done
-  def initialize; @done = false; end
+  def initialize
+    @done = false
+  end
 
   include Tea::Event::Dispatch
 
