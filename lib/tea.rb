@@ -17,16 +17,13 @@ module Tea
   #
   # May throw Tea::Error if initialisation fails.
   def Tea.init
-    begin
-      SDL.init(SDL::INIT_VIDEO | SDL::INIT_AUDIO)
+    SDL.init(SDL::INIT_VIDEO | SDL::INIT_AUDIO)
 
-      # Get typed characters from keys when pressed.
-      SDL::Event.enable_unicode
-
-      SDL::Mixer.open 44100, SDL::Mixer::DEFAULT_FORMAT, SDL::Mixer::DEFAULT_CHANNELS, 1024
-    rescue SDL::Error => e
-      raise Tea::Error, e.message, e.backtrace
-    end
+    # Get typed characters from keys when pressed.
+    SDL::Event.enable_unicode
+    SDL::Mixer.open 44100, SDL::Mixer::DEFAULT_FORMAT, SDL::Mixer::DEFAULT_CHANNELS, 1024
+  rescue SDL::Error => e
+    raise Tea::Error, e.message, e.backtrace
   end
 
 end
