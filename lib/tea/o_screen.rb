@@ -1,7 +1,10 @@
 # This file contains the Screen class.
 
+require 'weakref'
+
 require 'sdl'
 
+require 'tea/c_bitmap'
 require 'tea/mix_blitting'
 require 'tea/mix_clipping'
 require 'tea/mix_grabbing'
@@ -20,12 +23,18 @@ module Tea
 
     # Set or change the screen video mode, giving a width * height screen buffer.
     def Screen.set_mode(width, height)
-      begin
-        @screen = SDL::Screen.open(width, height, BITS_PER_PIXEL, SDL::SWSURFACE)
-        @set_mode_callbacks.each { |c| c.call }
-      rescue SDL::Error => e
-        raise Tea::Error, e.message, e.backtrace
+      @screen = SDL::Screen.open(width, height, BITS_PER_PIXEL, SDL::SWSURFACE)
+
+      # Optimize Bitmaps that registered for it.
+      (0...(@bitmaps_to_optimize.length)).to_a.reverse.each do |opt_index|
+        begin
+          @bitmaps_to_optimize[opt_index].optimize_for_screen
+        rescue WeakRef::RefError
+          @bitmaps_to_optimize.delete_at opt_index
+        end
       end
+    rescue SDL::Error => e
+      raise Tea::Error, e.message, e.backtrace
     end
 
     # Check if Screen.set_mode has been called yet.
@@ -33,14 +42,12 @@ module Tea
       @screen ? true : false
     end
 
-    # Set a proc to be called when Screen.set_mode is called.  The proc will be
-    # called after the new screen mode is set.  The callback ordering is not
-    # defined, so don't make callbacks that depend on other callbacks being
-    # called first.
-    def Screen.on_set_mode(callback)
-      @set_mode_callbacks << callback
+    # Register a Bitmap object to be optimised to the Screen's format when a
+    # screen mode is set.
+    def Screen.register_bitmap_for_optimizing(bitmap)
+      @bitmaps_to_optimize << WeakRef.new(bitmap)
     end
-    @set_mode_callbacks = []
+    @bitmaps_to_optimize = []
 
     # Get the screen width in pixels.
     def Screen.w

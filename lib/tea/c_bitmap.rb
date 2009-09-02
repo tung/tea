@@ -41,6 +41,13 @@ module Tea
       @buffer.h
     end
 
+    # Convert the Bitmap's internal format to that of the screen to speed up
+    # drawing.  Intended for internal use, but calling it manually won't bring
+    # any harm.
+    def optimize_for_screen
+      @buffer = @buffer.display_format_alpha
+    end
+
     include Blitting
     def blitting_buffer
       @buffer
@@ -78,7 +85,7 @@ module Tea
       if Tea::Screen.mode_set?
         @buffer = @buffer.display_format_alpha
       else
-        Tea::Screen.on_set_mode lambda { @buffer = @buffer.display_format_alpha }
+        Tea::Screen.register_bitmap_for_optimizing self
       end
     rescue SDL::Error => e
       raise Tea::Error, e.message, e.backtrace
@@ -106,7 +113,7 @@ module Tea
       if Tea::Screen.mode_set?
         @buffer = @buffer.display_format_alpha
       else
-        Tea::Screen.on_set_mode lambda { @buffer = @buffer.display_format_alpha }
+        Tea::Screen.register_bitmap_for_optimizing self
       end
     rescue SDL::Error => e
       raise Tea::Error, e.message, e.backtrace
