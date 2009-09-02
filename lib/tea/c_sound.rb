@@ -28,12 +28,12 @@ module Tea
     @@channel_sound_ids = []
 
     # Get the master volume.  Volume ranges from 0..128 inclusive.
-    def self.volume
+    def Sound.volume
       @@volume
     end
 
     # Set the master volume.  new_volume should be between 0..128 inclusive.
-    def self.volume=(new_volume)
+    def Sound.volume=(new_volume)
       v = (new_volume >= 0) ? (new_volume <= VOLUME_MAX ? new_volume : VOLUME_MAX) : 0
       SDL::Mixer.set_volume -1, new_volume
       @@volume = v
