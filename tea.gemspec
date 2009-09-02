@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tea}
-  s.version = "0.4.0"
+  s.version = "0.4.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tung Nguyen"]
@@ -59,6 +59,7 @@ It's designed with these things in mind:
      "lib/tea/c_bitmap.rb",
      "lib/tea/c_error.rb",
      "lib/tea/c_sound.rb",
+     "lib/tea/m_color.rb",
      "lib/tea/m_event.rb",
      "lib/tea/m_event_app.rb",
      "lib/tea/m_event_dispatch.rb",
