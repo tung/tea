@@ -286,7 +286,51 @@ Returns true when the right mouse button is held down.
 
 h1. Sound
 
-Nothing yet.
+h2. Tea::Sound
+
+A Sound represents a loaded audio file that can be played through the computer's speakers.
+
+For now, the supported formats are: OGG, WAV, AIFF, RIFF, VOC.
+
+h3. Tea::Sound.volume()
+
+Get the master volume.  Returns a value between 0 (min) and 128 (max) inclusive.
+
+h3. Tea::Sound.volume=(new_volume)
+
+Set the master volume.  new_volume should be between 0 (min) and 128 (max) inclusive.
+
+h3. Tea::Sound.new(path)
+
+Load a new sound from an audio file.
+
+h3. Tea::Sound#volume()
+
+Get the volume of the sound.  Returns a value between 0 (min) and 128 (max) inclusive.
+
+h3. Tea::Sound#volume=(new_volume)
+
+Set the volume of the sound.  new_volume should be between 0 (min) and 128 (max) inclusive.
+
+h3. Tea::Sound#play(loops=0)
+
+Play the sound.  If it's already playing, cut it off and start over.  loops should be the number of times to repeat the sound; use -1 to repeat it forever.
+
+h3. Tea::Sound#pause()
+
+Pause the sound if it's playing, otherwise do nothing.
+
+h3. Tea::Sound#resume()
+
+Resume playing the sound if it was paused, otherwise do nothing.
+
+h3. Tea::Sound#stop()
+
+Stop the sound if it's playing, otherwise do nothing.
+
+h3. Tea::Sound#state()
+
+Check if the sound is stopped, playing or paused.  Returns one of Tea::Sound::STOPPED, Tea::Sound::PLAYING or Tea::Sound::PAUSED.
 
 
 h1. Fonts

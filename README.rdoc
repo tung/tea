@@ -69,11 +69,11 @@ What's working:
 
 * Events/Input - done
 * Graphics - done
+* Sound - almost done, still needs pause/resume/stop all sounds
 
 What isn't done yet:
 
 * Fonts - support bitmap and TrueType fonts in ASCII
-* Sound - support loading and playing sound files
 
 
 == More information
