@@ -81,9 +81,8 @@ module Tea
     def from_image(image_path)
       @buffer = SDL::Surface.load(image_path)
 
-      # Optimise for the screen mode, potentially making screen blits faster.
       if Tea::Screen.mode_set?
-        @buffer = @buffer.display_format_alpha
+        optimize_for_screen
       else
         Tea::Screen.register_bitmap_for_optimizing self
       end
@@ -109,9 +108,8 @@ module Tea
                                  rmask, gmask, bmask, amask)
       rect 0, 0, w, h, color, :mix => :replace
 
-      # Optimise for the screen mode, now or later.
       if Tea::Screen.mode_set?
-        @buffer = @buffer.display_format_alpha
+        optimize_for_screen
       else
         Tea::Screen.register_bitmap_for_optimizing self
       end
