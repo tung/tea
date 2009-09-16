@@ -86,7 +86,6 @@ module Tea
     # loops should be the number of times to repeat playing the sound.  Use -1
     # to loop the sound forever.
     def play(loops=0)
-      # Cut off the sound if it's already playing.
       SDL::Mixer.halt(@channel) if channel_valid?
 
       @channel = SDL::Mixer.play_channel(-1, @wave, loops)

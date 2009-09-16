@@ -12,8 +12,7 @@ require 'tea/m_event_mouse'
 module Tea
 
   # The Event module allows access to the event queue, and the classes of
-  # events that come out.  Event handling is the heart and soul of most games,
-  # so this module is quite important.
+  # events that come out.
   module Event
 
     # Tea's generated event queue.  Add to the back, get from the front.

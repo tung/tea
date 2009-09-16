@@ -52,7 +52,6 @@ module Tea
       buffer[x, y] = primitive_color(color)
     end
 
-    # Mixer for alpha blend mix strategy.
     BLEND_MIXER = lambda do |src_r, src_g, src_b, src_a, dest_r, dest_g, dest_b, dest_a, intensity|
       ai = src_a * intensity
       ratio = dest_a > 0 ? ai / dest_a.to_f : 1
@@ -64,7 +63,6 @@ module Tea
       [final_r, final_g, final_b, final_a]
     end
 
-    # Mixer for replace mix strategy.
     REPLACE_MIXER = lambda do |src_r, src_g, src_b, src_a, dest_r, dest_g, dest_b, dest_a, intensity|
       [src_r, src_g, src_b, src_a * intensity]
     end
