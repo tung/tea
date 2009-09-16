@@ -24,15 +24,7 @@ module Tea
     # Set or change the screen video mode, giving a width * height screen buffer.
     def Screen.set_mode(width, height)
       @screen = SDL::Screen.open(width, height, BITS_PER_PIXEL, SDL::SWSURFACE)
-
-      # Optimize Bitmaps that registered for it.
-      (0...(@bitmaps_to_optimize.length)).to_a.reverse.each do |opt_index|
-        begin
-          @bitmaps_to_optimize[opt_index].optimize_for_screen
-        rescue WeakRef::RefError
-          @bitmaps_to_optimize.delete_at opt_index
-        end
-      end
+      optimize_bitmaps
     rescue SDL::Error => e
       raise Tea::Error, e.message, e.backtrace
     end
@@ -88,6 +80,18 @@ module Tea
     def Screen.primitive_buffer
       @screen
     end
+
+    # Convert the internal formats of registered Bitmaps.
+    def Screen.optimize_bitmaps
+      (0...(@bitmaps_to_optimize.length)).to_a.reverse.each do |opt_index|
+        begin
+          @bitmaps_to_optimize[opt_index].optimize_for_screen
+        rescue WeakRef::RefError
+          @bitmaps_to_optimize.delete_at opt_index
+        end
+      end
+    end
+    private_class_method :optimize_bitmaps
 
   end
 
