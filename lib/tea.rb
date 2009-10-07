@@ -4,6 +4,7 @@ require 'sdl'
 
 require 'tea/c_bitmap'
 require 'tea/c_error'
+require 'tea/c_font'
 require 'tea/c_sound'
 require 'tea/m_color'
 require 'tea/m_event'

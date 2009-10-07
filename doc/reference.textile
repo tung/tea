@@ -384,4 +384,24 @@ Check if the sound is stopped, playing or paused.  Returns one of Tea::Sound::ST
 
 h1. Fonts
 
-Nothing yet.
+h2. Tea::Font
+
+A font is a set of images (glyphs) that controls how text appears when it is drawn.
+
+Currently, only bitmap fonts are supported: 256 character images in a single BMP or PNG, in ASCII order.
+
+h3. Tea::Font.new(path, type[, {:transparent_color => Tea::Color::MAGENTA}])
+
+Load a font from a file.  For now, type must be Tea::Font::BITMAP_FONT.  Setting transparent_color will cause that color to be treated as transparent when the font is loaded.
+
+h3. Tea::Font#string_w(string)
+
+Get the width of a string rendered with the font, in pixels.
+
+h3. Tea::Font#h()
+
+Get the height of the font's characters, in pixels.
+
+h3. Tea::Font#draw(dest_blittable, x, y, string)
+
+Render the string using the font onto dest_blittable (a Bitmap or the Screen), with the top-left corner at (x, y).
