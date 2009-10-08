@@ -392,7 +392,7 @@ Currently, bitmap fonts and Karl Bartel's SFont formats are supported.
 
 Bitmap fonts are 256 character images in a row, in a single BMP or PNG, in ASCII order.
 
-SFont files are 94 character images in a row, also in a single BMP or PNG, in ASCII order.  Letters are variable width, and are separated with magenta gaps (255, 0, 255) in the top row.  The SFont alphabet is as follows:
+SFont files are 94 character images in a row, also in a single BMP or PNG, in ASCII order, starting with ASCII code 33.  Letters are variable width, and are separated with magenta gaps (255, 0, 255) in the top row.  The SFont alphabet is as follows:
 
 <pre>
     ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @
