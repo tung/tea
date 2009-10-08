@@ -91,11 +91,22 @@ module Tea
     # Write the given string onto the bitmap at (x, y).
     def draw_to(bitmap, x, y, string)
       draw_x = x
-      # TODO: Handle Ruby 1.8 as well.
-      string.codepoints do |pt|
-        g = @glyphs[pt]
-        bitmap.blit g, draw_x, y
-        draw_x += g.w
+      if ruby_version_match = RUBY_VERSION.match(/(\d+)\.(\d+)\.\d+/)
+        ruby_major = ruby_version_match[1].to_i
+        ruby_minor = ruby_version_match[2].to_i
+        if ruby_major >= 1 && ruby_minor >= 9
+          string.codepoints do |pt|
+            g = @glyphs[pt]
+            bitmap.blit g, draw_x, y
+            draw_x += g.w
+          end
+        else
+          string.length.times do |i|
+            g = @glyphs[string[i]]
+            bitmap.blit g, draw_x, y
+            draw_x += g.w
+          end
+        end
       end
       string
     end
