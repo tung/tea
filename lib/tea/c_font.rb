@@ -46,6 +46,9 @@ module Tea
     BITMAP_FONT = :BITMAP_FONT
     SFONT = :SFONT
 
+    BITMAP_FONT_ALPHABET_LENGTH = 256
+    SFONT_ALPHABET_LENGTH = 94
+
     # Create a new font from a font file given by +path+.
     #
     # +font_type+ is one of Tea::Font::BITMAP_FONT or Tea::Font::SFONT.  See
@@ -123,15 +126,15 @@ module Tea
 
     # Extract an array of letter glyph Bitmaps from a bitmap font.
     def letters_from_bitmap_font(font_surface)
-      unless font_surface.w % 256 == 0
+      unless font_surface.w % BITMAP_FONT_ALPHABET_LENGTH == 0
         raise Tea::Error, "Bitmap font cannot be evenly divided into 256 glyphs (w == #{font_surface.w})", caller
       end
 
-      char_w = font_surface.w / 256
+      char_w = font_surface.w / BITMAP_FONT_ALPHABET_LENGTH
       char_h = font_surface.h
 
       glyphs = if @transparent_color
-                 Array.new(256) do |i|
+                 Array.new(BITMAP_FONT_ALPHABET_LENGTH) do |i|
                   g = Bitmap.new(char_w, char_h, Color::CLEAR)
                   for gy in 0...char_h
                     for gx in 0...char_w
@@ -143,7 +146,7 @@ module Tea
                   g
                 end
               else
-                Array.new(256) do |i|
+                Array.new(BITMAP_FONT_ALPHABET_LENGTH) do |i|
                   g = Bitmap.new(char_w, char_h, Color::CLEAR)
                   for gy in 0...char_h
                     for gx in 0...char_w
