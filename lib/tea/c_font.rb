@@ -48,6 +48,8 @@ module Tea
 
     BITMAP_FONT_ALPHABET_LENGTH = 256
     SFONT_ALPHABET_LENGTH = 94
+    SFONT_ALPHABET_OFFSET = 33
+    ASCII_SPACE = 32
 
     # Create a new font from a font file given by +path+.
     #
@@ -68,11 +70,15 @@ module Tea
         @transparent_color = Color.split(options[:transparent_color])
       end
 
+      @font_type = font_type
+
       case font_type
       when BITMAP_FONT
         @glyphs = letters_from_bitmap_font(font)
+        @alphabet_offset = 0
       when SFONT
         @glyphs = letters_from_sfont(font)
+        @alphabet_offset = SFONT_ALPHABET_OFFSET
       end
     rescue SDL::Error => e
       raise Tea::Error, e.message, e.backtrace
@@ -85,9 +91,34 @@ module Tea
         ruby_major = ruby_version_match[1].to_i
         ruby_minor = ruby_version_match[2].to_i
         if ruby_major >= 1 && ruby_minor >= 9
-          string.codepoints { |pt| w += @glyphs[pt].w }
+          case @font_type
+          when BITMAP_FONT
+            string.codepoints { |pt| w += @glyphs[pt - @alphabet_offset].w }
+          when SFONT
+            string.codepoints do |pt|
+              if pt == ASCII_SPACE
+                # Fudge the width of a space.
+                w += @glyphs[0].w
+              else
+                w += @glyphs[pt - @alphabet_offset].w
+              end
+            end
+          end
         else
-          string.length.times { |i| w += @glyphs[string[i]].w }
+          case @font_type
+          when BITMAP_FONT
+            string.length.times { |i| w += @glyphs[string[i] - @alphabet_offset].w }
+          when SFONT
+            string.length.times do |i|
+              pt = string[i]
+              if pt == ASCII_SPACE
+                # Fudge the width of a space.
+                w += @glyphs[0].w
+              else
+                w += @glyphs[pt - @alphabet_offset].w
+              end
+            end
+          end
         end
       end
       w
@@ -106,16 +137,45 @@ module Tea
         ruby_major = ruby_version_match[1].to_i
         ruby_minor = ruby_version_match[2].to_i
         if ruby_major >= 1 && ruby_minor >= 9
-          string.codepoints do |pt|
-            g = @glyphs[pt]
-            bitmap.blit g, draw_x, y
-            draw_x += g.w
+          case @font_type
+          when BITMAP_FONT
+            string.codepoints do |pt|
+              g = @glyphs[pt - @alphabet_offset]
+              bitmap.blit g, draw_x, y
+              draw_x += g.w
+            end
+          when SFONT
+            string.codepoints do |pt|
+              if pt == ASCII_SPACE
+                # Use the first char for the space width.
+                draw_x += @glyphs[0].w
+              else
+                g = @glyphs[pt - @alphabet_offset]
+                bitmap.blit g, draw_x, y
+                draw_x += g.w
+              end
+            end
           end
         else
-          string.length.times do |i|
-            g = @glyphs[string[i]]
-            bitmap.blit g, draw_x, y
-            draw_x += g.w
+          case @font_type
+          when BITMAP_FONT
+            string.length.times do |i|
+              g = @glyphs[string[i] - @alphabet_offset]
+              bitmap.blit g, draw_x, y
+              draw_x += g.w
+            end
+          when SFONT
+            string.length.times do |i|
+              pt = string[i]
+              if pt == ASCII_SPACE
+                # Use the first char for the space width.
+                draw_x += @glyphs[0].w
+              else
+                g = @glyphs[string[i] - @alphabet_offset]
+                bitmap.blit g, draw_x, y
+                draw_x += g.w
+              end
+            end
           end
         end
       end
@@ -162,7 +222,29 @@ module Tea
 
     # Extract an array of letter glyph Bitmaps from an SFont.
     def letters_from_sfont(font_surface)
-      raise "TODO: Implement letters_from_sfont."
+      detect_x = 0
+      glyphs = Array.new(SFONT_ALPHABET_LENGTH) do |i|
+        detect_x += 1 while Tea::Color.mix(*font_surface.get_rgba(font_surface[detect_x, 0])) == Tea::Color::MAGENTA && detect_x < font_surface.w
+        raise Tea::Error, "Expected #{SFONT_ALPHABET_LENGTH} letters while loading SFont, got #{i}" if detect_x >= font_surface.w
+
+        char_right_x = detect_x
+        char_right_x += 1 while Tea::Color.mix(*font_surface.get_rgba(font_surface[char_right_x, 0])) != Tea::Color::MAGENTA && char_right_x < font_surface.w
+        char_w = char_right_x - detect_x
+        char_h = font_surface.h
+
+        g = Bitmap.new(char_w, char_h, Color::CLEAR)
+        for gy in 0...char_h
+          for gx in 0...char_w
+            g[gx, gy] = Color.mix(*font_surface.get_rgba(font_surface[detect_x + gx, gy]))
+          end
+        end
+
+        detect_x = char_right_x
+
+        g
+      end
+
+      glyphs
     end
 
   end

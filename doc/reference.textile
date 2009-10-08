@@ -388,11 +388,19 @@ h2. Tea::Font
 
 A font is a set of images (glyphs) that controls how text appears when it is drawn.
 
-Currently, only bitmap fonts are supported: 256 character images in a single BMP or PNG, in ASCII order.
+Currently, bitmap fonts and Karl Bartel's SFont formats are supported.
+
+Bitmap fonts are 256 character images in a row, in a single BMP or PNG, in ASCII order.
+
+SFont files are 94 character images in a row, also in a single BMP or PNG, in ASCII order.  Letters are variable width, and are separated with magenta gaps (255, 0, 255) in the top row.  The SFont alphabet is as follows:
+
+    ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @
+    A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _ `
+    a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~
 
 h3. Tea::Font.new(path, type[, {:transparent_color => Tea::Color::MAGENTA}])
 
-Load a font from a file.  For now, type must be Tea::Font::BITMAP_FONT.  Setting transparent_color will cause that color to be treated as transparent when the font is loaded.
+Load a font from a file.  Type may be Tea::Font::BITMAP_FONT or Tea::Font::SFONT.  Setting transparent_color will cause that color to be treated as transparent when the font is loaded.
 
 h3. Tea::Font#string_w(string)
 
