@@ -63,7 +63,6 @@ module Tea
 
       if options && options.has_key?(:transparent_color)
         @transparent_color = Color.split(options[:transparent_color])
-        font.set_color_key SDL::SRCCOLORKEY, @transparent_color
       end
 
       case font_type
