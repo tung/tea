@@ -20,10 +20,6 @@ module Tea
   # option will consider one color as the 'transparent color' and no such
   # pixels will be drawn.
   #
-  # N.B.: Tea uses SGE as its bitmap font backend, which takes the transparent
-  #       color to be that of the bottom-left pixel (0, height - 1).  Future
-  #       versions of Tea may allow custom transparent colors.
-  #
   # SFont fonts (Tea::Font::SFONT) are also a single row of character images,
   # but ranging from ASCII 33 to ASCII 127:
   #
@@ -44,12 +40,6 @@ module Tea
   #
   # The width of a space is not defined in the SFont format, so Tea uses the
   # width of the first character, '!'.
-  #
-  # N.B.: Tea uses SGE as its SFont backend, which misinterprets the format's
-  #       specification.  To work around this:
-  #
-  #   1.  Use the same non-magenta color in the top row, above the characters.
-  #   2.  Line the first character flush with the left edge of the image.
   class Font
 
     # +font_type+ constant for bitmap fonts.
