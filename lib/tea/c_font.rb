@@ -78,7 +78,15 @@ module Tea
     # Calculate the pixel width of a string rendered with this font.
     def string_w(string)
       w = 0
-      string.length.times { |i| w += @glyphs[i].w }
+      if ruby_version_match = RUBY_VERSION.match(/(\d+)\.(\d+)\.\d+/)
+        ruby_major = ruby_version_match[1].to_i
+        ruby_minor = ruby_version_match[2].to_i
+        if ruby_major >= 1 && ruby_minor >= 9
+          string.codepoints { |pt| w += @glyphs[pt].w }
+        else
+          string.length.times { |i| w += @glyphs[string[i]].w }
+        end
+      end
       w
     end
 
