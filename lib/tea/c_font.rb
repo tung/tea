@@ -165,18 +165,14 @@ module Tea
 
     # Run a block for each code point of the string.
     def each_code_point(string)
-      if ruby_version_match = RUBY_VERSION.match(/(\d+)\.(\d+)\.\d+/)
-        ruby_major = ruby_version_match[1].to_i
-        ruby_minor = ruby_version_match[2].to_i
-        if ruby_major >= 1 && ruby_minor >= 9
-          string.codepoints do |pt|
-            yield pt
-          end
-        else
-          string.length.times do |i|
-            pt = string[i]
-            yield pt
-          end
+      if RUBY_1_9
+        string.codepoints do |pt|
+          yield pt
+        end
+      else
+        string.length.times do |i|
+          pt = string[i]
+          yield pt
         end
       end
     end

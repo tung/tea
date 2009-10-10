@@ -28,4 +28,7 @@ module Tea
     raise Tea::Error, e.message, e.backtrace
   end
 
+  rv_match = RUBY_VERSION.match(/(\d+)\.(\d+)\.\d+/)
+  RUBY_1_9 = rv_match && rv_match[1].to_i >= 1 && rv_match[2].to_i >= 9
+
 end

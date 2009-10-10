@@ -201,17 +201,9 @@ module Tea
 
         if sdl_event.unicode != 0
           unicode_field = "%c"
-
           # Ruby 1.9 uses UTF-8 Unicode encoding.  Otherwise, who knows how
           # Unicode code points are interpreted?
-          if ruby_version_match = RUBY_VERSION.match(/(\d+)\.(\d+)\.\d+/)
-            ruby_major = ruby_version_match[1].to_i
-            ruby_minor = ruby_version_match[2].to_i
-            if ruby_major >= 1 && ruby_minor >= 9
-              unicode_field = unicode_field.encode('utf-8')
-            end
-          end
-
+          unicode_field = unicode_field.encode('utf-8') if RUBY_1_9
           @char = unicode_field % sdl_event.unicode
         else
           @char = ''
