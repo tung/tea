@@ -65,16 +65,12 @@ Below is a simple bouncing circle demo.
 
 == Status
 
-What's working:
+All done.
 
 * Events/Input - done
 * Graphics - done
 * Sound - done
-* Fonts - bitmap font and SFont loading and drawing
-
-What isn't done yet:
-
-* Fonts - word-wrapping method
+* Fonts - done
 
 
 == More information
