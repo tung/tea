@@ -152,7 +152,8 @@ module Tea
         glyph = Bitmap.new(char_w, char_h, Color::CLEAR)
         for gy in 0...char_h
           for gx in 0...char_w
-            glyph[gx, gy] = Color.mix(*font_surface.get_rgba(font_surface[detect_x + gx, gy]))
+            color = font_surface.get_rgba(font_surface[detect_x + gx, gy])
+            glyph[gx, gy] = Color.mix(*color) unless color == trans_rgba
           end
         end
 
