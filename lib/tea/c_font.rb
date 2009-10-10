@@ -52,8 +52,6 @@ module Tea
     SFONT_LENGTH = 94
     CODE_POINT_SPACE = 32
 
-    SFONT_ALPHABET_LENGTH = 94
-
     # Create a new font from a font file given by +path+.
     #
     # +font_type+ is one of Tea::Font::BITMAP_FONT or Tea::Font::SFONT.  See
