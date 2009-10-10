@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tea}
-  s.version = "0.5.1"
+  s.version = "0.6.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tung Nguyen"]
-  s.date = %q{2009-10-08}
+  s.date = %q{2009-10-10}
   s.description = %q{Tea is a library for making simpler games from a simpler age. It's designed with these things in mind:  - 0 is better than 1, and 1 is better than 2. - Simplicity beats speed. - Value and convenience can sometimes beat simplicity. - Procedural beats object-oriented in a dead-heat.}
   s.email = %q{tunginobi@gmail.com}
   s.extra_rdoc_files = [
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
      "doc/example/event_keyboard.rb",
      "doc/example/event_mouse.rb",
      "doc/example/font_hello.rb",
+     "doc/example/font_word_wrap.rb",
      "doc/example/grab.rb",
      "doc/example/init.rb",
      "doc/example/lines.rb",
