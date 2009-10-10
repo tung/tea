@@ -416,6 +416,6 @@ h3. Tea::Font#word_wrap(string, width, initial_left_margin=0)
 
 Split the string into lines that, when drawn with this font, do not exceed width.  Setting initial_left_margin will treat the string as starting that many pixels away from the left "edge" of wrapping.  Returns an instance of WrappedLines, which is an Array in all ways except that it also has the position of the end of the final line from the left "edge", accessible as end_x.
 
-h3. Tea::Font#draw(dest_blittable, x, y, string)
+h3. Tea::Font#draw_to(dest_blittable, x, y, string)
 
 Render the string using the font onto dest_blittable (a Bitmap or the Screen), with the top-left corner at (x, y).
