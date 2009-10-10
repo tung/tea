@@ -50,6 +50,7 @@ module Tea
     BITMAP_FONT_LENGTH = 256
     SFONT_START = 33
     SFONT_LENGTH = 94
+
     CODE_POINT_SPACE = 32
 
     # Create a new font from a font file given by +path+.
@@ -90,6 +91,93 @@ module Tea
     def h
       # Nothing special about 0, all chars are the same height.
       @glyphs[0].h
+    end
+
+    # Array-like return class of word_wrap().
+    # +end_x+ holds the position of the end of the final line.
+    class WrappedLines < Array
+      attr_accessor :end_x
+    end
+
+    # Split a string into an array of lines such that each line, when rendered
+    # using this font, is no wider than width.
+    #
+    # +initial_left_margin+ sets the starting position for the first line of
+    # wrapping.
+    #
+    # Returns an array of strings, representing the split lines.
+    def word_wrap(string, width, initial_left_margin=0)
+      # This is adapted from the Sphere RPG Engine's font word wrapping code.
+      # Rickety, but battle-tested.
+      space_w = string_w(" ")
+      tab = " " * 4
+      tab_w = string_w(tab)
+
+      x = initial_left_margin
+
+      lines = WrappedLines.new
+      lines.push ""
+      word = ""
+      word_w = 0
+
+      # No good string character iterators for Ruby 1.8, hence crappy O(n) access.
+      string.length.times do |i|
+        # Crappy O(n) access here.
+        char = string[i, 1]
+
+        case char
+        when " ", "\t"
+          if char == " "
+            spacing = " "
+            spacing_w = space_w
+          elsif char == "\t"
+            spacing = tab
+            spacing_w = tab_w
+          end
+
+          if x + word_w + spacing_w > width
+            lines.push word + spacing
+            x = word_w + spacing_w
+          else
+            lines[-1] += word + spacing
+            x += word_w + spacing_w
+          end
+
+          word = ""
+          word_w = 0
+
+        when "\n"
+          lines[-1] += word
+          lines.push ""
+          x = 0
+          word = ""
+          word_w = 0
+
+        else
+          char_w = string_w(char)
+
+          if word_w + char_w > width && x == 0
+            # Word is too long for a single line, so split it.
+            lines[-1] += word
+            lines.push ""
+            word = ""
+            word_w = 0
+          elsif x + word_w + char_w > width
+            # Start a new line.
+            x = 0
+            lines.push ""
+          end
+
+          word += char
+          word_w += char_w
+
+        end
+      end
+
+      lines[-1] += word
+      lines.end_x = x + word_w
+
+      lines
     end
 
     # Write the given string onto the bitmap at (x, y).
@@ -208,7 +296,6 @@ module Tea
         end
       end
     end
-
 
   end
 
