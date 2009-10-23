@@ -21,12 +21,10 @@ many game engines and APIs.
 First, get Ruby (http://www.ruby-lang.org) if you don't have it already.  Ruby
 1.9 or later is recommended.
 
-Tea is available as a gem on GitHub, so you can install it like so:
+Tea is available as a gem on Gemcutter, so add http://gemcutter.org to your
+~/.gemrc and type
 
-  gem install tung-tea -s http://gems.github.com
-
-The rubysdl gem (http://www.kmc.gr.jp/~ohai/rubysdl.en.html) will be installed
-automatically as a dependency of Tea.
+  gem install tea
 
 
 == Using Tea
